@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Certus öz müştərilərinə müxtəlif istiqamətlər üzrə yüksək səviyyəli sertifikatlaşdırma xidmətləri təklif edir.">
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+
+    <!-- favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="%PUBLIC_URL%/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="%PUBLIC_URL%/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="%PUBLIC_URL%/favicon-16x16.png">
+    <link href="%PUBLIC_URL%/assets/css/loader.css" rel="stylesheet" type="text/css" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+    <link href="%PUBLIC_URL%/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="%PUBLIC_URL%/assets/css/plugins.css" rel="stylesheet" type="text/css" />
+    <!-- END GLOBAL MANDATORY STYLES -->
+
+    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM STYLES -->
+    <link href="%PUBLIC_URL%/plugins/apex/apexcharts.css" rel="stylesheet" type="text/css">
+    <link href="%PUBLIC_URL%/assets/css/scrollspyNav.css" rel="stylesheet" type="text/css" />
+    <link href="%PUBLIC_URL%/assets/css/components/tabs-accordian/custom-accordions.css" rel="stylesheet" type="text/css" />
+    <link href="%PUBLIC_URL%/assets/css/dashboard/dash_1.css" rel="stylesheet" type="text/css" />
+   
+    <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
+
+
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>Certus App</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+        <!-- BEGIN GLOBAL MANDATORY SCRIPTS -->
+    <script src="%PUBLIC_URL%/assets/js/libs/jquery-3.1.1.min.js"></script>
+    <script src="%PUBLIC_URL%/bootstrap/js/popper.min.js"></script>
+    <script src="%PUBLIC_URL%/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- END GLOBAL MANDATORY SCRIPTS -->
+
+    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+    <script src="%PUBLIC_URL%/plugins/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="%PUBLIC_URL%/assets/js/app.js"></script>
+
+    <script src="%PUBLIC_URL%/assets/js/custom.js"></script>
+    <!-- <script src="assets/js/dashboard/dash_1.js"></script> -->
+    <script>
+      $(document).ready(function() {
+          App.init();
+      });
+  </script>
