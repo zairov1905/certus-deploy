@@ -26,7 +26,7 @@ export default function Header() {
           <li className="nav-item theme-logo">
             <a href="index.html">
               <img
-                src="%PUBLIC_URL%/assets/img/apple-touch-icon.png"
+                src="https://zairov1905.github.io/certus-deploy/assets/img/apple-touch-icon.png"
                 className="navbar-logo"
                 alt="logo"
               />
@@ -81,7 +81,7 @@ export default function Header() {
               aria-haspopup="true"
               aria-expanded="false"
             >
-              <img src="%PUBLIC_URL%/assets/img/ca.png" className="flag-width" alt="flag" />
+              <img src="https://zairov1905.github.io/certus-deploy/assets/img/ca.png" className="flag-width" alt="flag" />
             </a>
             <div
               className="dropdown-menu position-absolute"
@@ -93,7 +93,7 @@ export default function Header() {
                 onClick={(e) => e.preventDefault()}
               >
                 <img
-                  src="%PUBLIC_URL%/assets/img/de.png"
+                  src="https://zairov1905.github.io/certus-deploy/assets/img/de.png"
                   className="flag-width"
                   alt="flag"
                 />{" "}
@@ -101,7 +101,7 @@ export default function Header() {
               </a>
               <a className="dropdown-item d-flex" href="#">
                 <img
-                  src="%PUBLIC_URL%/assets/img/jp.png"
+                  src="https://zairov1905.github.io/certus-deploy/assets/img/jp.png"
                   className="flag-width"
                   alt="flag"
                 />{" "}
@@ -113,7 +113,7 @@ export default function Header() {
                 onClick={(e) => e.preventDefault()}
               >
                 <img
-                  src="%PUBLIC_URL%/assets/img/fr.png"
+                  src="https://zairov1905.github.io/certus-deploy/assets/img/fr.png"
                   className="flag-width"
                   alt="flag"
                 />{" "}
@@ -125,7 +125,7 @@ export default function Header() {
                 onClick={(e) => e.preventDefault()}
               >
                 <img
-                  src="%PUBLIC_URL%/assets/img/ca.png"
+                  src="https://zairov1905.github.io/certus-deploy/assets/img/ca.png"
                   className="flag-width"
                   alt="flag"
                 />{" "}
@@ -170,7 +170,7 @@ export default function Header() {
                       <div className="user-img">
                         <img
                           className="usr-img rounded-circle"
-                          src="%PUBLIC_URL%/assets/img/90x90.jpg"
+                          src="https://zairov1905.github.io/certus-deploy/assets/img/90x90.jpg"
                           alt="profile"
                         />
                       </div>
@@ -189,7 +189,7 @@ export default function Header() {
                       <div className="user-img">
                         <img
                           className="usr-img rounded-circle"
-                          src="%PUBLIC_URL%/assets/img/90x90.jpg"
+                          src="https://zairov1905.github.io/certus-deploy/assets/img/90x90.jpg"
                           alt="profile"
                         />
                       </div>
@@ -208,7 +208,7 @@ export default function Header() {
                       <div className="user-img">
                         <img
                           className="usr-img rounded-circle"
-                          src="%PUBLIC_URL%/assets/img/90x90.jpg"
+                          src="https://zairov1905.github.io/certus-deploy/assets/img/90x90.jpg"
                           alt="profile"
                         />
                       </div>
@@ -346,7 +346,7 @@ export default function Header() {
               aria-haspopup="true"
               aria-expanded="false"
             >
-              <img src="%PUBLIC_URL%/assets/img/90x90.jpg" alt="avatar" />
+              <img src="https://zairov1905.github.io/certus-deploy/assets/img/90x90.jpg" alt="avatar" />
             </a>
             <div
               className="dropdown-menu position-absolute"
