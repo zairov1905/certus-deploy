@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/certus-deploy/static/css/main.4b806981.chunk.css",
+    "main.js": "/certus-deploy/static/js/main.32ede88c.chunk.js",
+    "main.js.map": "/certus-deploy/static/js/main.32ede88c.chunk.js.map",
+    "runtime-main.js": "/certus-deploy/static/js/runtime-main.c229acd2.js",
+    "runtime-main.js.map": "/certus-deploy/static/js/runtime-main.c229acd2.js.map",
+    "static/css/2.c5b90173.chunk.css": "/certus-deploy/static/css/2.c5b90173.chunk.css",
+    "static/js/2.0a7fe47d.chunk.js": "/certus-deploy/static/js/2.0a7fe47d.chunk.js",
+    "static/js/2.0a7fe47d.chunk.js.map": "/certus-deploy/static/js/2.0a7fe47d.chunk.js.map",
+    "static/js/3.da7654f0.chunk.js": "/certus-deploy/static/js/3.da7654f0.chunk.js",
+    "static/js/3.da7654f0.chunk.js.map": "/certus-deploy/static/js/3.da7654f0.chunk.js.map",
+    "index.html": "/certus-deploy/index.html",
+    "static/css/2.c5b90173.chunk.css.map": "/certus-deploy/static/css/2.c5b90173.chunk.css.map",
+    "static/css/main.4b806981.chunk.css.map": "/certus-deploy/static/css/main.4b806981.chunk.css.map",
+    "static/js/2.0a7fe47d.chunk.js.LICENSE.txt": "/certus-deploy/static/js/2.0a7fe47d.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.c229acd2.js",
+    "static/css/2.c5b90173.chunk.css",
+    "static/js/2.0a7fe47d.chunk.js",
+    "static/css/main.4b806981.chunk.css",
+    "static/js/main.32ede88c.chunk.js"
+  ]
+}
