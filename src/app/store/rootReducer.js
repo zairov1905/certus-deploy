@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
 import authReducer from '../../features/auth/authReducer';
+import controlSystemReducer from '../../features/dashboard/certifications/controlSystem/controlSystemReducer';
 import personalReducer from '../../features/dashboard/certifications/personalPage/personalReducer';
 import productServiceReducer from '../../features/dashboard/certifications/productServicePage/productServiceReducer';
 import crmReducer from '../../features/dashboard/crmPage/crmReducer';
@@ -48,7 +49,8 @@ const rootReducer = combineReducers({
     signOfLegalActs:signOfLegalActReducer,
     skills:skillReducer,
     trainings:trainingReducer,
-    personals:personalReducer 
+    personals:personalReducer,
+    controlSystems:controlSystemReducer
 })
 
 

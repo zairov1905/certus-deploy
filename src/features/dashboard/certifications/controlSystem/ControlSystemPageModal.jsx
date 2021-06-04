@@ -10,13 +10,13 @@ import cuid from "cuid";
 import { Form, Formik } from "formik";
 import { closeModal } from "../../../../app/modal/modalReducer";
 import {
-  createProductService,
-  updateProductService,
-} from "./productServiceActions";
+  createControlSystem,
+  updateControlSystem,
+} from "./controlSystemActions";
 import { loadSignOfLegalAct } from "../../settings/signOfLegalAct/signOfLegalActActions";
 import { loadLab } from "../../labPage/labActions";
 
-export default function ProductServicePageModal({ productService }) {
+export default function ControlSystemPageModal({ controlSystem }) {
   useEffect(() => {
     dispatch(loadSignOfLegalAct());
     dispatch(loadLab());
@@ -324,8 +324,8 @@ export default function ProductServicePageModal({ productService }) {
     }
   });
 
-  const initialValues = productService
-    ? productService
+  const initialValues = controlSystem
+    ? controlSystem
     : {
         id: "",
         snCode: "",
@@ -341,17 +341,12 @@ export default function ProductServicePageModal({ productService }) {
         legalAddressOfTheBusinessEntity: "",
         actualAddressOfTheBusiness: "",
         nameOfTheProduct: "",
-        quantity: "",
-        productNote: "",
         productCode: "",
-        countryOfOrigin: "",
         signOfLegalAct: "",
-        certificateIsRecognized: "",
         recognitionProcessNote: "",
-        accreditedLaboratoryName: "",
-        accreditedLaboratoryNumber: "",
         testQuantity: "",
         productBatchHistory: "",
+        note:""
       };
   const validationSchema = Yup.object({
     // id:"",
@@ -364,16 +359,10 @@ export default function ProductServicePageModal({ productService }) {
     certificateExpirationDate: Yup.string().required("Mütləq doldurulmalıdır."),
     businessEntityName: Yup.string().required("Mütləq doldurulmalıdır."),
     nameOfTheProduct: Yup.string().required("Mütləq doldurulmalıdır."),
-    quantity: Yup.string().required("Mütləq doldurulmalıdır."),
-    productNote: Yup.string().required("Mütləq doldurulmalıdır."),
     productCode: Yup.string().required("Mütləq doldurulmalıdır."),
-    countryOfOrigin: Yup.string().required("Mütləq doldurulmalıdır."),
     signOfLegalAct: Yup.string().required("Mütləq doldurulmalıdır."),
     certificateIsRecognized: Yup.string().required("Mütləq doldurulmalıdır."),
     recognitionProcessNote: Yup.string().required("Mütləq doldurulmalıdır."),
-    accreditedLaboratoryNumber: Yup.string().required(
-      "Mütləq doldurulmalıdır."
-    ),
     testQuantity: Yup.string().required("Mütləq doldurulmalıdır."),
     productBatchHistory: Yup.string().required("Mütləq doldurulmalıdır."),
   });
@@ -381,24 +370,24 @@ export default function ProductServicePageModal({ productService }) {
   return (
     <ModalWrapper
       size="modal-lg"
-      header={productService ? "Redakte Et" : "Əlavə et"}
+      header={controlSystem ? "Redakte Et" : "Əlavə et"}
     >
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
-            productService
-              ? await dispatch(updateProductService(values))
+            controlSystem
+              ? await dispatch(updateControlSystem(values))
               : await dispatch(
-                  createProductService({
+                  createControlSystem({
                     ...values,
                     id: cuid(),
                     labNumber: `Lab${cuid()}`,
                   })
                 );
             setSubmitting(false);
-            productService
+            controlSystem
               ? toast.success("Dəyişiklik uğurlar yerinə yetirildi")
               : toast.success("Uğurla əlavə edildi");
             setModal(true);
@@ -550,26 +539,6 @@ export default function ProductServicePageModal({ productService }) {
               </div>
               <div className="col-md-12 mb-4">
                 <MyTextInput
-                  id="quantity"
-                  name="quantity"
-                  type="text"
-                  className="form-control"
-                  placeholder="Miqdarı daxil edin"
-                  label="Miqdarı"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MySearchableSelect
-                  id="productNote"
-                  name="productNote"
-                  options={productNoteOptions}
-                  type="text"
-                  placeholder="Məhsulun ərzaq və ya qeyri ərzaq qrupuna aid olması barədə qeyd daxil edin"
-                  label="Məhsulun ərzaq və ya qeyri ərzaq qrupuna aid olması barədə qeyd"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
                   id="productCode"
                   name="productCode"
                   type="text"
@@ -578,28 +547,7 @@ export default function ProductServicePageModal({ productService }) {
                   label="Məhsulun kodu"
                 />
               </div>
-              <div className="col-md-12 mb-4">
-                <MySearchableSelect
-                  id="countryOfOrigin"
-                  name="countryOfOrigin"
-                  type="text"
-                  options={allCountriesListOptions}
-                  // className="form-control"
-                  placeholder="Məhsulun istehsal olunduğu ölkəni daxil edin"
-                  label="Məhsulun istehsal olunduğu ölkə"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MySearchableSelect
-                  id="certificateIsRecognized"
-                  name="certificateIsRecognized"
-                  type="text"
-                  options={allCountriesListOptions}
-                  // className="form-control"
-                  placeholder="Sertifikatı tanınan ölkənin adını daxil edin"
-                  label="Sertifikatı tanınan ölkənin adı"
-                />
-              </div>
+
               <div className="col-md-12 mb-4">
                 <MySearchableSelect
                   id="signOfLegalAct"
@@ -619,32 +567,11 @@ export default function ProductServicePageModal({ productService }) {
                   type="text"
                   options={recognitionProcessNoteOptions}
                   // className="form-control"
-                  placeholder="Tanınma prosesində məhsulun sınağının aparılması haqqında qeydi daxil edin"
-                  label="Tanınma prosesində məhsulun sınağının aparılması haqqında qeyd"
+                  placeholder="Tanınma prosesində auditin aparılması haqqında qeydi daxil edin"
+                  label="Tanınma prosesində auditin aparılması haqqında qeyd"
                 />
               </div>
-              <div className="col-md-12 mb-4">
-                <MySearchableSelect
-                  id="accreditedLaboratoryName"
-                  name="accreditedLaboratoryName"
-                  // type="text"
-                  options={accreditedLaboratoryNameOptions}
-                  // className="form-control"
-                  placeholder="Akkreditasiya olunmuş sınaq laboratoriyasının adını daxil edin"
-                  label="Akkreditasiya olunmuş sınaq laboratoriyasının adı"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="accreditedLaboratoryNumber"
-                  name="accreditedLaboratoryNumber"
-                  type="text"
-                  readOnly
-                  className="form-control"
-                  placeholder="Akkreditasiya olunmuş laboratoriyanın attestat nömrəsini daxil edin"
-                  label="Akkreditasiya olunmuş laboratoriyanın attestat nömrəsi"
-                />
-              </div>
+
               <div className="col-md-12 mb-4">
                 <MyTextInput
                   id="testQuantity"

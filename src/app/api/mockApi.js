@@ -16,6 +16,8 @@ import { sampleDataOrderSource } from './sampleDataOrderSource';
 import { sampleDataReference } from './sampleDataReference';
 import { sampleDataServiceTypes } from './sampleDataServiceTypes';
 import { sampleDataProductService } from './sampleDataProductService';
+import { sampleDataControlSystem } from './sampleDataControlSystem';
+
 import { sampleDataSignOfLegalAct } from './sampleDataSignOfLegalAct';
 import { sampleDataSkill } from './sampleDataSkill';
 import { sampleDataTraining } from './sampleDataTraining';
@@ -113,6 +115,11 @@ export function fetchSampleDataCrm(){
 export function fetchSampleDataProductService(){
     return delay(1000).then(function(){
         return Promise.resolve(sampleDataProductService);
+    })
+}
+export function fetchSampleDataControlSystem(){
+    return delay(1000).then(function(){
+        return Promise.resolve(sampleDataControlSystem);
     })
 }
 export function fetchSampleDataPersonal(){

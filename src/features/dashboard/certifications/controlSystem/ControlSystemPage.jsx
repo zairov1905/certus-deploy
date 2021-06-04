@@ -2,23 +2,22 @@ import React, { useEffect, useState } from "react";
 import DataTable, { defaultThemes } from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
 import { openModal } from "../../../../app/modal/modalReducer";
-import { loadTraining } from "../../settings/training/trainingActions";
 
 
-import { deletePersonal, loadPersonal } from "./personalActions";
-export default function PersonalPage() {
+import { deleteControlSystem, loadControlSystem } from "./controlSystemActions";
+export default function ControlSystemPage() {
   useEffect(() => {
-    dispatch(loadPersonal());
+    dispatch(loadControlSystem());
     //   // return () => {
     //   //   // dispatch(loadOrder())
     //   // }
   }, []);
   const dispatch = useDispatch();
-  const { personals } = useSelector((state) => state.personals);
+  const { controlSystems } = useSelector((state) => state.controlSystems);
   const [hover, sethover] = useState(false);
   const [target, setTarget] = useState({ id: null, name: null });
 
-  const data = personals;
+  const data = controlSystems;
   const buttonStyle = {
     padding: "9px",
     background: "#ffffff",
@@ -59,11 +58,11 @@ export default function PersonalPage() {
       onClick={() => {
         dispatch(
           openModal({
-            modalType: "PersonalPageModal",
+            modalType: "ControlSystemPageModal",
             modalProps: null,
           })
         );
-        dispatch(loadTraining());
+        // dispatch(loadDocs());
       }}
       style={{
         ...buttonStyle,
@@ -132,23 +131,38 @@ export default function PersonalPage() {
       sortable: true,
     },
     {
-      name: "İştirakçı adı",
-      selector: "participantName",
+      name: "Sertifikat təqdim edilən təsərrüfat subyektinin adı",
+      selector: "businessEntityName",
       sortable: true,
     },
     {
-      name: "Təlimçinin adı",
-      selector: "instructorName",
+      name: "Hüquqi statusu",
+      selector: "legalStatus",
       sortable: true,
     },
     {
-      name: "Təlimin adı",
-      selector: "training",
+      name: "VÖEN",
+      selector: "VOEN",
       sortable: true,
     },
     {
-      name: "Səriştələr",
-      selector: "skill",
+      name: "Təsərrüfat subyektinin rəhbərinin telefon nömrəsi",
+      selector: "economicEntityPhoneNumber",
+      sortable: true,
+    },
+    {
+      name: "Sertifikat təqdim edilən təsərrüfat subyektinin hüquqi ünvanı",
+      selector: "legalAddressOfTheBusinessEntity",
+      sortable: true,
+    },
+    {
+      name: "Sertifikat təqdim edilən təsərrüfat subyektinin faktiki ünvanı",
+      selector: "actualAddressOfTheBusiness",
+      sortable: true,
+    },
+    {
+      name: "Məhsulun(xidmətin) adı",
+      selector: "nameOfTheProduct",
       sortable: true,
     },
     {
@@ -157,33 +171,44 @@ export default function PersonalPage() {
       sortable: true,
     },
     {
-      name: "Normativ sənədin işarəsi",
-      selector: "signOfDocument",
+      name: "Hüquqi normativ texniki aktın işarəsi",
+      selector: "signOfLegalAct",
       sortable: true,
     },
     {
-      name: "Qeyd",
-      selector: "note",
+      name: "Tanınma prosesində auditin aparılması haqqında qeyd",
+      selector: "recognitionProcessNote",
       sortable: true,
     },
+    {
+      name: "Aparılmış sınaqların miqdarı",
+      selector: "testQuantity",
+      sortable: true,
+    },
+    {
+      name: "Məhsul partiyasının tarixi",
+      selector: "productBatchHistory",
+      sortable: true,
+    },
+
     {
       name: "",
-      cell: (personal) => (
+      cell: (controlSystem) => (
         <div className="action-btn">
           <svg
             onClick={() => {
               dispatch(
                 openModal({
-                  modalType: "PersonalPageModal",
-                  modalProps: { personal },
+                  modalType: "ControlSystemPageModal",
+                  modalProps: { controlSystem },
                 })
               );
-              dispatch(loadTraining());
+              // dispatch(loadDocs());
 
               // dispatch(loadEmployees());
             }}
             data-name="edit"
-            id={personal.id}
+            id={controlSystem.id}
             onMouseEnter={(e) => {
               sethover(true);
               setTarget({
@@ -200,7 +225,7 @@ export default function PersonalPage() {
             style={{
               ...buttonStyle1,
               ...(hover &&
-                target.id === `${personal.id}` &&
+                target.id === `${controlSystem.id}` &&
                 target.name === "edit" &&
                 buttonHover),
             }}
@@ -223,9 +248,9 @@ export default function PersonalPage() {
           </svg>
           <svg
             data-name="delete"
-            id={personal.id}
+            id={controlSystem.id}
             onClick={() => {
-              dispatch(deletePersonal(personal.id));
+              dispatch(deleteControlSystem(controlSystem.id));
             }}
             onMouseEnter={(e) => {
               sethover(true);
@@ -243,7 +268,7 @@ export default function PersonalPage() {
             style={{
               ...buttonStyle1,
               ...(hover &&
-                target.id === `${personal.id}` &&
+                target.id === `${controlSystem.id}` &&
                 target.name === "delete" &&
                 buttonHover),
             }}
@@ -277,7 +302,7 @@ export default function PersonalPage() {
               <DataTable
                 // className="dataTables_wrapper container-fluid dt-bootstrap4 table-responsive"
                 // selectableRows
-                title="Personal sertifikatları"
+                title="İdarəetmə sertifikatları"
                 columns={columns}
                 data={data}
                 // customStyles={customStyles}

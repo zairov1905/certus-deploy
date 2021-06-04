@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import ControlSystemPageModal from "../../features/dashboard/certifications/controlSystem/ControlSystemPageModal";
 import PersonalPageModal from "../../features/dashboard/certifications/personalPage/PersonalPageModal";
 import ProductServicePageModal from "../../features/dashboard/certifications/productServicePage/ProductServicePageModal";
 import CrmPageModal from "../../features/dashboard/crmPage/CrmPageModal";
@@ -46,7 +47,8 @@ export default function ModalManager() {
     SignOfLegalActPageModal,
     SkillPageModal,
     TrainingPageModal,
-    PersonalPageModal
+    PersonalPageModal,
+    ControlSystemPageModal
   };
   
 

@@ -32,6 +32,7 @@ import SkillPage from "../../features/dashboard/settings/skill/SkillPage";
 import TrainingPage from "../../features/dashboard/settings/training/TrainingPage";
 import PersonalPage from "../../features/dashboard/certifications/personalPage/PersonalPage";
 import React from "react";
+import ControlSystemPage from "../../features/dashboard/certifications/controlSystem/ControlSystemPage";
 function App() {
   // const { initialized } = useSelector((state) => state.async);
   // useScript("../../../public/assets/js/app.js")
@@ -133,6 +134,11 @@ function App() {
                   exact
                   path="/certificates/personal"
                   component={PersonalPage}
+                />
+                <Route
+                  exact
+                  path="/certificates/controlSystem"
+                  component={ControlSystemPage}
                 />
                 <Footer />
               </div>
