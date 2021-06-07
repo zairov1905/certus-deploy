@@ -119,7 +119,7 @@ export default function ReferencePage() {
                 dispatch(
                 
                   openModal({
-                    modalType: "referencePageModal",
+                    modalType: "ReferencePageModal",
                     modalProps: { reference },
                   })
                 )
