@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import './dash_1.css';
+// import './dash_1.css';
 import Chart from "react-apexcharts";
 import { useDispatch, useSelector } from "react-redux";
 import { loadEmployees } from "../employees/employeesActions";
