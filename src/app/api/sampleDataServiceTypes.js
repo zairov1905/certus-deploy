@@ -2,18 +2,18 @@ import cuid from "cuid";
 
 export const sampleDataServiceTypes = [
   {
-    id: cuid(),
-    serviceTypeName: "İcarə",
+    id: 0,
+    serviceTypeName: "Personal",
 
   },
   {
-    id: cuid(),
-    serviceTypeName: "Lorem ",
+    id: 1,
+    serviceTypeName: "Məhsul Xidmət",
 
   },
   {
-    id: cuid(),
-    serviceTypeName: "adadad",
+    id: 2,
+    serviceTypeName: "İdarəetmə sistemləri",
 
   },
 ];

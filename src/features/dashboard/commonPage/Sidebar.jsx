@@ -71,7 +71,7 @@ export default function Sidebar() {
                   <line x1={8} y1={2} x2={8} y2={18} />
                   <line x1={16} y1={6} x2={16} y2={22} />
                 </svg>
-                <span>CRM</span>
+                <span>Müştəri</span>
               </div>
             </NavLink>
           </li>
