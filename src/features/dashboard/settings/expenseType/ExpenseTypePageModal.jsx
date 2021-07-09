@@ -11,9 +11,19 @@ import cuid from "cuid";
 import { Form, Formik } from "formik";
 import { closeModal } from "../../../../app/modal/modalReducer";
 import { createExpenseType, updateExpenseType } from "./expenseTypeActions";
+import MySearchableSelect from "../../../../app/common/form/MySearchableSelect";
 
 export default function ExpenseTypePageModal({ expenseType }) {
   const dispatch = useDispatch();
+  const { expenseGroups } = useSelector((state) => state.expenseGroups);
+  let expenseGroupOptions =
+  expenseGroups &&
+  expenseGroups.map((expenseGroup) => {
+      return {
+        label: expenseGroup.expenseGroupName,
+        value: expenseGroup.id,
+      };
+    });
   const [modal, setModal] = useState(false);
   useEffect(() => {
     if (modal) {
@@ -26,9 +36,11 @@ export default function ExpenseTypePageModal({ expenseType }) {
     : {
         id: "",
         expenseTypeName: "",
+        expenseGroupName: "",
       };
   const validationSchema = Yup.object({
     expenseTypeName: Yup.string().required("Mütləq doldurulmalıdır."),
+    expenseGroupName: Yup.string().required("Mütləq doldurulmalıdır."),
   });
 
   return (
@@ -60,6 +72,17 @@ export default function ExpenseTypePageModal({ expenseType }) {
         {({ isSubmitting, isValid, dirty, errors }) => (
           <Form id="emp">
             <div className="row">
+              {" "}
+              <div className="col-md-12">
+                <MySearchableSelect
+                  id="expenseGroupName"
+                  name="expenseGroupName"
+                  type="text"
+                  options={expenseGroupOptions}
+                  // className="form-control"
+                  placeholder="Gəlir-Xərc qrupu"
+                />
+              </div>
               <div className="col-md-12">
                 <MyTextInput
                   id="expenseTypeName"

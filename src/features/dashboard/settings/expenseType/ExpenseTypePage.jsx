@@ -2,18 +2,18 @@ import React, { useEffect, useState } from "react";
 import DataTable, { defaultThemes } from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
 import { openModal } from "../../../../app/modal/modalReducer";
+import { loadExpenseGroup } from "../expenseGroup/expenseGroupActions";
 import { deleteExpenseType, loadExpenseType } from "./expenseTypeActions";
-
 
 export default function ExpenseTypePage() {
   useEffect(() => {
-    dispatch(loadExpenseType())
-  //   // return () => {
-  //   //   // dispatch(loadOrder())
-  //   // }
-  },[])
+    dispatch(loadExpenseType());
+    //   // return () => {
+    //   //   // dispatch(loadOrder())
+    //   // }
+  }, []);
   const dispatch = useDispatch();
-  const {expenseTypes} = useSelector(state => state.expenseTypes);
+  const { expenseTypes } = useSelector((state) => state.expenseTypes);
   const data = expenseTypes;
 
   const [hover, sethover] = useState(false);
@@ -62,6 +62,7 @@ export default function ExpenseTypePage() {
             modalProps: null,
           })
         );
+        dispatch(loadExpenseGroup());
       }}
       style={{
         ...buttonStyle,
@@ -114,20 +115,17 @@ export default function ExpenseTypePage() {
       cell: (expenseType) => (
         <div className="action-btn">
           <svg
-            onClick={() =>
-              {
-                dispatch(
-                
-                  openModal({
-                    modalType: "ExpenseTypePageModal",
-                    modalProps: { expenseType },
-                  })
-                )
-                // dispatch(loadEmployees());
+            onClick={() => {
+              dispatch(
+                openModal({
+                  modalType: "ExpenseTypePageModal",
+                  modalProps: { expenseType },
+                })
+              );
+              dispatch(loadExpenseGroup());
 
-              }
-
-            }
+              // dispatch(loadEmployees());
+            }}
             data-name="edit"
             id={expenseType.id}
             onMouseEnter={(e) => {
@@ -220,7 +218,6 @@ export default function ExpenseTypePage() {
         <div className="row layout-top-spacing">
           <div className="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
             <div className="widget-content widget-content-area br-6">
-
               <DataTable
                 // className="dataTables_wrapper container-fluid dt-bootstrap4 table-responsive"
                 // selectableRows
