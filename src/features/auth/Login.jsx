@@ -57,7 +57,7 @@ export default function Login() {
                     // console.log('ugurludur')
                     dispatch(
                       signInUser(history, {
-                        username: values.username,
+                        email: values.username,
                         password: values.password,
                       })
                     );
