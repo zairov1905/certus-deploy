@@ -25,10 +25,10 @@ export default function DocumentTypePageModal({ documentType }) {
     ? documentType
     : {
         id: "",
-        documentType: "",
+        name: "",
       };
   const validationSchema = Yup.object({
-    documentType: Yup.string().required("Mütləq doldurulmalıdır."),
+    name: Yup.string().required("Mütləq doldurulmalıdır."),
   });
 
   return (
@@ -42,12 +42,9 @@ export default function DocumentTypePageModal({ documentType }) {
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
             documentType
-              ? await dispatch(updateDocumentType(values))
-              : await dispatch(createDocumentType({ ...values, id: cuid() }));
+              ? await dispatch(updateDocumentType({id:values.id,name:values.name}))
+              : await dispatch(createDocumentType({ name:values.documentType }));
             setSubmitting(false);
-            documentType
-              ? toast.success("Dəyişiklik uğurlar yerinə yetirildi")
-              : toast.success("Uğurla əlavə edildi");
             setModal(true);
             dispatch(closeModal());
           } catch (error) {
@@ -62,8 +59,8 @@ export default function DocumentTypePageModal({ documentType }) {
             <div className="row">
               <div className="col-md-12">
                 <MyTextInput
-                  id="documentType"
-                  name="documentType"
+                  id="name"
+                  name="name"
                   type="text"
                   className="form-control"
                   placeholder="Sənəd növü"

@@ -9,16 +9,14 @@ export function signInUser(history,user) {
     const data = await axios.post("login", user, {
       withCredentials: true,
     });
-    console.log(data)
-    // if (data.data.succeeded) {
-    //   // console.log(data.data.data);
-    //   dispatch({ type: SIGN_IN_USER, payload: data.data.data });
-    //   // console.log(cookies.get('refreshToken'));
-    //   dispatch(asyncActionFinish());
-    //   history.push("/dashboard");
-    // } else {
-    //   dispatch(asyncActionError(data.data.Message));
-    // }
+    if (data.status === 200) {
+      console.log(data.data.data);
+      dispatch({ type: SIGN_IN_USER, payload: data.data.data });
+      dispatch(asyncActionFinish());
+      history.push("/dashboard");
+    } else {
+      dispatch(asyncActionError(data.data.Message));
+    }
   };
 
 }

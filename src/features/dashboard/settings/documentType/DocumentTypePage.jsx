@@ -5,13 +5,17 @@ import { openModal } from "../../../../app/modal/modalReducer";
 import { deleteDocumentType, loadDocumentTypes } from "./documentTypeActions";
 
 export default function DocumetTypePage() {
+  const dispatch = useDispatch();
   useEffect(() => {
     dispatch(loadDocumentTypes())
   //   // return () => {
   //   //   // dispatch(loadOrder())
   //   // }
   },[])
-  const dispatch = useDispatch();
+  // const { cemeteries, totalCount } = useSelector((state) => state.cemeteries);
+  const totalCount= 10;
+  const [perPage, setPerPage] = useState(10);
+  const [PageNumber, setPageNumber] = useState(1);
   const {documentTypes} = useSelector(state => state.documentTypes);
   const data = documentTypes;
 
@@ -49,6 +53,15 @@ export default function DocumetTypePage() {
   const buttonHover = {
     color: "#515365",
     fill: "#ffcacd",
+  };
+  const handlePageChange = (page) => {
+    dispatch(loadDocumentTypes({ PageNumber: page, PageSize: perPage }));
+    setPageNumber(page);
+  };
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    dispatch(loadDocumentTypes({ PageNumber: page, PageSize: newPerPage }));
+    setPerPage(newPerPage);
   };
 
   const actions = (
@@ -104,7 +117,7 @@ export default function DocumetTypePage() {
     },
     {
       name: "Sənəd növü",
-      selector: "documentType",
+      selector: "name",
       sortable: true,
     },
     {
@@ -225,16 +238,16 @@ export default function DocumetTypePage() {
                 title="Sənəd növləri"
                 columns={columns}
                 data={data}
-                // customStyles={customStyles}
-                // progressPending={loading}
                 pagination
-                // paginationServer
+                paginationServer
+                paginationTotalRows={totalCount}
+                paginationDefaultPage={PageNumber}
+                onChangeRowsPerPage={handlePerRowsChange}
+                onChangePage={handlePageChange}
                 highlightOnHover
                 Clicked
                 actions={actions}
-                // loading={loading}
-                // dense
-                // paginationTotalRows={totalRows}
+
               />
             </div>
           </div>
