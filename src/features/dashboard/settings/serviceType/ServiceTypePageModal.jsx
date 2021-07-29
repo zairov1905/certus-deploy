@@ -6,8 +6,6 @@ import ModalWrapper from "../../../../app/modal/ModalWrapper";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import MyTextInput from "../../../../app/common/form/MyTextInput";
-import { toast } from "react-toastify";
-import cuid from "cuid";
 import { Form, Formik } from "formik";
 import { closeModal } from "../../../../app/modal/modalReducer";
 import { createServiceType, updateServiceType } from "./serviceTypeActions";
@@ -25,10 +23,10 @@ export default function ServiceTypePageModal({ serviceType }) {
     ? serviceType
     : {
         id: "",
-        serviceTypeName: "",
+        name: "",
       };
   const validationSchema = Yup.object({
-    serviceTypeName: Yup.string().required("Mütləq doldurulmalıdır."),
+    name: Yup.string().required("Mütləq doldurulmalıdır."),
   });
 
   return (
@@ -43,11 +41,8 @@ export default function ServiceTypePageModal({ serviceType }) {
           try {
             serviceType
               ? await dispatch(updateServiceType(values))
-              : await dispatch(createServiceType({ ...values, id: cuid() }));
+              : await dispatch(createServiceType({ ...values}));
             setSubmitting(false);
-            serviceType
-              ? toast.success("Dəyişiklik uğurlar yerinə yetirildi")
-              : toast.success("Uğurla əlavə edildi");
             setModal(true);
             dispatch(closeModal());
           } catch (error) {
@@ -62,11 +57,11 @@ export default function ServiceTypePageModal({ serviceType }) {
             <div className="row">
               <div className="col-md-12">
                 <MyTextInput
-                  id="serviceTypeName"
-                  name="serviceTypeName"
+                  id="name"
+                  name="name"
                   type="text"
                   className="form-control"
-                  placeholder="Xərc növü adı"
+                  placeholder="Xidmət növü"
                 />
               </div>
             </div>

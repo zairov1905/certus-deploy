@@ -23,9 +23,12 @@ export function loadDocumentTypes(data) {
     const document_types = await axios.get("/document_type", {
       params: { ...data },
     });
-    console.log(document_types.status);
     if (document_types.status === 200) {
-      dispatch({ type: FETCH_DOCUMENTTYPE, payload: document_types.data.data });
+      dispatch({
+        type: FETCH_DOCUMENTTYPE,
+        payload: document_types.data.data,
+        totalCount: document_types.data.message,
+      });
       dispatch(asyncActionFinish());
     } else {
       dispatch(asyncActionError());
@@ -50,6 +53,8 @@ export function createDocumentType(documentType) {
       toast.success("Uğurla əlavə edildi");
       dispatch({ type: CREATE_DOCUMENTTYPE, payload: data.data.data });
       dispatch(asyncActionFinish());
+    } else {
+      toast.danger("Xəta baş verdi, yenidən cəht edin.");
     }
   };
 }
@@ -58,15 +63,16 @@ export function updateDocumentType(documentType) {
   return async function (dispatch) {
     dispatch(asyncActionStart);
 
-    const documentUptaded = await axios.put(
+    const documentUpdated = await axios.put(
       "/document_type/update",
       documentType
     );
-    if (documentUptaded.status === 201) {
+    console.log(documentUpdated.data.data)
+    if (documentUpdated.status === 200) {
       toast.success("Dəyişiklik uğurlar yerinə yetirildi");
       dispatch({
         type: UPDATE_DOCUMENTTYPE,
-        payload: documentUptaded.data.data,
+        payload: documentUpdated.data.data,
       });
       dispatch(asyncActionFinish());
     } else {
@@ -81,11 +87,10 @@ export function deleteDocumentType(documentTypeId) {
       `/document_type/delete?id=${documentTypeId}`
     );
     console.log(documentDeleted);
-    if (documentDeleted.status === 201) {
-      await delay(1000);
+    if (documentDeleted.status === 200) {
       dispatch({ type: DELETE_DOCUMENTTYPE, payload: documentTypeId });
       // dispatch(asyncActionFinish())
-      toast.success("Uğurla silindi");
+      toast.info("Uğurla silindi");
     } else {
       dispatch(asyncActionError());
     }

@@ -43,7 +43,7 @@ export default function DocumentTypePageModal({ documentType }) {
           try {
             documentType
               ? await dispatch(updateDocumentType({id:values.id,name:values.name}))
-              : await dispatch(createDocumentType({ name:values.documentType }));
+              : await dispatch(createDocumentType({ ...values }));
             setSubmitting(false);
             setModal(true);
             dispatch(closeModal());

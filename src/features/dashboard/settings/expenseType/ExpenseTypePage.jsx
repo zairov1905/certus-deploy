@@ -6,14 +6,18 @@ import { loadExpenseGroup } from "../expenseGroup/expenseGroupActions";
 import { deleteExpenseType, loadExpenseType } from "./expenseTypeActions";
 
 export default function ExpenseTypePage() {
+  const dispatch = useDispatch();
   useEffect(() => {
     dispatch(loadExpenseType());
     //   // return () => {
     //   //   // dispatch(loadOrder())
     //   // }
   }, []);
-  const dispatch = useDispatch();
-  const { expenseTypes } = useSelector((state) => state.expenseTypes);
+  const [perPage, setPerPage] = useState(10);
+  const [PageNumber, setPageNumber] = useState(1);
+  const { expenseTypes, totalCount } = useSelector(
+    (state) => state.expenseTypes
+  );
   const data = expenseTypes;
 
   const [hover, sethover] = useState(false);
@@ -50,6 +54,15 @@ export default function ExpenseTypePage() {
   const buttonHover = {
     color: "#515365",
     fill: "#ffcacd",
+  };
+  const handlePageChange = (page) => {
+    dispatch(loadExpenseType({ s: page, take: perPage }));
+    setPageNumber(page);
+  };
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    dispatch(loadExpenseType({ s: page, take: newPerPage }));
+    setPerPage(newPerPage);
   };
 
   const actions = (
@@ -106,7 +119,7 @@ export default function ExpenseTypePage() {
     },
     {
       name: "Gəlir-Xərc növü",
-      selector: "expenseTypeName",
+      selector: "name",
       sortable: true,
     },
 
@@ -222,18 +235,18 @@ export default function ExpenseTypePage() {
                 // className="dataTables_wrapper container-fluid dt-bootstrap4 table-responsive"
                 // selectableRows
                 title="Gəlir-Xərc növləri"
+                title="Sənəd növləri"
                 columns={columns}
                 data={data}
-                // customStyles={customStyles}
-                // progressPending={loading}
                 pagination
-                // paginationServer
+                paginationServer
+                paginationTotalRows={totalCount}
+                paginationDefaultPage={PageNumber}
+                onChangeRowsPerPage={handlePerRowsChange}
+                onChangePage={handlePageChange}
                 highlightOnHover
                 Clicked
                 actions={actions}
-                // loading={loading}
-                // dense
-                // paginationTotalRows={totalRows}
               />
             </div>
           </div>

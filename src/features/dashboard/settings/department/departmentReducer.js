@@ -5,7 +5,7 @@ const initialState = {
   departments: []
 };
 
-export default function departmentReducer(state = initialState, { type, payload }) {
+export default function departmentReducer(state = initialState, { type, payload,totalCount }) {
   switch (type) {
     case CREATE_DEPARTMENT:
       return {
@@ -30,6 +30,7 @@ export default function departmentReducer(state = initialState, { type, payload 
       return {
         ...state,
         departments: payload,
+        totalCount:totalCount
       };
     default:
       return state;

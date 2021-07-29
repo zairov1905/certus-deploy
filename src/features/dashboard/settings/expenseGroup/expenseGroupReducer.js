@@ -5,7 +5,7 @@ const initialState = {
   expenseGroups: []
 };
 
-export default function expenseGroupReducer(state = initialState, { type, payload }) {
+export default function expenseGroupReducer(state = initialState, { type, payload,totalCount }) {
   switch (type) {
     case CREATE_EXPENSE_GROUP:
       return {
@@ -30,6 +30,7 @@ export default function expenseGroupReducer(state = initialState, { type, payloa
       return {
         ...state,
         expenseGroups: payload,
+        totalCount:totalCount
       };
     default:
       return state;

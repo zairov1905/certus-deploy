@@ -5,14 +5,18 @@ import { openModal } from "../../../../app/modal/modalReducer";
 import { deleteDuty, loadDuties } from "./dutyActions";
 
 export default function DutyPage() {
+  const dispatch = useDispatch();
   useEffect(() => {
     dispatch(loadDuties())
   //   // return () => {
   //   //   // dispatch(loadOrder())
   //   // }
   },[])
-  const dispatch = useDispatch();
-  const {duties} = useSelector(state => state.duties);
+
+
+  const [perPage, setPerPage] = useState(10);
+  const [PageNumber, setPageNumber] = useState(1);
+  const {duties,totalCount} = useSelector(state => state.duties);
   const data = duties;
 
   const [hover, sethover] = useState(false);
@@ -50,6 +54,16 @@ export default function DutyPage() {
     color: "#515365",
     fill: "#ffcacd",
   };
+  const handlePageChange = (page) => {
+    dispatch(loadDuties({ s: page, take: perPage }));
+    setPageNumber(page);
+  };
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    dispatch(loadDuties({ s: page, take: newPerPage }));
+    setPerPage(newPerPage);
+  };
+
 
   const actions = (
     <svg
@@ -104,7 +118,7 @@ export default function DutyPage() {
     },
     {
       name: "Vəzifəsi",
-      selector: "duty",
+      selector: "name",
       sortable: true,
     },
     {
@@ -225,16 +239,15 @@ export default function DutyPage() {
                 title="Vəzifələr"
                 columns={columns}
                 data={data}
-                // customStyles={customStyles}
-                // progressPending={loading}
                 pagination
-                // paginationServer
+                paginationServer
+                paginationTotalRows={totalCount}
+                paginationDefaultPage={PageNumber}
+                onChangeRowsPerPage={handlePerRowsChange}
+                onChangePage={handlePageChange}
                 highlightOnHover
                 Clicked
                 actions={actions}
-                // loading={loading}
-                // dense
-                // paginationTotalRows={totalRows}
               />
             </div>
           </div>

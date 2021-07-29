@@ -5,7 +5,7 @@ const initialState = {
   duties: []
 };
 
-export default function dutyReducer(state = initialState, { type, payload }) {
+export default function dutyReducer(state = initialState, { type, payload,totalCount }) {
   switch (type) {
     case CREATE_DUTY:
       return {
@@ -30,6 +30,7 @@ export default function dutyReducer(state = initialState, { type, payload }) {
       return {
         ...state,
         duties: payload,
+        totalCount:totalCount
       };
     default:
       return state;

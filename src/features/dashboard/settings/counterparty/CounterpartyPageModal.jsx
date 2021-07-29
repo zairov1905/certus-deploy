@@ -23,17 +23,15 @@ export default function CounterpartyPageModal({ counterparty }) {
 
   const initialValues = counterparty ? counterparty: {
     id: "",
-    counterpartyName: "",
-    counterpartyAbout: "",
-    counterpartyNumber: "",
+    name: "",
+    about: "",
+    contact: "",
     // counterpartyCategory: "",
   };
   const validationSchema = Yup.object({
-    counterpartyName: Yup.string().required("Mütləq doldurulmalıdır."),
-    counterpartyAbout: Yup.string().required("Mütləq doldurulmalıdır."),
-    counterpartyNumber: Yup.string().required("Mütləq doldurulmalıdır."),
-    // counterpartyCategory: Yup.string().required("Mütləq doldurulmalıdır."),
-
+    name: Yup.string().required("Mütləq doldurulmalıdır."),
+    about: Yup.string().required("Mütləq doldurulmalıdır."),
+    contact: Yup.string().required("Mütləq doldurulmalıdır."),
   });
 
   return (
@@ -47,9 +45,6 @@ export default function CounterpartyPageModal({ counterparty }) {
               ? await dispatch(updateCounterparty(values))
               : await dispatch(createCounterparty({ ...values, id: cuid() }));
             setSubmitting(false);
-            counterparty
-              ? toast.success("Dəyişiklik uğurlar yerinə yetirildi")
-              : toast.success("Uğurla əlavə edildi");
             setModal(true);
             dispatch(closeModal());
           } catch (error) {
@@ -64,8 +59,8 @@ export default function CounterpartyPageModal({ counterparty }) {
             <div className="row">
               <div className="col-md-12">
                 <MyTextInput
-                  id="counterpartyName"
-                  name="counterpartyName"
+                  id="name"
+                  name="name"
                   type="text"
                   className="form-control"
                   placeholder="Kontragent adı"
@@ -73,8 +68,8 @@ export default function CounterpartyPageModal({ counterparty }) {
               </div>
               <div className="col-md-12">
                 <MyTextInput
-                  id="counterpartyAbout"
-                  name="counterpartyAbout"
+                  id="about"
+                  name="about"
                   type="text"
                   className="form-control"
                   placeholder="Kontragent haqqında"
@@ -82,8 +77,8 @@ export default function CounterpartyPageModal({ counterparty }) {
               </div>
               <div className="col-md-12">
                 <MyTextInput
-                  id="counterpartyNumber"
-                  name="counterpartyNumber"
+                  id="contact"
+                  name="contact"
                   type="text"
                   className="form-control"
                   placeholder="Kontragent əlaqə nömrəsi"

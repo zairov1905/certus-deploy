@@ -23,10 +23,10 @@ export default function DutyPageModal({ duty }) {
 
   const initialValues = duty ? duty: {
     id: "",
-    duty: "",
+    name: "",
   };
   const validationSchema = Yup.object({
-    duty: Yup.string().required("Mütləq doldurulmalıdır."),
+    name: Yup.string().required("Mütləq doldurulmalıdır."),
 
   });
 
@@ -41,9 +41,6 @@ export default function DutyPageModal({ duty }) {
               ? await dispatch(updateDuty(values))
               : await dispatch(createDuty({ ...values, id: cuid() }));
             setSubmitting(false);
-            duty
-              ? toast.success("Dəyişiklik uğurlar yerinə yetirildi")
-              : toast.success("Uğurla əlavə edildi");
             setModal(true);
             dispatch(closeModal());
           } catch (error) {
@@ -58,8 +55,8 @@ export default function DutyPageModal({ duty }) {
             <div className="row">
               <div className="col-md-12">
                 <MyTextInput
-                  id="duty"
-                  name="duty"
+                  id="name"
+                  name="name"
                   type="text"
                   className="form-control"
                   placeholder="Sturuktur bölməsi"

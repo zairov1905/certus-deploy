@@ -17,10 +17,10 @@ export default function ExpenseTypePageModal({ expenseType }) {
   const dispatch = useDispatch();
   const { expenseGroups } = useSelector((state) => state.expenseGroups);
   let expenseGroupOptions =
-  expenseGroups &&
-  expenseGroups.map((expenseGroup) => {
+    expenseGroups &&
+    expenseGroups.map((expenseGroup) => {
       return {
-        label: expenseGroup.expenseGroupName,
+        label: expenseGroup.name,
         value: expenseGroup.id,
       };
     });
@@ -35,12 +35,13 @@ export default function ExpenseTypePageModal({ expenseType }) {
     ? expenseType
     : {
         id: "",
-        expenseTypeName: "",
-        expenseGroupName: "",
+        name: "",
+        group_id: "",
       };
+    
   const validationSchema = Yup.object({
-    expenseTypeName: Yup.string().required("Mütləq doldurulmalıdır."),
-    expenseGroupName: Yup.string().required("Mütləq doldurulmalıdır."),
+    name: Yup.string().required("Mütləq doldurulmalıdır."),
+    group_id: Yup.string().required("Mütləq doldurulmalıdır."),
   });
 
   return (
@@ -57,9 +58,6 @@ export default function ExpenseTypePageModal({ expenseType }) {
               ? await dispatch(updateExpenseType(values))
               : await dispatch(createExpenseType({ ...values, id: cuid() }));
             setSubmitting(false);
-            expenseType
-              ? toast.success("Dəyişiklik uğurlar yerinə yetirildi")
-              : toast.success("Uğurla əlavə edildi");
             setModal(true);
             dispatch(closeModal());
           } catch (error) {
@@ -75,8 +73,15 @@ export default function ExpenseTypePageModal({ expenseType }) {
               {" "}
               <div className="col-md-12">
                 <MySearchableSelect
-                  id="expenseGroupName"
-                  name="expenseGroupName"
+                  defaultValue={
+                    expenseType &&
+                    expenseGroupOptions.filter(
+                      (expenseGroupOption) =>
+                      expenseType.group_id.id == expenseGroupOption.value
+                    )
+                  }
+                  id="group_id"
+                  name="group_id"
                   type="text"
                   options={expenseGroupOptions}
                   // className="form-control"
@@ -85,8 +90,8 @@ export default function ExpenseTypePageModal({ expenseType }) {
               </div>
               <div className="col-md-12">
                 <MyTextInput
-                  id="expenseTypeName"
-                  name="expenseTypeName"
+                  id="name"
+                  name="name"
                   type="text"
                   className="form-control"
                   placeholder="Gəlir-Xərc növü"

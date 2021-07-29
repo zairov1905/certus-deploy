@@ -6,14 +6,16 @@ import { loadCounterparty } from "./counterpartyActions";
 import { deleteCounterparty } from "./counterpartyActions";
 
 export default function CounterpartyPage() {
+  const dispatch = useDispatch();
   useEffect(() => {
     dispatch(loadCounterparty())
   //   // return () => {
   //   //   // dispatch(loadOrder())
   //   // }
   },[])
-  const dispatch = useDispatch();
-  const {counterparties} = useSelector(state => state.counterparties);
+  const [perPage, setPerPage] = useState(10);
+  const [PageNumber, setPageNumber] = useState(1);
+  const {counterparties,totalCount} = useSelector(state => state.counterparties);
   const data = counterparties;
 
   const [hover, sethover] = useState(false);
@@ -51,7 +53,15 @@ export default function CounterpartyPage() {
     color: "#515365",
     fill: "#ffcacd",
   };
+  const handlePageChange = (page) => {
+    dispatch(loadCounterparty({ s: page, take: perPage }));
+    setPageNumber(page);
+  };
 
+  const handlePerRowsChange = async (newPerPage, page) => {
+    dispatch(loadCounterparty({ s: page, take: newPerPage }));
+    setPerPage(newPerPage);
+  };
   const actions = (
     <svg
       data-name="add"
@@ -100,17 +110,17 @@ export default function CounterpartyPage() {
   const columns = [
     {
       name: "Ad",
-      selector: "counterpartyName",
+      selector: "name",
       sortable: true,
     },
     {
       name: "Haqqında",
-      selector: "counterpartyAbout",
+      selector: "about",
       sortable: true,
     },
     {
       name: "Nömrə",
-      selector: "counterpartyNumber",
+      selector: "contact",
       sortable: true,
     },
     // {
@@ -236,16 +246,15 @@ export default function CounterpartyPage() {
                 title="Kontragentlər"
                 columns={columns}
                 data={data}
-                // customStyles={customStyles}
-                // progressPending={loading}
                 pagination
-                // paginationServer
+                paginationServer
+                paginationTotalRows={totalCount}
+                paginationDefaultPage={PageNumber}
+                onChangeRowsPerPage={handlePerRowsChange}
+                onChangePage={handlePageChange}
                 highlightOnHover
                 Clicked
                 actions={actions}
-                // loading={loading}
-                // dense
-                // paginationTotalRows={totalRows}
               />
             </div>
           </div>

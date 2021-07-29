@@ -12,11 +12,10 @@ export default function DocumetTypePage() {
   //   //   // dispatch(loadOrder())
   //   // }
   },[])
-  // const { cemeteries, totalCount } = useSelector((state) => state.cemeteries);
-  const totalCount= 10;
+
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);
-  const {documentTypes} = useSelector(state => state.documentTypes);
+  const {documentTypes, totalCount} = useSelector(state => state.documentTypes);
   const data = documentTypes;
 
   const [hover, sethover] = useState(false);
@@ -55,12 +54,12 @@ export default function DocumetTypePage() {
     fill: "#ffcacd",
   };
   const handlePageChange = (page) => {
-    dispatch(loadDocumentTypes({ PageNumber: page, PageSize: perPage }));
+    dispatch(loadDocumentTypes({ s: page, take: perPage }));
     setPageNumber(page);
   };
 
   const handlePerRowsChange = async (newPerPage, page) => {
-    dispatch(loadDocumentTypes({ PageNumber: page, PageSize: newPerPage }));
+    dispatch(loadDocumentTypes({ s: page, take: newPerPage }));
     setPerPage(newPerPage);
   };
 

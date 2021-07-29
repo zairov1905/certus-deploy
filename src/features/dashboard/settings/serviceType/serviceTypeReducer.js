@@ -5,7 +5,7 @@ const initialState = {
   serviceTypes: []
 };
 
-export default function serviceTypeReducer(state = initialState, { type, payload }) {
+export default function serviceTypeReducer(state = initialState, { type, payload,totalCount }) {
   switch (type) {
     case CREATE_SERVICE_TYPE:
       return {
@@ -30,6 +30,7 @@ export default function serviceTypeReducer(state = initialState, { type, payload
       return {
         ...state,
         serviceTypes: payload,
+        totalCount:totalCount
       };
     default:
       return state;

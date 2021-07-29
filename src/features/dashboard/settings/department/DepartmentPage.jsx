@@ -5,14 +5,16 @@ import { openModal } from "../../../../app/modal/modalReducer";
 import { deleteDepartment, loadDepartments } from "./departmentActions";
 
 export default function DepartmentPage() {
+  const dispatch = useDispatch();
   useEffect(() => {
     dispatch(loadDepartments())
   //   // return () => {
   //   //   // dispatch(loadOrder())
   //   // }
   },[])
-  const dispatch = useDispatch();
-  const {departments} = useSelector(state => state.departments);
+  const [perPage, setPerPage] = useState(10);
+  const [PageNumber, setPageNumber] = useState(1);
+  const {departments,totalCount} = useSelector(state => state.departments);
   const data = departments;
 
   const [hover, sethover] = useState(false);
@@ -50,7 +52,15 @@ export default function DepartmentPage() {
     color: "#515365",
     fill: "#ffcacd",
   };
+  const handlePageChange = (page) => {
+    dispatch(loadDepartments({ s: page, take: perPage }));
+    setPageNumber(page);
+  };
 
+  const handlePerRowsChange = async (newPerPage, page) => {
+    dispatch(loadDepartments({ s: page, take: newPerPage }));
+    setPerPage(newPerPage);
+  };
   const actions = (
     <svg
       data-name="add"
@@ -104,7 +114,7 @@ export default function DepartmentPage() {
     },
     {
       name: "Sturuktur bölmə",
-      selector: "department",
+      selector: "name",
       sortable: true,
     },
     {
@@ -225,16 +235,15 @@ export default function DepartmentPage() {
                 title="Struktur Bölmələr"
                 columns={columns}
                 data={data}
-                // customStyles={customStyles}
-                // progressPending={loading}
                 pagination
-                // paginationServer
+                paginationServer
+                paginationTotalRows={totalCount}
+                paginationDefaultPage={PageNumber}
+                onChangeRowsPerPage={handlePerRowsChange}
+                onChangePage={handlePageChange}
                 highlightOnHover
                 Clicked
                 actions={actions}
-                // loading={loading}
-                // dense
-                // paginationTotalRows={totalRows}
               />
             </div>
           </div>

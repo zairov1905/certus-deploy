@@ -5,7 +5,7 @@ const initialState = {
   counterparties: []
 };
 
-export default function counterpartyReducer(state = initialState, { type, payload }) {
+export default function counterpartyReducer(state = initialState, { type, payload, totalCount }) {
   switch (type) {
     case CREATE_COUNTERPARTY:
       return {
@@ -30,6 +30,7 @@ export default function counterpartyReducer(state = initialState, { type, payloa
       return {
         ...state,
         counterparties: payload,
+        totalCount:totalCount
       };
     default:
       return state;

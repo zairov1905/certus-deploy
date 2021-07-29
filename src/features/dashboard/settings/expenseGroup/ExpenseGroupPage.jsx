@@ -6,14 +6,16 @@ import { deleteExpenseGroup, loadExpenseGroup } from "./expenseGroupActions";
 
 
 export default function ExpenseGroupPage() {
+  const dispatch = useDispatch();
   useEffect(() => {
     dispatch(loadExpenseGroup())
   //   // return () => {
   //   //   // dispatch(loadOrder())
   //   // }
   },[])
-  const dispatch = useDispatch();
-  const {expenseGroups} = useSelector(state => state.expenseGroups);
+  const [perPage, setPerPage] = useState(10);
+  const [PageNumber, setPageNumber] = useState(1);
+  const {expenseGroups, totalCount} = useSelector(state => state.expenseGroups);
   const data = expenseGroups;
 
   const [hover, sethover] = useState(false);
@@ -50,6 +52,15 @@ export default function ExpenseGroupPage() {
   const buttonHover = {
     color: "#515365",
     fill: "#ffcacd",
+  };
+  const handlePageChange = (page) => {
+    dispatch(loadExpenseGroup({ s: page, take: perPage }));
+    setPageNumber(page);
+  };
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    dispatch(loadExpenseGroup({ s: page, take: newPerPage }));
+    setPerPage(newPerPage);
   };
 
   const actions = (
@@ -105,7 +116,7 @@ export default function ExpenseGroupPage() {
     },
     {
       name: "Gəlir-Xərc qrupu",
-      selector: "expenseGroupName",
+      selector: "name",
       sortable: true,
     },
 
@@ -227,16 +238,15 @@ export default function ExpenseGroupPage() {
                 title="Gəlir-Xərc qrupları"
                 columns={columns}
                 data={data}
-                // customStyles={customStyles}
-                // progressPending={loading}
                 pagination
-                // paginationServer
+                paginationServer
+                paginationTotalRows={totalCount}
+                paginationDefaultPage={PageNumber}
+                onChangeRowsPerPage={handlePerRowsChange}
+                onChangePage={handlePageChange}
                 highlightOnHover
                 Clicked
                 actions={actions}
-                // loading={loading}
-                // dense
-                // paginationTotalRows={totalRows}
               />
             </div>
           </div>

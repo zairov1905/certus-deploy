@@ -23,10 +23,10 @@ export default function DepartmentPageModal({ department }) {
 
   const initialValues = department ? department: {
     id: "",
-    department: "",
+    name: "",
   };
   const validationSchema = Yup.object({
-    department: Yup.string().required("Mütləq doldurulmalıdır."),
+    name: Yup.string().required("Mütləq doldurulmalıdır."),
 
   });
 
@@ -39,11 +39,8 @@ export default function DepartmentPageModal({ department }) {
           try {
             department
               ? await dispatch(updateDepartment(values))
-              : await dispatch(createDepartment({ ...values, id: cuid() }));
+              : await dispatch(createDepartment({ ...values }));
             setSubmitting(false);
-            department
-              ? toast.success("Dəyişiklik uğurlar yerinə yetirildi")
-              : toast.success("Uğurla əlavə edildi");
             setModal(true);
             dispatch(closeModal());
           } catch (error) {
@@ -58,8 +55,8 @@ export default function DepartmentPageModal({ department }) {
             <div className="row">
               <div className="col-md-12">
                 <MyTextInput
-                  id="department"
-                  name="department"
+                  id="name"
+                  name="name"
                   type="text"
                   className="form-control"
                   placeholder="Sturuktur bölməsi"

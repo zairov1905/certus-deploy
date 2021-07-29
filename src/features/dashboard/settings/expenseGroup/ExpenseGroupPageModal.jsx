@@ -23,10 +23,10 @@ export default function ExpenseGroupPageModal({ expenseGroup }) {
 
   const initialValues = expenseGroup ?expenseGroup: {
     id: "",
-    expenseGroupName: "",
+    name: "",
   };
   const validationSchema = Yup.object({
-    expenseGroupName: Yup.string().required("Mütləq doldurulmalıdır."),
+    name: Yup.string().required("Mütləq doldurulmalıdır."),
   });
 
   return (
@@ -38,11 +38,8 @@ export default function ExpenseGroupPageModal({ expenseGroup }) {
           try {
             expenseGroup
               ? await dispatch(updateExpenseGroup(values))
-              : await dispatch(createExpenseGroup({ ...values, id: cuid() }));
+              : await dispatch(createExpenseGroup({ ...values}));
             setSubmitting(false);
-            expenseGroup
-              ? toast.success("Dəyişiklik uğurlar yerinə yetirildi")
-              : toast.success("Uğurla əlavə edildi");
             setModal(true);
             dispatch(closeModal());
           } catch (error) {
@@ -57,8 +54,8 @@ export default function ExpenseGroupPageModal({ expenseGroup }) {
             <div className="row">
               <div className="col-md-12">
                 <MyTextInput
-                  id="expenseGroupName"
-                  name="expenseGroupName"
+                  id="name"
+                  name="name"
                   type="text"
                   className="form-control"
                   placeholder="Gəlir-Xərc qrupu adı"

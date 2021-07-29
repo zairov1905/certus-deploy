@@ -1,3 +1,4 @@
+import axios from "axios";
 import { toast } from "react-toastify";
 import { fetchSampleDataCounterParty } from "../../../../app/api/mockApi";
 
@@ -15,15 +16,21 @@ import {
   UPDATE_COUNTERPARTY,
 } from "./counterpartyConstants";
 
-export function loadCounterparty() {
+export function loadCounterparty(data) {
   return async function (dispatch) {
     dispatch(asyncActionStart());
-    try {
-      const counterparties = await fetchSampleDataCounterParty();
-      dispatch({ type: FETCH_COUNTERPARTY, payload: counterparties });
+    const counterparties = await axios.get("/contractor", {
+      params: { ...data },
+    });
+    if (counterparties.status === 200) {
+      dispatch({
+        type: FETCH_COUNTERPARTY,
+        payload: counterparties.data.data,
+        totalCount: counterparties.data.message,
+      });
       dispatch(asyncActionFinish());
-    } catch (error) {
-      dispatch(asyncActionError(error));
+    } else {
+      dispatch(asyncActionError());
     }
   };
 }
@@ -37,12 +44,15 @@ export function listenToCounterparty(counterparties) {
 export function createCounterparty(counterparty) {
   return async function (dispatch) {
     dispatch(asyncActionStart());
-    try {
-      await delay(1000);
-      dispatch({ type: CREATE_COUNTERPARTY, payload: counterparty });
+    const data = await axios.post("contractor/create", counterparty, {
+      withCredentials: true,
+    });
+    if (data.status === 201) {
+      toast.success("Uğurla əlavə edildi");
+      dispatch({ type: CREATE_COUNTERPARTY, payload: data.data.data });
       dispatch(asyncActionFinish());
-    } catch (error) {
-      asyncActionError(error);
+    } else {
+      toast.danger("Xəta baş verdi, yenidən cəht edin.");
     }
   };
 }
@@ -50,25 +60,36 @@ export function createCounterparty(counterparty) {
 export function updateCounterparty(counterparty) {
   return async function (dispatch) {
     dispatch(asyncActionStart);
-    try {
-      await delay(1000);
-      dispatch({ type: UPDATE_COUNTERPARTY, payload: counterparty });
+
+    const counterpartyUptaded = await axios.put(
+      "/contractor/update",
+      counterparty
+    );
+    
+    if (counterpartyUptaded.status === 200) {
+      toast.success("Dəyişiklik uğurlar yerinə yetirildi");
+      dispatch({
+        type: UPDATE_COUNTERPARTY,
+        payload: counterpartyUptaded.data.data,
+      });
       dispatch(asyncActionFinish());
-    } catch (error) {
-      asyncActionError(error);
+    } else {
+      asyncActionError();
     }
   };
 }
 
 export function deleteCounterparty(counterpartyId) {
   return async function (dispatch) {
-    try {
-      await delay(1000);
+    const counterpartyDeleted = await axios.delete(
+      `/contractor/delete?id=${counterpartyId}`
+    );
+    if (counterpartyDeleted.status === 200) {
       dispatch({ type: DELETE_COUNTERPARTY, payload: counterpartyId });
       // dispatch(asyncActionFinish())
-      toast.success("Uğurla silindi");
-    } catch (error) {
-      dispatch(asyncActionError(error));
+      toast.info("Uğurla silindi");
+    } else {
+      dispatch(asyncActionError());
     }
   };
 }

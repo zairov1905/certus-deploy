@@ -4,16 +4,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { openModal } from "../../../../app/modal/modalReducer";
 import { deleteServiceType, loadServiceType } from "./serviceTypeActions";
 
-
 export default function ServiceTypePage() {
-  useEffect(() => {
-    dispatch(loadServiceType())
-  //   // return () => {
-  //   //   // dispatch(loadOrder())
-  //   // }
-  },[])
   const dispatch = useDispatch();
-  const {serviceTypes} = useSelector(state => state.serviceTypes);
+  useEffect(() => {
+    dispatch(loadServiceType());
+    //   // return () => {
+    //   //   // dispatch(loadOrder())
+    //   // }
+  }, []);
+
+  const [perPage, setPerPage] = useState(10);
+  const [PageNumber, setPageNumber] = useState(1);
+  const { serviceTypes, totalCount } = useSelector(
+    (state) => state.serviceTypes
+  );
   const data = serviceTypes;
 
   const [hover, sethover] = useState(false);
@@ -50,6 +54,15 @@ export default function ServiceTypePage() {
   const buttonHover = {
     color: "#515365",
     fill: "#ffcacd",
+  };
+  const handlePageChange = (page) => {
+    dispatch(loadServiceType({ s: page, take: perPage }));
+    setPageNumber(page);
+  };
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    dispatch(loadServiceType({ s: page, take: newPerPage }));
+    setPerPage(newPerPage);
   };
 
   const actions = (
@@ -104,8 +117,8 @@ export default function ServiceTypePage() {
       sortable: true,
     },
     {
-      name: "Servis Növü",
-      selector: "serviceTypeName",
+      name: "Xidmət Növü",
+      selector: "name",
       sortable: true,
     },
 
@@ -114,20 +127,15 @@ export default function ServiceTypePage() {
       cell: (serviceType) => (
         <div className="action-btn">
           <svg
-            onClick={() =>
-              {
-                dispatch(
-                
-                  openModal({
-                    modalType: "ServiceTypePageModal",
-                    modalProps: { serviceType },
-                  })
-                )
-                // dispatch(loadEmployees());
-
-              }
-
-            }
+            onClick={() => {
+              dispatch(
+                openModal({
+                  modalType: "ServiceTypePageModal",
+                  modalProps: { serviceType },
+                })
+              );
+              // dispatch(loadEmployees());
+            }}
             data-name="edit"
             id={serviceType.id}
             onMouseEnter={(e) => {
@@ -220,23 +228,21 @@ export default function ServiceTypePage() {
         <div className="row layout-top-spacing">
           <div className="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
             <div className="widget-content widget-content-area br-6">
-
               <DataTable
                 // className="dataTables_wrapper container-fluid dt-bootstrap4 table-responsive"
                 // selectableRows
                 title="Xidmət Növləri"
                 columns={columns}
                 data={data}
-                // customStyles={customStyles}
-                // progressPending={loading}
                 pagination
-                // paginationServer
+                paginationServer
+                paginationTotalRows={totalCount}
+                paginationDefaultPage={PageNumber}
+                onChangeRowsPerPage={handlePerRowsChange}
+                onChangePage={handlePageChange}
                 highlightOnHover
                 Clicked
                 actions={actions}
-                // loading={loading}
-                // dense
-                // paginationTotalRows={totalRows}
               />
             </div>
           </div>
