@@ -2,18 +2,22 @@ import React, { useEffect, useState } from "react";
 import DataTable, { defaultThemes } from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
 import { openModal } from "../../../../app/modal/modalReducer";
-import { deleteOrderSource, loadOrderSource} from "./orderSourceActions";
-
+import { deleteOrderSource, loadOrderSource } from "./orderSourceActions";
 
 export default function OrderSourcePage() {
-  useEffect(() => {
-    dispatch(loadOrderSource())
-  //   // return () => {
-  //   //   // dispatch(loadOrder())
-  //   // }
-  },[])
   const dispatch = useDispatch();
-  const {orderSources} = useSelector(state => state.orderSources);
+  useEffect(() => {
+    dispatch(loadOrderSource());
+    //   // return () => {
+    //   //   // dispatch(loadOrder())
+    //   // }
+  }, []);
+
+  const [perPage, setPerPage] = useState(10);
+  const [PageNumber, setPageNumber] = useState(1);
+  const { orderSources, totalCount } = useSelector(
+    (state) => state.orderSources
+  );
   const data = orderSources;
 
   const [hover, sethover] = useState(false);
@@ -50,6 +54,15 @@ export default function OrderSourcePage() {
   const buttonHover = {
     color: "#515365",
     fill: "#ffcacd",
+  };
+  const handlePageChange = (page) => {
+    dispatch(loadOrderSource({ s: page, take: perPage }));
+    setPageNumber(page);
+  };
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    dispatch(loadOrderSource({ s: page, take: newPerPage }));
+    setPerPage(newPerPage);
   };
 
   const actions = (
@@ -105,7 +118,7 @@ export default function OrderSourcePage() {
     },
     {
       name: "Sifariş mənbəyi",
-      selector: "orderSourceName",
+      selector: "name",
       sortable: true,
     },
 
@@ -114,20 +127,15 @@ export default function OrderSourcePage() {
       cell: (orderSource) => (
         <div className="action-btn">
           <svg
-            onClick={() =>
-              {
-                dispatch(
-                
-                  openModal({
-                    modalType: "OrderSourcePageModal",
-                    modalProps: { orderSource },
-                  })
-                )
-                // dispatch(loadEmployees());
-
-              }
-
-            }
+            onClick={() => {
+              dispatch(
+                openModal({
+                  modalType: "OrderSourcePageModal",
+                  modalProps: { orderSource },
+                })
+              );
+              // dispatch(loadEmployees());
+            }}
             data-name="edit"
             id={orderSource.id}
             onMouseEnter={(e) => {
@@ -220,23 +228,21 @@ export default function OrderSourcePage() {
         <div className="row layout-top-spacing">
           <div className="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
             <div className="widget-content widget-content-area br-6">
-
               <DataTable
                 // className="dataTables_wrapper container-fluid dt-bootstrap4 table-responsive"
                 // selectableRows
                 title="Sifariş mənbəyi"
                 columns={columns}
                 data={data}
-                // customStyles={customStyles}
-                // progressPending={loading}
                 pagination
-                // paginationServer
+                paginationServer
+                paginationTotalRows={totalCount}
+                paginationDefaultPage={PageNumber}
+                onChangeRowsPerPage={handlePerRowsChange}
+                onChangePage={handlePageChange}
                 highlightOnHover
                 Clicked
                 actions={actions}
-                // loading={loading}
-                // dense
-                // paginationTotalRows={totalRows}
               />
             </div>
           </div>

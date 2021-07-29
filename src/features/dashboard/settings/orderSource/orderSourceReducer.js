@@ -1,11 +1,18 @@
-import { CREATE_ORDER_SOURCE, DELETE_ORDER_SOURCE, FETCH_ORDER_SOURCE, UPDATE_ORDER_SOURCE } from "./orderSourceConstants";
-
+import {
+  CREATE_ORDER_SOURCE,
+  DELETE_ORDER_SOURCE,
+  FETCH_ORDER_SOURCE,
+  UPDATE_ORDER_SOURCE,
+} from "./orderSourceConstants";
 
 const initialState = {
-  orderSources: []
+  orderSources: [],
 };
 
-export default function orderSourceReducer(state = initialState, { type, payload }) {
+export default function orderSourceReducer(
+  state = initialState,
+  { type, payload, totalCount }
+) {
   switch (type) {
     case CREATE_ORDER_SOURCE:
       return {
@@ -16,7 +23,9 @@ export default function orderSourceReducer(state = initialState, { type, payload
       return {
         ...state,
         orderSources: [
-          ...state.orderSources.filter((orderSource) => orderSource.id !== payload.id),
+          ...state.orderSources.filter(
+            (orderSource) => orderSource.id !== payload.id
+          ),
           payload,
         ],
       };
@@ -24,12 +33,17 @@ export default function orderSourceReducer(state = initialState, { type, payload
     case DELETE_ORDER_SOURCE:
       return {
         ...state,
-        orderSources: [...state.orderSources.filter((orderSource) => orderSource.id !== payload)],
+        orderSources: [
+          ...state.orderSources.filter(
+            (orderSource) => orderSource.id !== payload
+          ),
+        ],
       };
     case FETCH_ORDER_SOURCE:
       return {
         ...state,
         orderSources: payload,
+        totalCount: totalCount,
       };
     default:
       return state;

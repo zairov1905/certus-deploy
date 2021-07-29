@@ -1,3 +1,4 @@
+import axios from "axios";
 import { toast } from "react-toastify";
 import { fetchSampleDataOrderSource } from "../../../../app/api/mockApi";
 
@@ -15,15 +16,22 @@ import {
   UPDATE_ORDER_SOURCE,
 } from "./orderSourceConstants";
 
-export function loadOrderSource() {
+export function loadOrderSource(data) {
   return async function (dispatch) {
     dispatch(asyncActionStart());
-    try {
-      const orderSources = await fetchSampleDataOrderSource();
-      dispatch({ type: FETCH_ORDER_SOURCE, payload: orderSources });
+
+    const orderSources = await axios.get("/order_source", {
+      params: { ...data },
+    });
+    if (orderSources.status === 200) {
+      dispatch({
+        type: FETCH_ORDER_SOURCE,
+        payload: orderSources.data.data,
+        totalCount: orderSources.data.message,
+      });
       dispatch(asyncActionFinish());
-    } catch (error) {
-      dispatch(asyncActionError(error));
+    } else {
+      dispatch(asyncActionError());
     }
   };
 }
@@ -37,12 +45,17 @@ export function listenToOrderSource(orderSource) {
 export function createOrderSource(orderSource) {
   return async function (dispatch) {
     dispatch(asyncActionStart());
-    try {
-      await delay(1000);
-      dispatch({ type: CREATE_ORDER_SOURCE, payload: orderSource });
+    const data = await axios.post("order_source/create", orderSource, {
+      withCredentials: true,
+    });
+    
+
+    if (data.status === 201) {
+      toast.success("Uğurla əlavə edildi");
+      dispatch({ type: CREATE_ORDER_SOURCE, payload: data.data.data });
       dispatch(asyncActionFinish());
-    } catch (error) {
-      asyncActionError(error);
+    } else {
+      toast.danger("Xəta baş verdi, yenidən cəht edin.");
     }
   };
 }
@@ -50,25 +63,37 @@ export function createOrderSource(orderSource) {
 export function updateOrderSource(orderSource) {
   return async function (dispatch) {
     dispatch(asyncActionStart);
-    try {
-      await delay(1000);
-      dispatch({ type: UPDATE_ORDER_SOURCE, payload: orderSource });
+
+    const orderSourceUpdated = await axios.put(
+      "/order_source/update",
+      orderSource
+    );
+   
+    if (orderSourceUpdated.status === 200) {
+      toast.success("Dəyişiklik uğurlar yerinə yetirildi");
+      dispatch({
+        type: UPDATE_ORDER_SOURCE,
+        payload: orderSourceUpdated.data.data,
+      });
       dispatch(asyncActionFinish());
-    } catch (error) {
-      asyncActionError(error);
+    } else {
+      asyncActionError();
     }
   };
 }
 
 export function deleteOrderSource(orderSourceId) {
   return async function (dispatch) {
-    try {
-      await delay(1000);
+    const orderSourceDeleted = await axios.delete(
+      `/order_source/delete?id=${orderSourceId}`
+    );
+    
+    if (orderSourceDeleted.status === 200) {
       dispatch({ type: DELETE_ORDER_SOURCE, payload: orderSourceId });
       // dispatch(asyncActionFinish())
-      toast.success("Uğurla silindi");
-    } catch (error) {
-      dispatch(asyncActionError(error));
+      toast.info("Uğurla silindi");
+    } else {
+      dispatch(asyncActionError());
     }
   };
 }

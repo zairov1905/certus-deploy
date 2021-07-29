@@ -25,10 +25,10 @@ export default function OrderSourcePageModal({ orderSource }) {
     ? orderSource
     : {
         id: "",
-        orderSourceName: "",
+        name: "",
       };
   const validationSchema = Yup.object({
-    orderSourceName: Yup.string().required("Mütləq doldurulmalıdır."),
+    name: Yup.string().required("Mütləq doldurulmalıdır."),
   });
 
   return (
@@ -43,11 +43,8 @@ export default function OrderSourcePageModal({ orderSource }) {
           try {
             orderSource
               ? await dispatch(updateOrderSource(values))
-              : await dispatch(createOrderSource({ ...values, id: cuid() }));
+              : await dispatch(createOrderSource({ ...values}));
             setSubmitting(false);
-            orderSource
-              ? toast.success("Dəyişiklik uğurlar yerinə yetirildi")
-              : toast.success("Uğurla əlavə edildi");
             setModal(true);
             dispatch(closeModal());
           } catch (error) {
@@ -62,11 +59,11 @@ export default function OrderSourcePageModal({ orderSource }) {
             <div className="row">
               <div className="col-md-12">
                 <MyTextInput
-                  id="orderSourceName"
-                  name="orderSourceName"
+                  id="name"
+                  name="name"
                   type="text"
                   className="form-control"
-                  placeholder="Xərc növü adı"
+                  placeholder="Sifariş mənbəyi"
                 />
               </div>
             </div>
