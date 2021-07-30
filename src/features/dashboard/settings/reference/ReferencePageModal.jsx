@@ -25,10 +25,10 @@ export default function ReferencePageModal({ reference }) {
     ? reference
     : {
         id: "",
-        referenceName: "",
+        name: "",
       };
   const validationSchema = Yup.object({
-    referenceName: Yup.string().required("Mütləq doldurulmalıdır."),
+    name: Yup.string().required("Mütləq doldurulmalıdır."),
   });
 
   return (
@@ -45,9 +45,6 @@ export default function ReferencePageModal({ reference }) {
               ? await dispatch(updateReference(values))
               : await dispatch(createReference({ ...values, id: cuid() }));
             setSubmitting(false);
-            reference
-              ? toast.success("Dəyişiklik uğurlar yerinə yetirildi")
-              : toast.success("Uğurla əlavə edildi");
             setModal(true);
             dispatch(closeModal());
           } catch (error) {
@@ -62,8 +59,8 @@ export default function ReferencePageModal({ reference }) {
             <div className="row">
               <div className="col-md-12">
                 <MyTextInput
-                  id="referenceName"
-                  name="referenceName"
+                  id="name"
+                  name="name"
                   type="text"
                   className="form-control"
                   placeholder="Referans"

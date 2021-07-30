@@ -6,14 +6,18 @@ import { loadSkill } from "./skillActions";
 import { deleteSkill } from "./skillActions";
 
 export default function SkillPage() {
-  useEffect(() => {
-    dispatch(loadSkill())
-  //   // return () => {
-  //   //   // dispatch(loadOrder())
-  //   // }
-  },[])
   const dispatch = useDispatch();
-  const {skills} = useSelector(state => state.skills);
+
+  useEffect(() => {
+    dispatch(loadSkill());
+    //   // return () => {
+    //   //   // dispatch(loadOrder())
+    //   // }
+  }, []);
+
+  const [perPage, setPerPage] = useState(10);
+  const [PageNumber, setPageNumber] = useState(1);
+  const { skills, totalCount } = useSelector((state) => state.skills);
   const data = skills;
 
   const [hover, sethover] = useState(false);
@@ -51,6 +55,16 @@ export default function SkillPage() {
     color: "#515365",
     fill: "#ffcacd",
   };
+  const handlePageChange = (page) => {
+    dispatch(loadSkill({ s: page, take: perPage }));
+    setPageNumber(page);
+  };
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    dispatch(loadSkill({ s: page, take: newPerPage }));
+    setPerPage(newPerPage);
+  };
+
 
   const actions = (
     <svg
@@ -100,12 +114,12 @@ export default function SkillPage() {
   const columns = [
     {
       name: "Ad",
-      selector: "skillName",
+      selector: "name",
       sortable: true,
     },
     {
       name: "Haqqında",
-      selector: "skillAbout",
+      selector: "about",
       sortable: true,
     },
     {
@@ -113,20 +127,15 @@ export default function SkillPage() {
       cell: (skill) => (
         <div className="action-btn">
           <svg
-            onClick={() =>
-              {
-                dispatch(
-                
-                  openModal({
-                    modalType: "SkillPageModal",
-                    modalProps: { skill },
-                  })
-                )
-                // dispatch(loadEmployees());
-
-              }
-
-            }
+            onClick={() => {
+              dispatch(
+                openModal({
+                  modalType: "SkillPageModal",
+                  modalProps: { skill },
+                })
+              );
+              // dispatch(loadEmployees());
+            }}
             data-name="edit"
             id={skill.id}
             onMouseEnter={(e) => {
@@ -219,23 +228,21 @@ export default function SkillPage() {
         <div className="row layout-top-spacing">
           <div className="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
             <div className="widget-content widget-content-area br-6">
-
               <DataTable
                 // className="dataTables_wrapper container-fluid dt-bootstrap4 table-responsive"
                 // selectableRows
                 title="Səriştələr"
                 columns={columns}
                 data={data}
-                // customStyles={customStyles}
-                // progressPending={loading}
                 pagination
-                // paginationServer
+                paginationServer
+                paginationTotalRows={totalCount}
+                paginationDefaultPage={PageNumber}
+                onChangeRowsPerPage={handlePerRowsChange}
+                onChangePage={handlePageChange}
                 highlightOnHover
                 Clicked
                 actions={actions}
-                // loading={loading}
-                // dense
-                // paginationTotalRows={totalRows}
               />
             </div>
           </div>

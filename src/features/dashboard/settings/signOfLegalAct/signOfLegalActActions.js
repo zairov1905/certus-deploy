@@ -1,3 +1,4 @@
+import axios from "axios";
 import { toast } from "react-toastify";
 import { fetchSampleDataSignOfLegalAct } from "../../../../app/api/mockApi";
 
@@ -8,22 +9,31 @@ import {
   asyncActionStart,
 } from "../../../../app/async/asyncReducer";
 import { delay } from "../../../../app/util/util";
+import { DELETE_SERVICE_TYPE } from "../serviceType/serviceTypeConstants";
 import {
   CREATE_SIGN_OF_LEGAL_ACT,
   DELETE_SIGN_OF_LEGAL_ACT,
   FETCH_SIGN_OF_LEGAL_ACT,
   UPDATE_SIGN_OF_LEGAL_ACT,
 } from "./signOfLegalActConstants";
+const url = "legal_act";
 
-export function loadSignOfLegalAct() {
+export function loadSignOfLegalAct(data) {
   return async function (dispatch) {
     dispatch(asyncActionStart());
-    try {
-      const signOfLegalActs = await fetchSampleDataSignOfLegalAct();
-      dispatch({ type: FETCH_SIGN_OF_LEGAL_ACT, payload: signOfLegalActs });
+
+    const references = await axios.get(`/${url}`, {
+      params: { ...data },
+    });
+    if (references.status === 200) {
+      dispatch({
+        type: FETCH_SIGN_OF_LEGAL_ACT,
+        payload: references.data.data,
+        totalCount: references.data.message,
+      });
       dispatch(asyncActionFinish());
-    } catch (error) {
-      dispatch(asyncActionError(error));
+    } else {
+      dispatch(asyncActionError());
     }
   };
 }
@@ -37,12 +47,15 @@ export function listenToSignOfLegalAct(counterparties) {
 export function createSignOfLegalAct(signOfLegalAct) {
   return async function (dispatch) {
     dispatch(asyncActionStart());
-    try {
-      await delay(1000);
-      dispatch({ type: CREATE_SIGN_OF_LEGAL_ACT, payload: signOfLegalAct });
+    const data = await axios.post(`${url}/create`, signOfLegalAct, {
+      withCredentials: true,
+    });
+    if (data.status === 201) {
+      toast.success("Uğurla əlavə edildi");
+      dispatch({ type: CREATE_SIGN_OF_LEGAL_ACT, payload: data.data.data });
       dispatch(asyncActionFinish());
-    } catch (error) {
-      asyncActionError(error);
+    } else {
+      toast.danger("Xəta baş verdi, yenidən cəht edin.");
     }
   };
 }
@@ -50,25 +63,35 @@ export function createSignOfLegalAct(signOfLegalAct) {
 export function updateSignOfLegalAct(signOfLegalAct) {
   return async function (dispatch) {
     dispatch(asyncActionStart);
-    try {
-      await delay(1000);
-      dispatch({ type: UPDATE_SIGN_OF_LEGAL_ACT, payload: signOfLegalAct });
+
+    const signOfLegalActUpdated = await axios.put(
+      `/${url}/update`,
+      signOfLegalAct
+    );
+    if (signOfLegalActUpdated.status === 200) {
+      toast.success("Dəyişiklik uğurlar yerinə yetirildi");
+      dispatch({
+        type: UPDATE_SIGN_OF_LEGAL_ACT,
+        payload: signOfLegalActUpdated.data.data,
+      });
       dispatch(asyncActionFinish());
-    } catch (error) {
-      asyncActionError(error);
+    } else {
+      asyncActionError();
     }
   };
 }
 
 export function deleteSignOfLegalAct(signOfLegalActId) {
   return async function (dispatch) {
-    try {
-      await delay(1000);
+    const signOfLegalActDeleted = await axios.delete(
+      `/${url}/delete?id=${signOfLegalActId}`
+    );
+    if (signOfLegalActDeleted.status === 200) {
       dispatch({ type: DELETE_SIGN_OF_LEGAL_ACT, payload: signOfLegalActId });
       // dispatch(asyncActionFinish())
-      toast.success("Uğurla silindi");
-    } catch (error) {
-      dispatch(asyncActionError(error));
+      toast.info("Uğurla silindi");
+    } else {
+      dispatch(asyncActionError());
     }
   };
 }

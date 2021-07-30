@@ -23,14 +23,14 @@ export default function SkillPageModal({ skill }) {
 
   const initialValues = skill ? skill : {
     id: "",
-    skillName: "",
-    skillAbout: "",
+    name: "",
+    about: "",
     // skillNumber: "",
     // skillCategory: "",
   };
   const validationSchema = Yup.object({
-    skillName: Yup.string().required("Mütləq doldurulmalıdır."),
-    skillAbout: Yup.string().required("Mütləq doldurulmalıdır."),
+    name: Yup.string().required("Mütləq doldurulmalıdır."),
+    about: Yup.string().required("Mütləq doldurulmalıdır."),
     // skillNumber: Yup.string().required("Mütləq doldurulmalıdır."),
     // skillCategory: Yup.string().required("Mütləq doldurulmalıdır."),
 
@@ -47,9 +47,6 @@ export default function SkillPageModal({ skill }) {
               ? await dispatch(updateSkill(values))
               : await dispatch(createSkill({ ...values, id: cuid() }));
             setSubmitting(false);
-            skill
-              ? toast.success("Dəyişiklik uğurlar yerinə yetirildi")
-              : toast.success("Uğurla əlavə edildi");
             setModal(true);
             dispatch(closeModal());
           } catch (error) {
@@ -64,8 +61,8 @@ export default function SkillPageModal({ skill }) {
             <div className="row">
               <div className="col-md-12">
                 <MyTextInput
-                  id="skillName"
-                  name="skillName"
+                  id="name"
+                  name="name"
                   type="text"
                   className="form-control"
                   placeholder="Səriştənin adı"
@@ -73,8 +70,8 @@ export default function SkillPageModal({ skill }) {
               </div>
               <div className="col-md-12">
                 <MyTextInput
-                  id="skillAbout"
-                  name="skillAbout"
+                  id="about"
+                  name="about"
                   type="text"
                   className="form-control"
                   placeholder="Səriştə haqqında"

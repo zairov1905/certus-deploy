@@ -5,7 +5,7 @@ const initialState = {
   signOfLegalActs: []
 };
 
-export default function signOfLegalActReducer(state = initialState, { type, payload }) {
+export default function signOfLegalActReducer(state = initialState, { type, payload,totalCount }) {
   switch (type) {
     case CREATE_SIGN_OF_LEGAL_ACT:
       return {
@@ -30,6 +30,7 @@ export default function signOfLegalActReducer(state = initialState, { type, payl
       return {
         ...state,
         signOfLegalActs: payload,
+        totalCount:totalCount
       };
     default:
       return state;

@@ -6,14 +6,16 @@ import { deleteSignOfLegalAct } from "./signOfLegalActActions";
 import { loadSignOfLegalAct } from "./signOfLegalActActions";
 
 export default function SignOfLegalActPage() {
+  const dispatch = useDispatch();
   useEffect(() => {
     dispatch(loadSignOfLegalAct())
   //   // return () => {
   //   //   // dispatch(loadOrder())
   //   // }
   },[])
-  const dispatch = useDispatch();
-  const {signOfLegalActs} = useSelector(state => state.signOfLegalActs);
+  const [perPage, setPerPage] = useState(10);
+  const [PageNumber, setPageNumber] = useState(1);
+  const {signOfLegalActs,totalCount} = useSelector(state => state.signOfLegalActs);
   const data = signOfLegalActs;
 
   const [hover, sethover] = useState(false);
@@ -51,7 +53,15 @@ export default function SignOfLegalActPage() {
     color: "#515365",
     fill: "#ffcacd",
   };
+  const handlePageChange = (page) => {
+    dispatch(loadSignOfLegalAct({ s: page, take: perPage }));
+    setPageNumber(page);
+  };
 
+  const handlePerRowsChange = async (newPerPage, page) => {
+    dispatch(loadSignOfLegalAct({ s: page, take: newPerPage }));
+    setPerPage(newPerPage);
+  };
   const actions = (
     <svg
       data-name="add"
@@ -105,7 +115,7 @@ export default function SignOfLegalActPage() {
     },
     {
       name: "Hüquqi normativ texniki aktın işarəsi",
-      selector: "signOfLegalActName",
+      selector: "name",
       sortable: true,
     },
 
@@ -225,18 +235,18 @@ export default function SignOfLegalActPage() {
                 // className="dataTables_wrapper container-fluid dt-bootstrap4 table-responsive"
                 // selectableRows
                 title="Hüquqi normativ texniki aktın işarələri"
+                title="Xidmət Növləri"
                 columns={columns}
                 data={data}
-                // customStyles={customStyles}
-                // progressPending={loading}
                 pagination
-                // paginationServer
+                paginationServer
+                paginationTotalRows={totalCount}
+                paginationDefaultPage={PageNumber}
+                onChangeRowsPerPage={handlePerRowsChange}
+                onChangePage={handlePageChange}
                 highlightOnHover
                 Clicked
                 actions={actions}
-                // loading={loading}
-                // dense
-                // paginationTotalRows={totalRows}
               />
             </div>
           </div>

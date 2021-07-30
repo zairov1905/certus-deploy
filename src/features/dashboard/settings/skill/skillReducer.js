@@ -5,7 +5,7 @@ const initialState = {
   skills: []
 };
 
-export default function skillReducer(state = initialState, { type, payload }) {
+export default function skillReducer(state = initialState, { type, payload, totalCount }) {
   switch (type) {
     case CREATE_SKILL:
       return {
@@ -30,6 +30,7 @@ export default function skillReducer(state = initialState, { type, payload }) {
       return {
         ...state,
         skills: payload,
+        totalCount:totalCount
       };
     default:
       return state;

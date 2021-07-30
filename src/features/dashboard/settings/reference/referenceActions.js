@@ -1,3 +1,4 @@
+import axios from "axios";
 import { toast } from "react-toastify";
 import { fetchSampleDataReference } from "../../../../app/api/mockApi";
 
@@ -14,16 +15,23 @@ import {
   FETCH_REFERENCE,
   UPDATE_REFERENCE,
 } from "./referenceConstants";
-
-export function loadReference() {
+const url = "rreference";
+export function loadReference(data) {
   return async function (dispatch) {
     dispatch(asyncActionStart());
-    try {
-      const references = await fetchSampleDataReference();
-      dispatch({ type: FETCH_REFERENCE, payload: references });
+
+    const references = await axios.get(`/${url}`, {
+      params: { ...data },
+    });
+    if (references.status === 200) {
+      dispatch({
+        type: FETCH_REFERENCE,
+        payload: references.data.data,
+        totalCount: references.data.message,
+      });
       dispatch(asyncActionFinish());
-    } catch (error) {
-      dispatch(asyncActionError(error));
+    } else {
+      dispatch(asyncActionError());
     }
   };
 }
@@ -37,12 +45,15 @@ export function listenToReference(reference) {
 export function createReference(reference) {
   return async function (dispatch) {
     dispatch(asyncActionStart());
-    try {
-      await delay(1000);
-      dispatch({ type: CREATE_REFERENCE, payload: reference });
+    const data = await axios.post(`${url}/create`, reference, {
+      withCredentials: true,
+    });
+    if (data.status === 201) {
+      toast.success("Uğurla əlavə edildi");
+      dispatch({ type: CREATE_REFERENCE, payload: data.data.data });
       dispatch(asyncActionFinish());
-    } catch (error) {
-      asyncActionError(error);
+    } else {
+      toast.danger("Xəta baş verdi, yenidən cəht edin.");
     }
   };
 }
@@ -50,25 +61,35 @@ export function createReference(reference) {
 export function updateReference(reference) {
   return async function (dispatch) {
     dispatch(asyncActionStart);
-    try {
-      await delay(1000);
-      dispatch({ type: UPDATE_REFERENCE, payload: reference });
+
+    const referenceUpdated = await axios.put(
+      `/${url}/update`,
+      reference
+    );
+    if (referenceUpdated.status === 200) {
+      toast.success("Dəyişiklik uğurlar yerinə yetirildi");
+      dispatch({
+        type: UPDATE_REFERENCE,
+        payload: referenceUpdated.data.data,
+      });
       dispatch(asyncActionFinish());
-    } catch (error) {
-      asyncActionError(error);
+    } else {
+      asyncActionError();
     }
   };
 }
 
 export function deleteReference(referenceId) {
   return async function (dispatch) {
-    try {
-      await delay(1000);
+    const documentDeleted = await axios.delete(
+      `/${url}/delete?id=${referenceId}`
+    );
+    if (documentDeleted.status === 200) {
       dispatch({ type: DELETE_REFERENCE, payload: referenceId });
       // dispatch(asyncActionFinish())
-      toast.success("Uğurla silindi");
-    } catch (error) {
-      dispatch(asyncActionError(error));
+      toast.info("Uğurla silindi");
+    } else {
+      dispatch(asyncActionError());
     }
   };
 }

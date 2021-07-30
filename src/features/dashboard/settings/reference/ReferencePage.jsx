@@ -2,18 +2,20 @@ import React, { useEffect, useState } from "react";
 import DataTable, { defaultThemes } from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
 import { openModal } from "../../../../app/modal/modalReducer";
-import { deleteReference, loadReference} from "./referenceActions";
-
+import { deleteReference, loadReference } from "./referenceActions";
 
 export default function ReferencePage() {
-  useEffect(() => {
-    dispatch(loadReference())
-  //   // return () => {
-  //   //   // dispatch(loadOrder())
-  //   // }
-  },[])
   const dispatch = useDispatch();
-  const {references} = useSelector(state => state.references);
+
+  useEffect(() => {
+    dispatch(loadReference());
+    //   // return () => {
+    //   //   // dispatch(loadOrder())
+    //   // }
+  }, []);
+  const [perPage, setPerPage] = useState(10);
+  const [PageNumber, setPageNumber] = useState(1);
+  const { references, totalCount } = useSelector((state) => state.references);
   const data = references;
 
   const [hover, sethover] = useState(false);
@@ -50,6 +52,15 @@ export default function ReferencePage() {
   const buttonHover = {
     color: "#515365",
     fill: "#ffcacd",
+  };
+  const handlePageChange = (page) => {
+    dispatch(loadReference({ s: page, take: perPage }));
+    setPageNumber(page);
+  };
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    dispatch(loadReference({ s: page, take: newPerPage }));
+    setPerPage(newPerPage);
   };
 
   const actions = (
@@ -105,7 +116,7 @@ export default function ReferencePage() {
     },
     {
       name: "Referans",
-      selector: "referenceName",
+      selector: "name",
       sortable: true,
     },
 
@@ -114,20 +125,15 @@ export default function ReferencePage() {
       cell: (reference) => (
         <div className="action-btn">
           <svg
-            onClick={() =>
-              {
-                dispatch(
-                
-                  openModal({
-                    modalType: "ReferencePageModal",
-                    modalProps: { reference },
-                  })
-                )
-                // dispatch(loadEmployees());
-
-              }
-
-            }
+            onClick={() => {
+              dispatch(
+                openModal({
+                  modalType: "ReferencePageModal",
+                  modalProps: { reference },
+                })
+              );
+              // dispatch(loadEmployees());
+            }}
             data-name="edit"
             id={reference.id}
             onMouseEnter={(e) => {
@@ -220,23 +226,21 @@ export default function ReferencePage() {
         <div className="row layout-top-spacing">
           <div className="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
             <div className="widget-content widget-content-area br-6">
-
               <DataTable
                 // className="dataTables_wrapper container-fluid dt-bootstrap4 table-responsive"
                 // selectableRows
                 title="Referanslar"
                 columns={columns}
                 data={data}
-                // customStyles={customStyles}
-                // progressPending={loading}
                 pagination
-                // paginationServer
+                paginationServer
+                paginationTotalRows={totalCount}
+                paginationDefaultPage={PageNumber}
+                onChangeRowsPerPage={handlePerRowsChange}
+                onChangePage={handlePageChange}
                 highlightOnHover
                 Clicked
                 actions={actions}
-                // loading={loading}
-                // dense
-                // paginationTotalRows={totalRows}
               />
             </div>
           </div>

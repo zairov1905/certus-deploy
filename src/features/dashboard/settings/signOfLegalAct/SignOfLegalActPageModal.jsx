@@ -28,10 +28,10 @@ export default function SignOfLegalActPageModal({ signOfLegalAct }) {
     ? signOfLegalAct
     : {
         id: "",
-        signOfLegalActName: "",
+        name: "",
       };
   const validationSchema = Yup.object({
-    signOfLegalActName: Yup.string().required("Mütləq doldurulmalıdır."),
+    name: Yup.string().required("Mütləq doldurulmalıdır."),
   });
 
   return (
@@ -48,9 +48,6 @@ export default function SignOfLegalActPageModal({ signOfLegalAct }) {
               ? await dispatch(updateSignOfLegalAct(values))
               : await dispatch(createSignOfLegalAct({ ...values, id: cuid() }));
             setSubmitting(false);
-            signOfLegalAct
-              ? toast.success("Dəyişiklik uğurlar yerinə yetirildi")
-              : toast.success("Uğurla əlavə edildi");
             setModal(true);
             dispatch(closeModal());
           } catch (error) {
@@ -65,8 +62,8 @@ export default function SignOfLegalActPageModal({ signOfLegalAct }) {
             <div className="row">
               <div className="col-md-12">
                 <MyTextInput
-                  id="signOfLegalActName"
-                  name="signOfLegalActName"
+                  id="name"
+                  name="name"
                   type="text"
                   className="form-control"
                   placeholder="Hüquqi normativ texniki aktın işarəsi"

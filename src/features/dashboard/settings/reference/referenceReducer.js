@@ -5,7 +5,7 @@ const initialState = {
   references: []
 };
 
-export default function referenceReducer(state = initialState, { type, payload }) {
+export default function referenceReducer(state = initialState, { type, payload,totalCount }) {
   switch (type) {
     case CREATE_REFERENCE:
       return {
@@ -30,6 +30,7 @@ export default function referenceReducer(state = initialState, { type, payload }
       return {
         ...state,
         references: payload,
+        totalCount:totalCount
       };
     default:
       return state;
