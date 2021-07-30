@@ -7,14 +7,16 @@ import { loadTraining } from "./trainingActions";
 import { deleteTraining } from "./trainingActions";
 
 export default function TrainingPage() {
-  useEffect(() => {
-    dispatch(loadTraining())
-  //   // return () => {
-  //   //   // dispatch(loadOrder())
-  //   // }
-  },[])
   const dispatch = useDispatch();
-  const {trainings} = useSelector(state => state.trainings);
+  useEffect(() => {
+    dispatch(loadTraining());
+    //   // return () => {
+    //   //   // dispatch(loadOrder())
+    //   // }
+  }, []);
+  const [perPage, setPerPage] = useState(10);
+  const [PageNumber, setPageNumber] = useState(1);
+  const { trainings, totalCount } = useSelector((state) => state.trainings);
   const data = trainings;
 
   const [hover, sethover] = useState(false);
@@ -52,6 +54,15 @@ export default function TrainingPage() {
     color: "#515365",
     fill: "#ffcacd",
   };
+  const handlePageChange = (page) => {
+    dispatch(loadTraining({ s: page, take: perPage }));
+    setPageNumber(page);
+  };
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    dispatch(loadTraining({ s: page, take: newPerPage }));
+    setPerPage(newPerPage);
+  };
 
   const actions = (
     <svg
@@ -64,7 +75,6 @@ export default function TrainingPage() {
           })
         );
         dispatch(loadSkill());
-
       }}
       style={{
         ...buttonStyle,
@@ -103,21 +113,19 @@ export default function TrainingPage() {
   const columns = [
     {
       name: "Ad",
-      selector: "trainingName",
+      selector: "name",
       sortable: true,
     },
     {
       name: "Haqqında",
-      selector: "trainingAbout",
+      selector: "about",
       sortable: true,
     },
     {
       name: "Səriştələr",
       // selector: "trainingSkills",
       sortable: true,
-      cell: training => (
-        training.trainingSkills.map(skill=> `${skill} `)
-      )
+      cell: (training) =>  training.skill_id && training.skill_id.map((skill) => `${skill.name} `),
     },
     // {
     //   name: "Kateqoriya",
@@ -129,20 +137,15 @@ export default function TrainingPage() {
       cell: (training) => (
         <div className="action-btn">
           <svg
-            onClick={() =>
-              {
-                dispatch(
-                
-                  openModal({
-                    modalType: "TrainingPageModal",
-                    modalProps: { training },
-                  })
-                )
-                dispatch(loadSkill());
-
-              }
-
-            }
+            onClick={() => {
+              dispatch(
+                openModal({
+                  modalType: "TrainingPageModal",
+                  modalProps: { training },
+                })
+              );
+              dispatch(loadSkill());
+            }}
             data-name="edit"
             id={training.id}
             onMouseEnter={(e) => {
@@ -235,23 +238,21 @@ export default function TrainingPage() {
         <div className="row layout-top-spacing">
           <div className="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
             <div className="widget-content widget-content-area br-6">
-
               <DataTable
                 // className="dataTables_wrapper container-fluid dt-bootstrap4 table-responsive"
                 // selectableRows
                 title="Təlimlər"
                 columns={columns}
                 data={data}
-                // customStyles={customStyles}
-                // progressPending={loading}
                 pagination
-                // paginationServer
+                paginationServer
+                paginationTotalRows={totalCount}
+                paginationDefaultPage={PageNumber}
+                onChangeRowsPerPage={handlePerRowsChange}
+                onChangePage={handlePageChange}
                 highlightOnHover
                 Clicked
                 actions={actions}
-                // loading={loading}
-                // dense
-                // paginationTotalRows={totalRows}
               />
             </div>
           </div>

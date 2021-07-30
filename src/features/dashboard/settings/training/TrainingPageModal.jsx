@@ -17,12 +17,12 @@ export default function TrainingPageModal({ training }) {
   const dispatch = useDispatch();
   const [modal, setModal] = useState(false);
   const { skills } = useSelector((state) => state.skills);
-  const skillOptions =
+  const skillOptions = 
     skills &&
     skills.map((skill) => {
-      return {
-        label: skill.skillName,
-        value: skill.skillName,
+      return  {
+        label: skill.name,
+        value: skill.id,
       };
     });
   useEffect(() => {
@@ -35,14 +35,14 @@ export default function TrainingPageModal({ training }) {
     ? training
     : {
         id: "",
-        trainingName: "",
-        trainingAbout: "",
-        trainingSkills: [],
+        name: "",
+        about: "",
+        skill_id: [],
         // trainingCategory: "",
       };
   const validationSchema = Yup.object({
-    trainingName: Yup.string().required("Mütləq doldurulmalıdır."),
-    trainingAbout: Yup.string().required("Mütləq doldurulmalıdır."),
+    name: Yup.string().required("Mütləq doldurulmalıdır."),
+    about: Yup.string().required("Mütləq doldurulmalıdır."),
     // trainingSkills: Yup.required("Mütləq doldurulmalıdır."),
     // trainingCategory: Yup.string().required("Mütləq doldurulmalıdır."),
   });
@@ -56,11 +56,8 @@ export default function TrainingPageModal({ training }) {
           try {
             training
               ? await dispatch(updateTraining(values))
-              : await dispatch(createTraining({ ...values, id: cuid() }));
+              : await dispatch(createTraining({ ...values}));
             setSubmitting(false);
-            training
-              ? toast.success("Dəyişiklik uğurlar yerinə yetirildi")
-              : toast.success("Uğurla əlavə edildi");
             setModal(true);
             dispatch(closeModal());
           } catch (error) {
@@ -75,8 +72,8 @@ export default function TrainingPageModal({ training }) {
             <div className="row">
               <div className="col-md-12">
                 <MyTextInput
-                  id="trainingName"
-                  name="trainingName"
+                  id="name"
+                  name="name"
                   type="text"
                   className="form-control"
                   placeholder="Təlim adı"
@@ -84,32 +81,30 @@ export default function TrainingPageModal({ training }) {
               </div>
               <div className="col-md-12">
                 <MyTextInput
-                  id="trainingAbout"
-                  name="trainingAbout"
+                  id="about"
+                  name="about"
                   type="text"
                   className="form-control"
                   placeholder="Təlim haqqında"
                 />
               </div>
               <div className="col-md-12">
-                {console.log(values.trainingSkills)}
+                {/* {console.log(values)} */}
                 <MySearchableSelect
-                  id="trainingSkills"
-                  name="trainingSkills"
+                  id="skill_id"
+                  name="skill_id"
                   options={skillOptions}
+                  defaultValue={
+                    training &&
+                    skillOptions.filter(
+                      (skillOption) =>
+                      skillOption.skill_id.id == skillOption.value
+                    )
+                  }
                   isMulti
                   placeholder="Təlimin səriştələri"
                 />
               </div>
-              {/* <div className="col-md-12">
-                <MyTextInput
-                  id="trainingNumber"
-                  name="trainingNumber"
-                  type="text"
-                  className="form-control"
-                  placeholder="Kontragent əlaqə nömrəsi"
-                />
-              </div> */}
             </div>
 
             <button

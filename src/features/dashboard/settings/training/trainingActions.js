@@ -1,3 +1,4 @@
+import axios from "axios";
 import { toast } from "react-toastify";
 import { fetchSampleDataTraining } from "../../../../app/api/mockApi";
 
@@ -14,16 +15,24 @@ import {
   FETCH_TRAINING,
   UPDATE_TRAINING,
 } from "./trainingConstants";
-
-export function loadTraining() {
+const url = "training";
+export function loadTraining(data) {
   return async function (dispatch) {
     dispatch(asyncActionStart());
-    try {
-      const trainings = await fetchSampleDataTraining();
-      dispatch({ type: FETCH_TRAINING, payload: trainings });
+
+    const trainings = await axios.get(`/${url}`, {
+      params: { ...data },
+    });
+    console.log(trainings);
+    if (trainings.status === 200) {
+      dispatch({
+        type: FETCH_TRAINING,
+        payload: trainings.data.data,
+        totalCount: trainings.data.message,
+      });
       dispatch(asyncActionFinish());
-    } catch (error) {
-      dispatch(asyncActionError(error));
+    } else {
+      dispatch(asyncActionError());
     }
   };
 }
@@ -37,12 +46,16 @@ export function listenToTraining(trainings) {
 export function createTraining(training) {
   return async function (dispatch) {
     dispatch(asyncActionStart());
-    try {
-      await delay(1000);
-      dispatch({ type: CREATE_TRAINING, payload: training });
+    const data = await axios.post(`${url}/create`, training, {
+      withCredentials: true,
+    });
+    console.log(data)
+    if (data.status === 201) {
+      toast.success("Uğurla əlavə edildi");
+      dispatch({ type: CREATE_TRAINING, payload: data.data.data });
       dispatch(asyncActionFinish());
-    } catch (error) {
-      asyncActionError(error);
+    } else {
+      toast.danger("Xəta baş verdi, yenidən cəht edin.");
     }
   };
 }
@@ -50,25 +63,35 @@ export function createTraining(training) {
 export function updateTraining(training) {
   return async function (dispatch) {
     dispatch(asyncActionStart);
-    try {
-      await delay(1000);
-      dispatch({ type: UPDATE_TRAINING, payload: training });
+
+    const trainingUpdated = await axios.put(
+      `/${url}/update`,
+      training
+    );
+    if (trainingUpdated.status === 200) {
+      toast.success("Dəyişiklik uğurlar yerinə yetirildi");
+      dispatch({
+        type: UPDATE_TRAINING,
+        payload: trainingUpdated.data.data,
+      });
       dispatch(asyncActionFinish());
-    } catch (error) {
-      asyncActionError(error);
+    } else {
+      asyncActionError();
     }
   };
 }
 
 export function deleteTraining(trainingId) {
   return async function (dispatch) {
-    try {
-      await delay(1000);
+    const documentDeleted = await axios.delete(
+      `/${url}/delete?id=${trainingId}`
+    );
+    if (documentDeleted.status === 200) {
       dispatch({ type: DELETE_TRAINING, payload: trainingId });
       // dispatch(asyncActionFinish())
-      toast.success("Uğurla silindi");
-    } catch (error) {
-      dispatch(asyncActionError(error));
+      toast.info("Uğurla silindi");
+    } else {
+      dispatch(asyncActionError());
     }
   };
 }
