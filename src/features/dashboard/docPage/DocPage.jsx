@@ -3,17 +3,20 @@ import DataTable, { defaultThemes } from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
 import { openModal } from "../../../app/modal/modalReducer";
 import { loadDocumentTypes } from "../settings/documentType/documentTypeActions";
-import { loadDocs,deleteDoc } from "./docActions";
+import { loadDocs, deleteDoc } from "./docActions";
 
 export default function DocPage() {
-  useEffect(() => {
-    dispatch(loadDocs())
-  //   // return () => {
-  //   //   // dispatch(loadOrder())
-  //   // }
-  },[])
   const dispatch = useDispatch();
-  const { docs } = useSelector((state) => state.docs);
+  useEffect(() => {
+    dispatch(loadDocs());
+    //   // return () => {
+    //   //   // dispatch(loadOrder())
+    //   // }
+  }, []);
+
+  const [perPage, setPerPage] = useState(10);
+  const [PageNumber, setPageNumber] = useState(1);
+  const { docs, totalCount } = useSelector((state) => state.docs);
   const [hover, sethover] = useState(false);
   const [target, setTarget] = useState({ id: null, name: null });
 
@@ -51,7 +54,15 @@ export default function DocPage() {
     color: "#515365",
     fill: "#ffcacd",
   };
+  const handlePageChange = (page) => {
+    dispatch(loadDocs({ s: page, take: perPage }));
+    setPageNumber(page);
+  };
 
+  const handlePerRowsChange = async (newPerPage, page) => {
+    dispatch(loadDocs({ s: page, take: newPerPage }));
+    setPerPage(newPerPage);
+  };
   const actions = (
     <svg
       data-name="add"
@@ -100,48 +111,53 @@ export default function DocPage() {
 
   const columns = [
     {
-      name: "Sənəd növü",
-      selector: "docType",
+      name: "Sənəd nömrəsi",
+      selector: "document_number",
       sortable: true,
     },
     {
-      name: "Sənəd nömrəsi",
-      selector: "docNumber",
+      name: "Sənəd Növü",
+      // selector: "document_type",
       sortable: true,
+      cell: (doc) => (
+        <p>{doc.document_type_id.name}</p>
+      )
+    },
+    {
+      name: "Sənəd Təyinatı ",
+      cell: (doc) => {
+        if (doc.document_for === 1) {
+          return "Satış";
+        } else if (doc.document_for === 0) {
+          return "Alış";
+        }
+      },
     },
     {
       name: "Sənəd Predmeti",
-      selector: "docSubject",
+      selector: "about",
       sortable: true,
     },
     {
-      name:"Tarix",
-      selector:"docDate",
+      name: "Tarix",
+      selector: "date",
       sortable: true,
-
-      
     },
-    
 
     {
       name: "",
       cell: (doc) => (
         <div className="action-btn">
           <svg
-            onClick={() =>
-              {
-                dispatch(
-                
-                  openModal({
-                    modalType: "DocPageModal",
-                    modalProps: { doc },
-                  })
-                )
-                dispatch(loadDocumentTypes());
-
-              }
-
-            }
+            onClick={() => {
+              dispatch(
+                openModal({
+                  modalType: "DocPageModal",
+                  modalProps: { doc },
+                })
+              );
+              dispatch(loadDocumentTypes());
+            }}
             data-name="edit"
             id={doc.id}
             onMouseEnter={(e) => {
@@ -234,23 +250,21 @@ export default function DocPage() {
         <div className="row layout-top-spacing">
           <div className="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
             <div className="widget-content widget-content-area br-6">
-
               <DataTable
                 // className="dataTables_wrapper container-fluid dt-bootstrap4 table-responsive"
                 // selectableRows
                 title="Sənədlər"
                 columns={columns}
                 data={data}
-                // customStyles={customStyles}
-                // progressPending={loading}
                 pagination
-                // paginationServer
+                paginationServer
+                paginationTotalRows={totalCount}
+                paginationDefaultPage={PageNumber}
+                onChangeRowsPerPage={handlePerRowsChange}
+                onChangePage={handlePageChange}
                 highlightOnHover
                 Clicked
                 actions={actions}
-                // loading={loading}
-                // dense
-                // paginationTotalRows={totalRows}
               />
             </div>
           </div>

@@ -1,9 +1,12 @@
 import { CREATE_DOC, DELETE_DOC, FETCH_DOC, UPDATE_DOC } from "./docConstants";
 const initialState = {
-  docs: []
+  docs: [],
 };
 
-export default function docReducer(state = initialState, { type, payload }) {
+export default function docReducer(
+  state = initialState,
+  { type, payload, totalCount }
+) {
   switch (type) {
     case CREATE_DOC:
       return {
@@ -13,10 +16,7 @@ export default function docReducer(state = initialState, { type, payload }) {
     case UPDATE_DOC:
       return {
         ...state,
-        docs: [
-          ...state.docs.filter((doc) => doc.id !== payload.id),
-          payload,
-        ],
+        docs: [...state.docs.filter((doc) => doc.id !== payload.id), payload],
       };
 
     case DELETE_DOC:
@@ -28,6 +28,7 @@ export default function docReducer(state = initialState, { type, payload }) {
       return {
         ...state,
         docs: payload,
+        totalCount: totalCount,
       };
     default:
       return state;

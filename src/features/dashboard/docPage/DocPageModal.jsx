@@ -25,8 +25,8 @@ export default function DocPageModal({ doc }) {
   const { documentTypes } = useSelector((state) => state.documentTypes);
   let documentTypesOptions = documentTypes.map((documentType) => {
     return {
-      label: documentType.documentType,
-      value: documentType.documentType,
+      label: documentType.name,
+      value: documentType.id,
     };
   });
   const docPurposeSettings = [
@@ -34,21 +34,20 @@ export default function DocPageModal({ doc }) {
     { label: "Satış", value: 1 },
   ];
   const initialValues = doc ? doc: {
-    id: "",
-    docType: "",
-    docNumber: "",
-    docSubject: "",
-    docDate: "",
-    docPurpose: "",
+    document_type_id: "",
+    document_for: "",
+    date: "",
+    about: "",
+
   };
   const validationSchema = Yup.object({
     // id:"",
     // id:"",
-    docType: Yup.string().required("Mütləq doldurulmalıdır."),
+    document_type_id: Yup.string().required("Mütləq doldurulmalıdır."),
     // docNumber: Yup.string().required("Mütləq doldurulmalıdır."),
-    docSubject: Yup.string().required("Mütləq doldurulmalıdır."),
-    docDate: Yup.string().required("Mütləq doldurulmalıdır."),
-    docPurpose: Yup.string().required("Mütləq doldurulmalıdır."),
+    document_for: Yup.string().required("Mütləq doldurulmalıdır."),
+    date: Yup.string().required("Mütləq doldurulmalıdır."),
+    about: Yup.string().required("Mütləq doldurulmalıdır."),
   });
 
   return (
@@ -61,12 +60,9 @@ export default function DocPageModal({ doc }) {
             doc
               ? await dispatch(updateDoc(values))
               : await dispatch(
-                  createDoc({ ...values, id: cuid(), docNumber: cuid() })
+                  createDoc({ ...values})
                 );
             setSubmitting(false);
-            doc
-              ? toast.success("Dəyişiklik uğurlar yerinə yetirildi")
-              : toast.success("Uğurla əlavə edildi");
             setModal(true);
             dispatch(closeModal());
           } catch (error) {
@@ -81,8 +77,8 @@ export default function DocPageModal({ doc }) {
             <div className="row">
               <div className="col-md-4">
                 <MySearchableSelect
-                  id="docType"
-                  name="docType"
+                  id="document_type_id"
+                  name="document_type_id"
                   options={documentTypesOptions}
                   // type="text"
                   // className="form-control"
@@ -91,8 +87,8 @@ export default function DocPageModal({ doc }) {
               </div>
               <div className="col-md-4">
                 <MySearchableSelect
-                  id="docPurpose"
-                  name="docPurpose"
+                  id="document_for"
+                  name="document_for"
                   options={docPurposeSettings}
                   // type="text"
                   // className="form-control"
@@ -101,8 +97,8 @@ export default function DocPageModal({ doc }) {
               </div>
               <div className="col-md-4">
                 <MyTextInput
-                  id="docDate"
-                  name="docDate"
+                  id="date"
+                  name="date"
                   className="form-control"
                   type="date"
                   // className="form-control"
@@ -111,8 +107,8 @@ export default function DocPageModal({ doc }) {
               </div>
               <div className="col-md-12">
                 <MyTextArea
-                  id="docSubject"
-                  name="docSubject"
+                  id="about"
+                  name="about"
                   // type="text"
                   className="form-control"
                   placeholder="Sənəd predmeti"
