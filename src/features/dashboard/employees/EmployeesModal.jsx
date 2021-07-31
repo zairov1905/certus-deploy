@@ -11,6 +11,8 @@ import cuid from "cuid";
 import { Form, Formik } from "formik";
 import { createEmployees, updateEmployees } from "./employeesActions";
 import { closeModal } from "../../../app/modal/modalReducer";
+import { loadDuties } from "../settings/duty/dutyActions";
+import { loadDepartments } from "../settings/department/departmentActions";
 
 export default function EmployeesModal({ employee }) {
   const dispatch = useDispatch();
@@ -21,59 +23,73 @@ export default function EmployeesModal({ employee }) {
       $("#closeModal").click();
     }
   });
-  const {duties} = useSelector(state => state.duties)
-  const {departments} = useSelector(state => state.departments)
-  let dutyOptions = duties && duties.map(duty => {
-    return {
-      label: duty.duty,
-      value: duty.duty,
-    }
-  })
-  let departmentOptions = departments && departments.map(department => {
-    return {
-      label: department.department,
-      value: department.department,
-    }
-  })
+  useEffect(() => {
+    dispatch(loadDuties());
+    dispatch(loadDepartments());
+  }, []);
+  const { duties } = useSelector((state) => state.duties);
+  const { departments } = useSelector((state) => state.departments);
+  let dutyOptions =
+    duties &&
+    duties.map((duty) => {
+      return {
+        label: duty.name,
+        value: duty.id,
+      };
+    });
+
+  let departmentOptions =
+    departments &&
+    departments.map((department) => {
+      return {
+        label: department.name,
+        value: department.id,
+      };
+    });
   const contractTypeOptions = [
     { label: "Əmək müqaviləsi", value: 0 },
     { label: "Xidmət müqaviləsi", value: 1 },
   ];
-  const initialValues = employee ? employee: {
-    id: null,
-    pin:"",
-    firstname: "",
-    lastname: "",
-    middlename: "",
-    birthday: "",
-    place: "",
-    phone: "",
+  const selectedContractType =
+    employee && employee.agreement_type === 1
+      ? { label: "Xidmət müqaviləsi", value: 1 }
+      : { label: "Əmək müqaviləsi", value: 0 };
+  const initialValues = employee
+    ? employee
+    : {
+        fin: "",
+        name: "",
+        surname: "",
+        dadname: "",
+        birthday: "",
+        address: "",
+        phone: "",
 
-    whatsapp: "",
-    telegram: "",
-    facebook: "",
-    linkedin: "",
-    twitter: "",
-    instagram: "",
-    mail: "",
+        whatsapp: "",
+        telegram: "",
+        facebook: "",
+        linkedin: "",
+        twitter: "",
+        instagram: "",
+        mail: "",
 
-    duty: "",
-    department: "",
-    startWork: "",
-    circulation: "",
-    bonus: "",
-    customerSatisfaction: "",
-    performance: "",
-    contractType:""
-  };
+        position_id: "",
+        structural_section_id: "",
+        date: "",
+        turnover: "",
+        bonus: "",
+        customer_satisfaction: "",
+        performans: "",
+        agreement_type: "",
+      };
 
   const validationSchema = Yup.object({
-    pin:Yup.string().required("Mütləq doldurulmalıdır."),
-    firstname: Yup.string().required("Mütləq doldurulmalıdır."),
-    lastname: Yup.string().required("Mütləq doldurulmalıdır."),
-    middlename: Yup.string().required("Mütləq doldurulmalıdır."),
+    fin: Yup.string().required("Mütləq doldurulmalıdır."),
+    name: Yup.string().required("Mütləq doldurulmalıdır."),
+    surname: Yup.string().required("Mütləq doldurulmalıdır."),
+    dadname: Yup.string().required("Mütləq doldurulmalıdır."),
     birthday: Yup.string().required("Mütləq doldurulmalıdır."),
-    place: Yup.string().required("Mütləq doldurulmalıdır."),
+    address: Yup.string().required("Mütləq doldurulmalıdır."),
     phone: Yup.string().required("Mütləq doldurulmalıdır."),
 
     whatsapp: Yup.string().required("Mütləq doldurulmalıdır."),
@@ -84,13 +100,14 @@ export default function EmployeesModal({ employee }) {
     instagram: Yup.string().required("Mütləq doldurulmalıdır."),
     mail: Yup.string().required("Mütləq doldurulmalıdır."),
 
-    duty: Yup.string().required("Mütləq doldurulmalıdır."),
-    department: Yup.string().required("Mütləq doldurulmalıdır."),
-    startWork: Yup.string().required("Mütləq doldurulmalıdır."),
-    circulation: Yup.string().required("Mütləq doldurulmalıdır."),
+    position_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    structural_section_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    date: Yup.string().required("Mütləq doldurulmalıdır."),
+    turnover: Yup.string().required("Mütləq doldurulmalıdır."),
     bonus: Yup.string().required("Mütləq doldurulmalıdır."),
-    customerSatisfaction: Yup.string().required("Mütləq doldurulmalıdır."),
-    performance: Yup.string().required("Mütləq doldurulmalıdır."),
+    customer_satisfaction: Yup.string().required("Mütləq doldurulmalıdır."),
+    performans: Yup.string().required("Mütləq doldurulmalıdır."),
+    agreement_type: Yup.string().required("Mütləq doldurulmalıdır."),
   });
   return (
     <ModalWrapper size="modal-lg" header={employee ? "Redakte Et" : "Əlavə et"}>
@@ -101,11 +118,8 @@ export default function EmployeesModal({ employee }) {
           try {
             employee
               ? await dispatch(updateEmployees(values))
-              : await dispatch(createEmployees({ ...values, id: cuid() }));
+              : await dispatch(createEmployees({ ...values }));
             setSubmitting(false);
-            employee
-              ? toast.success("Dəyişiklik uğurlar yerinə yetirildi")
-              : toast.success("Uğurla əlavə edildi");
             setModal(true);
             dispatch(closeModal());
           } catch (error) {
@@ -119,9 +133,9 @@ export default function EmployeesModal({ employee }) {
           <Form id="emp">
             <div className="row">
               <div className="col-md-4">
-              <MyTextInput
-                  id="pin"
-                  name="pin"
+                <MyTextInput
+                  id="fim"
+                  name="fin"
                   type="text"
                   className="form-control"
                   placeholder="FİN"
@@ -129,8 +143,8 @@ export default function EmployeesModal({ employee }) {
               </div>
               <div className="col-md-4">
                 <MyTextInput
-                  id="firstname"
-                  name="firstname"
+                  id="name"
+                  name="name"
                   type="text"
                   className="form-control"
                   placeholder="Ad"
@@ -138,8 +152,8 @@ export default function EmployeesModal({ employee }) {
               </div>
               <div className="col-md-4">
                 <MyTextInput
-                  id="lastname"
-                  name="lastname"
+                  id="surname"
+                  name="surname"
                   type="text"
                   className="form-control"
                   placeholder="Soyad"
@@ -149,8 +163,8 @@ export default function EmployeesModal({ employee }) {
             <div className="row">
               <div className="col-md-4">
                 <MyTextInput
-                  id="middlename"
-                  name="middlename"
+                  id="dadname"
+                  name="dadname"
                   type="text"
                   className="form-control"
                   placeholder="Ata adı"
@@ -167,8 +181,8 @@ export default function EmployeesModal({ employee }) {
               </div>
               <div className="col-md-4">
                 <MyTextInput
-                  name="place"
-                  id="place"
+                  name="address"
+                  id="address"
                   type="text"
                   className="form-control"
                   placeholder="Ünvan"
@@ -185,7 +199,6 @@ export default function EmployeesModal({ employee }) {
                   placeholder="Telefon"
                 />
               </div>
-
               <div className="col-md-4">
                 <MyTextInput
                   name="whatsapp"
@@ -253,20 +266,31 @@ export default function EmployeesModal({ employee }) {
             <div className="row">
               <div className="col-md-4">
                 <MySearchableSelect
-                  name="duty"
-                  id="duty"
+                  name="position_id"
+                  id="position_id"
                   options={dutyOptions}
                   // type="text"
                   // className="form-control"
                   placeholder="Vəzifəsi"
+                  defaultValue={
+                    employee && {
+                      label: employee.position_id.name,
+                      value: employee.position_id.id,
+                    }
+                  }
                 />
               </div>
               <div className="col-md-8">
                 <MySearchableSelect
-                  name="department"
-                  id="department"
+                  name="structural_section_id"
+                  id="structural_section_id"
                   options={departmentOptions}
-
+                  defaultValue={
+                    employee && {
+                      label: employee.structural_section_id.name,
+                      value: employee.structural_section_id.id,
+                    }
+                  }
                   // type="text"
                   // className="form-control"
                   placeholder="Struktur bölməsi"
@@ -274,8 +298,8 @@ export default function EmployeesModal({ employee }) {
               </div>
               <div className="col-md-4">
                 <MyTextInput
-                  name="startWork"
-                  id="startWork"
+                  name="date"
+                  id="date"
                   type="date"
                   className="form-control"
                   placeholder="İşə qəbul tarixi"
@@ -283,8 +307,8 @@ export default function EmployeesModal({ employee }) {
               </div>
               <div className="col-md-4">
                 <MyTextInput
-                  name="circulation"
-                  id="circulation"
+                  name="turnover"
+                  id="turnover"
                   type="text"
                   className="form-control"
                   placeholder="Dövriyyə"
@@ -301,8 +325,8 @@ export default function EmployeesModal({ employee }) {
               </div>
               <div className="col-md-4">
                 <MyTextInput
-                  name="customerSatisfaction"
-                  id="customerSatisfaction"
+                  name="customer_satisfaction"
+                  id="customer_satisfaction"
                   type="text"
                   className="form-control"
                   placeholder="Müştəri məmnuniyyəti"
@@ -310,8 +334,8 @@ export default function EmployeesModal({ employee }) {
               </div>{" "}
               <div className="col-md-4">
                 <MyTextInput
-                  name="performance"
-                  id="performance"
+                  name="performans"
+                  id="performans"
                   type="text"
                   className="form-control"
                   placeholder="Performans"
@@ -319,10 +343,10 @@ export default function EmployeesModal({ employee }) {
               </div>{" "}
               <div className="col-md-4">
                 <MySearchableSelect
-                  name="contractType"
-                  id="contractType"
+                  name="agreement_type"
+                  id="agreement_type"
                   options={contractTypeOptions}
-
+                  defaultValue={selectedContractType}
                   // type="text"
                   // className="form-control"
                   placeholder="Müqavilə növü"

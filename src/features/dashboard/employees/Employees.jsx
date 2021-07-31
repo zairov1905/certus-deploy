@@ -241,15 +241,15 @@ export default function Employees() {
                         <div className="user-meta-info">
                           <p
                             className="user-name"
-                            data-name={employee.firstname}
+                            data-name={employee.name}
                           >
-                            {employee.firstname + " " + employee.lastname}
+                            {employee.name + " " + employee.surname}
                           </p>
                           <p
                             className="user-work"
-                            data-occupation={employee.duty}
+                            data-occupation={employee.position_id.name}
                           >
-                            {employee.duty}
+                            {employee.position_id.name}
                           </p>
                         </div>
                       </div>
@@ -272,9 +272,9 @@ export default function Employees() {
                         <p className="info-title">Dövriyyə: </p>
                         <p
                           className="usr-location"
-                          data-location={employee.circulation}
+                          data-location={employee.turnover}
                         >
-                          {employee.circulation}
+                          {employee.turnover}
                         </p>
                       </div>
 

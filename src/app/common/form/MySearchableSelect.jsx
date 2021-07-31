@@ -34,7 +34,6 @@ export default function MySearchableSelect({ label, ...props }) {
       <Select
         {...props}
         onChange={onChange}
-        value={state && state.value}
         styles={customStyles1}
         onBlur={setTouched}
         minHeight={"44px"}

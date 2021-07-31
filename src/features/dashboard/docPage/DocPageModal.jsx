@@ -80,6 +80,13 @@ export default function DocPageModal({ doc }) {
                   id="document_type_id"
                   name="document_type_id"
                   options={documentTypesOptions}
+                  defaultValue={
+                    doc &&                    {
+                      label: doc.document_type_id.name,
+                      value: doc.document_type_id.id,
+                    }
+                  }
+
                   // type="text"
                   // className="form-control"
                   placeholder="Sənəd növü"
@@ -90,6 +97,14 @@ export default function DocPageModal({ doc }) {
                   id="document_for"
                   name="document_for"
                   options={docPurposeSettings}
+                  defaultValue={
+                    doc &&
+                    docPurposeSettings.filter(
+                      (docPurposeSetting) =>
+                      doc.document_for === docPurposeSetting.value
+                    )
+                  }
+                  
                   // type="text"
                   // className="form-control"
                   placeholder="Sənədin təyinatı"

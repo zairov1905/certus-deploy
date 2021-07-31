@@ -38,7 +38,7 @@ export default function ExpenseTypePageModal({ expenseType }) {
         name: "",
         group_id: "",
       };
-    
+
   const validationSchema = Yup.object({
     name: Yup.string().required("Mütləq doldurulmalıdır."),
     group_id: Yup.string().required("Mütləq doldurulmalıdır."),
@@ -74,11 +74,10 @@ export default function ExpenseTypePageModal({ expenseType }) {
               <div className="col-md-12">
                 <MySearchableSelect
                   defaultValue={
-                    expenseType &&
-                    expenseGroupOptions.filter(
-                      (expenseGroupOption) =>
-                      expenseType.group_id.id == expenseGroupOption.value
-                    )
+                    expenseType && {
+                      label: expenseType.group_id.name,
+                      value: expenseType.group_id.id,
+                    }
                   }
                   id="group_id"
                   name="group_id"
