@@ -9,7 +9,6 @@ export default function Footer() {
           <a target="_blank" href="https://designreset.com">
             Certus
           </a>
-          , Bütün Hüquqlar qorunur.
         </p>
       </div>
       <div className="footer-section f-section-2">

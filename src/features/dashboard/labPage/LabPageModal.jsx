@@ -34,7 +34,7 @@ export default function LabPageModal({ lab }) {
     docs &&
     docs.map((doc) => {
       return {
-        label: doc.docType,
+        label: doc.document_number,
         value: doc.id,
       };
     });
@@ -48,20 +48,21 @@ export default function LabPageModal({ lab }) {
   const initialValues = lab
     ? lab
     : {
-        id: "",
-        labName: "",
-        labNote: "",
-        contractNumber: "",
-        labPeriod: "",
-        labOperation: "",
+        name: "",
+        document_id: "",
+        certificate_number: "",
+        turnover: "",
+        operations: "",
+        note: "",
       };
   const validationSchema = Yup.object({
     // id:"",
-    labName: Yup.string().required("Mütləq doldurulmalıdır."),
-    labNote: Yup.string().required("Mütləq doldurulmalıdır."),
-    contractNumber: Yup.string().required("Mütləq doldurulmalıdır."),
-    labPeriod: Yup.string().required("Mütləq doldurulmalıdır."),
-    labOperation: Yup.string().required("Mütləq doldurulmalıdır."),
+    name: Yup.string().required("Mütləq doldurulmalıdır."),
+    document_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    certificate_number: Yup.string().required("Mütləq doldurulmalıdır."),
+    turnover: Yup.string().required("Mütləq doldurulmalıdır."),
+    operations: Yup.string().required("Mütləq doldurulmalıdır."),
+    note: Yup.string().required("Mütləq doldurulmalıdır."),
   });
 
   return (
@@ -76,14 +77,9 @@ export default function LabPageModal({ lab }) {
               : await dispatch(
                   createLab({
                     ...values,
-                    id: cuid(),
-                    labNumber: `Lab${cuid()}`,
                   })
                 );
             setSubmitting(false);
-            lab
-              ? toast.success("Dəyişiklik uğurlar yerinə yetirildi")
-              : toast.success("Uğurla əlavə edildi");
             setModal(true);
             dispatch(closeModal());
           } catch (error) {
@@ -98,8 +94,8 @@ export default function LabPageModal({ lab }) {
             <div className="row">
               <div className="col-md-4">
                 <MyTextInput
-                  id="labName"
-                  name="labName"
+                  id="name"
+                  name="name"
                   type="text"
                   className="form-control"
                   placeholder="Laboratoriya adı"
@@ -107,9 +103,15 @@ export default function LabPageModal({ lab }) {
               </div>
               <div className="col-md-4">
                 <MySearchableSelect
-                  id="contractNumber"
-                  name="contractNumber"
+                  id="document_id"
+                  name="document_id"
                   // type="text"
+                  defaultValue={
+                    lab && {
+                      label: lab.document_id.document_number,
+                      value: lab.document_id.id,
+                    }
+                  }
                   options={docsOptions}
                   // className="form-control"
                   placeholder="Müqavilə Nömrəsi"
@@ -117,8 +119,8 @@ export default function LabPageModal({ lab }) {
               </div>
               <div className="col-md-4">
                 <MyTextInput
-                  id="certificateNumber"
-                  name="certificateNumber"
+                  id="certificate_number"
+                  name="certificate_number"
                   type="text"
                   className="form-control"
                   placeholder="Atestat Nömrəsi"
@@ -128,8 +130,8 @@ export default function LabPageModal({ lab }) {
             <div className="row">
               <div className="col-md-4">
                 <MyTextInput
-                  id="labPeriod"
-                  name="labPeriod"
+                  id="turnover"
+                  name="turnover"
                   type="text"
                   className="form-control"
                   placeholder="Dövriyyə"
@@ -137,8 +139,8 @@ export default function LabPageModal({ lab }) {
               </div>
               <div className="col-md-4">
                 <MyTextInput
-                  id="labOperation"
-                  name="labOperation"
+                  id="operations"
+                  name="operations"
                   type="text"
                   className="form-control"
                   placeholder="Əməliyyatlar"
@@ -146,8 +148,8 @@ export default function LabPageModal({ lab }) {
               </div>
               <div className="col-md-4">
                 <MyTextInput
-                  id="labNote"
-                  name="labNote"
+                  id="note"
+                  name="note"
                   type="text"
                   className="form-control"
                   placeholder="Qeyd"

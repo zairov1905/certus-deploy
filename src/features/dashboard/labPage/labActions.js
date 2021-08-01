@@ -1,3 +1,4 @@
+import axios from "axios";
 import { toast } from "react-toastify";
 import { fetchSampleDataLab } from "../../../app/api/mockApi";
 import {
@@ -7,19 +8,29 @@ import {
   asyncActionStart,
 } from "../../../app/async/asyncReducer";
 import { delay } from "../../../app/util/util";
+import { DELETE_DOC } from "../docPage/docConstants";
 import { CREATE_LAB, DELETE_LAB, FETCH_LAB, UPDATE_LAB } from "./labConstants";
 
-export function loadLab() {
-  return async function (dispatch) {
-    dispatch(asyncActionStart());
-    try {
-      const labs = await fetchSampleDataLab();
-      dispatch({ type: FETCH_LAB, payload: labs });
-      dispatch(asyncActionFinish());
-    } catch (error) {
-      dispatch(asyncActionError(error));
-    }
-  };
+const url = "lab";
+export function loadLab(data) {
+    return async function (dispatch) {
+        dispatch(asyncActionStart());
+    
+        const labs = await axios.get(`/${url}`, {
+          params: { ...data },
+        });
+        console.log(labs)
+        if (labs.status === 200) {
+          dispatch({
+            type: FETCH_LAB,
+            payload: labs.data.data,
+            totalCount: labs.data.message,
+          });
+          dispatch(asyncActionFinish());
+        } else {
+          dispatch(asyncActionError());
+        }
+      };
 }
 export function listenToLab(labs){
     return {
@@ -29,41 +40,53 @@ export function listenToLab(labs){
 }
 
 export function createLab(lab){
-    return async function(dispatch){
+    return async function (dispatch) {
         dispatch(asyncActionStart());
-        try {
-            await delay(1000);
-            dispatch({type:CREATE_LAB,payload:lab});
-            dispatch(asyncActionFinish());
-
-        } catch (error) {
-            asyncActionError(error)
+        const data = await axios.post(`${url}/create`, lab, {
+          withCredentials: true,
+        });
+        if (data.status === 201) {
+          toast.success("Uğurla əlavə edildi");
+          dispatch({ type: CREATE_LAB, payload: data.data.data });
+          dispatch(asyncActionFinish());
+        } else {
+          toast.danger("Xəta baş verdi, yenidən cəht edin.");
         }
-    }
+      };
 }
 
 export function updateLab(lab){
-    return async function(dispatch){
-        dispatch(asyncActionStart)
-        try {
-            await delay(1000);
-            dispatch({type:UPDATE_LAB,payload:lab});
-            dispatch(asyncActionFinish());
-        } catch (error) {
-            asyncActionError(error);
+    return async function (dispatch) {
+        dispatch(asyncActionStart);
+    
+        const labUpdated = await axios.put(
+          `/${url}/update`,
+          lab
+        );
+        if (labUpdated.status === 200) {
+          toast.success("Dəyişiklik uğurlar yerinə yetirildi");
+          dispatch({
+            type: UPDATE_LAB,
+            payload: labUpdated.data.data,
+          });
+          dispatch(asyncActionFinish());
+        } else {
+          asyncActionError();
         }
-    }
+      };
 }
 
 export function deleteLab(labId){
-    return async function(dispatch){
-        try {
-            await delay(1000)
-            dispatch({type:DELETE_LAB, payload:labId});
-            // dispatch(asyncActionFinish())
-            toast.success("Uğurla silindi")
-        } catch (error) {
-            dispatch(asyncActionError(error))
+    return async function (dispatch) {
+        const documentDeleted = await axios.delete(
+          `/${url}/delete?id=${labId}`
+        );
+        if (documentDeleted.status === 200) {
+          dispatch({ type: DELETE_LAB, payload: labId });
+          // dispatch(asyncActionFinish())
+          toast.info("Uğurla silindi");
+        } else {
+          dispatch(asyncActionError());
         }
-    }
+      };
 }

@@ -6,14 +6,16 @@ import { loadDocs } from "../docPage/docActions";
 
 import { deleteLab, loadLab } from "./labActions";
 export default function LabsPage() {
+  const dispatch = useDispatch();
   useEffect(() => {
     dispatch(loadLab());
     //   // return () => {
     //   //   // dispatch(loadOrder())
     //   // }
   }, []);
-  const dispatch = useDispatch();
-  const { labs } = useSelector((state) => state.labs);
+  const [perPage, setPerPage] = useState(10);
+  const [PageNumber, setPageNumber] = useState(1);
+  const { labs, totalCount } = useSelector((state) => state.labs);
   const [hover, sethover] = useState(false);
   const [target, setTarget] = useState({ id: null, name: null });
 
@@ -50,6 +52,15 @@ export default function LabsPage() {
   const buttonHover = {
     color: "#515365",
     fill: "#ffcacd",
+  };
+  const handlePageChange = (page) => {
+    dispatch(loadLab({ s: page, take: perPage }));
+    setPageNumber(page);
+  };
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    dispatch(loadLab({ s: page, take: newPerPage }));
+    setPerPage(newPerPage);
   };
 
   const actions = (
@@ -101,38 +112,39 @@ export default function LabsPage() {
   const columns = [
     {
       name: "Lab nömrəsi",
-      selector: "labNumber",
+      selector: "id",
       sortable: true,
     },
     {
       name: "Lab adı",
-      selector: "labName",
+      selector: "name",
       sortable: true,
     },
     {
       name: "Müqavilə nömrəsi",
-      selector: "contractNumber",
       sortable: true,
+
+      cell: (lab) => <p>{lab.document_id.document_number}</p>,
     },
 
     {
+      name: "Atestat nömrəsi",
+      selector: "certificate_number",
+      sortable: true,
+    },
+    {
       name: "Dövriyyə",
-      selector: "labPeriod",
+      selector: "turnover",
       sortable: true,
     },
     {
       name: "Əməliyyatlar",
-      selector: "labOperation",
+      selector: "operations",
       sortable: true,
     },
     {
-      name: "Atestat nömrəsi",
-      selector: "certificateNumber",
-      sortable:true
-    },
-    {
       name: "Lab not",
-      selector: "labNote",
+      selector: "note",
       sortable: true,
     },
 
@@ -250,16 +262,15 @@ export default function LabsPage() {
                 title="Laboratoriyalar"
                 columns={columns}
                 data={data}
-                // customStyles={customStyles}
-                // progressPending={loading}
                 pagination
-                // paginationServer
+                paginationServer
+                paginationTotalRows={totalCount}
+                paginationDefaultPage={PageNumber}
+                onChangeRowsPerPage={handlePerRowsChange}
+                onChangePage={handlePageChange}
                 highlightOnHover
                 Clicked
                 actions={actions}
-                // loading={loading}
-                // dense
-                // paginationTotalRows={totalRows}
               />
             </div>
           </div>

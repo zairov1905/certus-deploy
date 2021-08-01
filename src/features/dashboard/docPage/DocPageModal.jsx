@@ -33,13 +33,14 @@ export default function DocPageModal({ doc }) {
     { label: "Alış", value: 0 },
     { label: "Satış", value: 1 },
   ];
-  const initialValues = doc ? doc: {
-    document_type_id: "",
-    document_for: "",
-    date: "",
-    about: "",
-
-  };
+  const initialValues = doc
+    ? doc
+    : {
+        document_type_id: "",
+        document_for: "",
+        date: "",
+        about: "",
+      };
   const validationSchema = Yup.object({
     // id:"",
     // id:"",
@@ -59,9 +60,7 @@ export default function DocPageModal({ doc }) {
           try {
             doc
               ? await dispatch(updateDoc(values))
-              : await dispatch(
-                  createDoc({ ...values})
-                );
+              : await dispatch(createDoc({ ...values }));
             setSubmitting(false);
             setModal(true);
             dispatch(closeModal());
@@ -81,12 +80,11 @@ export default function DocPageModal({ doc }) {
                   name="document_type_id"
                   options={documentTypesOptions}
                   defaultValue={
-                    doc &&                    {
+                    doc && {
                       label: doc.document_type_id.name,
                       value: doc.document_type_id.id,
                     }
                   }
-
                   // type="text"
                   // className="form-control"
                   placeholder="Sənəd növü"
@@ -101,10 +99,9 @@ export default function DocPageModal({ doc }) {
                     doc &&
                     docPurposeSettings.filter(
                       (docPurposeSetting) =>
-                      doc.document_for === docPurposeSetting.value
+                        doc.document_for === docPurposeSetting.value
                     )
                   }
-                  
                   // type="text"
                   // className="form-control"
                   placeholder="Sənədin təyinatı"

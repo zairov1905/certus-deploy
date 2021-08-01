@@ -10,7 +10,7 @@ const initialState = {
   labs: []
 };
 
-export default function labReducer(state = initialState, { type, payload }) {
+export default function labReducer(state = initialState, { type, payload,totalCount}) {
   switch (type) {
     case CREATE_LAB:
       return {
@@ -35,6 +35,7 @@ export default function labReducer(state = initialState, { type, payload }) {
       return {
         ...state,
         labs: payload,
+        totalCount:totalCount
       };
     default:
       return state;
