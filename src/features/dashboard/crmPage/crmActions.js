@@ -1,3 +1,4 @@
+import axios from "axios";
 import { toast } from "react-toastify";
 import { fetchSampleDataCrm } from "../../../app/api/mockApi";
 import {
@@ -8,62 +9,80 @@ import {
 } from "../../../app/async/asyncReducer";
 import { delay } from "../../../app/util/util";
 import { CREATE_CRM, DELETE_CRM, FETCH_CRM, UPDATE_CRM } from "./crmConstants";
-
-export function loadCrm() {
+const url = "customer";
+export function loadCrm(data) {
   return async function (dispatch) {
     dispatch(asyncActionStart());
-    try {
-      const crms = await fetchSampleDataCrm();
-      dispatch({ type: FETCH_CRM, payload: crms });
+
+    const crms = await axios.get(`/${url}`, {
+      params: { ...data },
+    });
+    console.log(crms);
+    if (crms.status === 200) {
+      dispatch({
+        type: FETCH_CRM,
+        payload: crms.data.data,
+        totalCount: crms.data.message,
+      });
       dispatch(asyncActionFinish());
-    } catch (error) {
-      dispatch(asyncActionError(error));
+    } else {
+      dispatch(asyncActionError());
     }
   };
 }
-export function listenToCrm(crms){
-    return {
-        type:FETCH_CRM,
-        payload:crms
-    }
+export function listenToCrm(crms) {
+  return {
+    type: FETCH_CRM,
+    payload: crms,
+  };
 }
 
-export function createCrm(crm){
-    return async function(dispatch){
-        dispatch(asyncActionStart());
-        try {
-            await delay(1000);
-            dispatch({type:CREATE_CRM,payload:crm});
-            dispatch(asyncActionFinish());
+export function createCrm(crm) {
+  console.log(crm);
+  return async function (dispatch) {
+    dispatch(asyncActionStart());
 
-        } catch (error) {
-            asyncActionError(error)
-        }
+    const data = await axios.post(`${url}/create`, crm, {
+      withCredentials: true,
+    });
+
+    if (data.status === 201) {
+      toast.success("Uğurla əlavə edildi");
+      dispatch({ type: CREATE_CRM, payload: data.data.data });
+      dispatch(asyncActionFinish());
+    } else {
+      toast.danger("Xəta baş verdi, yenidən cəht edin.");
     }
+  };
 }
 
-export function updateCrm(crm){
-    return async function(dispatch){
-        dispatch(asyncActionStart)
-        try {
-            await delay(1000);
-            dispatch({type:UPDATE_CRM,payload:crm});
-            dispatch(asyncActionFinish());
-        } catch (error) {
-            asyncActionError(error);
-        }
+export function updateCrm(crm) {
+  return async function (dispatch) {
+    dispatch(asyncActionStart);
+    console.log(crm);
+    const crmUpdated = await axios.put(`/${url}/update`, crm);
+    if (crmUpdated.status === 200) {
+      toast.success("Dəyişiklik uğurlar yerinə yetirildi");
+      dispatch({
+        type: UPDATE_CRM,
+        payload: crmUpdated.data.data,
+      });
+      dispatch(asyncActionFinish());
+    } else {
+      asyncActionError();
     }
+  };
 }
 
-export function deleteCrm(crmId){
-    return async function(dispatch){
-        try {
-            await delay(1000)
-            dispatch({type:DELETE_CRM, payload:crmId});
-            // dispatch(asyncActionFinish())
-            toast.success("Uğurla silindi")
-        } catch (error) {
-            dispatch(asyncActionError(error))
-        }
+export function deleteCrm(crmId) {
+  return async function (dispatch) {
+    const crmDeleted = await axios.delete(`/${url}/delete?id=${crmId}`);
+    if (crmDeleted.status === 200) {
+      dispatch({ type: DELETE_CRM, payload: crmId });
+      // dispatch(asyncActionFinish())
+      toast.info("Uğurla silindi");
+    } else {
+      dispatch(asyncActionError());
     }
+  };
 }

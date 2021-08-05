@@ -18,7 +18,9 @@ export default function Header() {
   // if (auth.authenticated === false) {
   //   return <Redirect to="/" />;
   // }
-
+  if (auth.authenticated === false) {
+    return <Redirect to="/" />;
+  }
   return (
     <div className="header-container fixed-top">
       <header className="header navbar navbar-expand-sm">

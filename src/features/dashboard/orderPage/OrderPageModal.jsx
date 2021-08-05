@@ -28,8 +28,8 @@ export default function OrderPageModal({ order }) {
     serviceTypes &&
     serviceTypes.map((serviceType) => {
       return {
-        value: `${serviceType.serviceTypeName}`,
-        label: `${serviceType.serviceTypeName}`,
+        value: `${serviceType.id}`,
+        label: `${serviceType.name}`,
       };
     });
 
@@ -37,24 +37,24 @@ export default function OrderPageModal({ order }) {
     orderSources &&
     orderSources.map((orderSource) => {
       return {
-        value: `${orderSource.orderSourceName}`,
-        label: `${orderSource.orderSourceName}`,
+        value: `${orderSource.id}`,
+        label: `${orderSource.name}`,
       };
     });
   referenceOptions =
     references &&
     references.map((reference) => {
       return {
-        value: `${reference.referenceName}`,
-        label: `${reference.referenceName}`,
+        value: `${reference.id}`,
+        label: `${reference.name}`,
       };
     });
   customerOptions =
     crms &&
     crms.map((crm) => {
       return {
-        value: `${crm.customerName}`,
-        label: `${crm.customerName}`,
+        value: `${crm.id}`,
+        label: `${crm.customer_name}`,
       };
     });
   const dispatch = useDispatch();
@@ -68,26 +68,24 @@ export default function OrderPageModal({ order }) {
   const initialValues = order
     ? order
     : {
-        id: "",
-        orderNumber: "",
-        serviceType: "",
-        customer: "",
-        orderSource: "",
-        oderAppointment: "",
-        orderReference: "",
-        orderDate: "",
-        orderNote: "",
+        number: "",
+        service_type_id: "",
+        customer_id: "",
+        order_source_id: "",
+        reference_id: "",
+        date: "",
+        description: "",
 
         /////
       };
   const validationSchema = Yup.object({
-    orderNumber: Yup.string().required("Mütləq doldurulmalıdır."),
-    serviceType: Yup.string().required("Mütləq doldurulmalıdır."),
-    customer: Yup.string().required("Mütləq doldurulmalıdır."),
-    orderSource: Yup.string().required("Mütləq doldurulmalıdır."),
-    oderAppointment: Yup.string().required("Mütləq doldurulmalıdır."),
-    orderReference: Yup.string().required("Mütləq doldurulmalıdır."),
-    orderDate: Yup.string().required("Mütləq doldurulmalıdır."),
+    number: Yup.string().required("Mütləq doldurulmalıdır."),
+    service_type_id: Yup.number().required(),
+    customer_id: Yup.number(),
+    order_source_id: Yup.number(),
+    reference_id: Yup.number(),
+    date: Yup.string(),
+    // description: "",
   });
 
   return (
@@ -98,12 +96,14 @@ export default function OrderPageModal({ order }) {
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
             order
-              ? await dispatch(updateOrder(values))
-              : await dispatch(createOrder({ ...values, id: cuid() }));
+              ? await dispatch(
+                  updateOrder({
+                    ...values,
+                  }),
+                  console.log(values.service_type_id.id)
+                )
+              : await dispatch(createOrder(values));
             setSubmitting(false);
-            order
-              ? toast.success("Dəyişiklik uğurlar yerinə yetirildi")
-              : toast.success("Uğurla əlavə edildi");
             setModal(true);
             dispatch(closeModal());
           } catch (error) {
@@ -112,32 +112,37 @@ export default function OrderPageModal({ order }) {
             setSubmitting(false);
           }
         }}
+        
       >
-        {({ isSubmitting, isValid, dirty, errors }) => (
+        {({ isSubmitting, isValid, dirty, errors, values }) => (
           <Form id="emp">
             <div className="row">
               <div className="col-md-4">
                 <MyTextInput
-                  id="orderNumber"
-                  name="orderNumber"
+                  id="number"
+                  name="number"
                   type="text"
                   className="form-control"
                   placeholder="Sifariş Nömrəsi"
                 />
+                {/* {console.log(values.service_type_id)} */}
               </div>
               <div className="col-md-4">
                 <MySearchableSelect
+                  id="service_type_id"
+                  name="service_type_id"
+                  type="text"
                   defaultValue={
                     order &&
-                    serviceTypeOptions.filter(
-                      (serviceTypeOption) =>
-                        serviceTypeOption.value === order.serviceType
-                    )
+                    {
+                      label: order.service_type_id.name,
+                      value: parseInt(order.service_type_id.id),
+                    }
                   }
-                  id="serviceType"
-                  name="serviceType"
-                  type="text"
+                  
                   options={serviceTypeOptions}
+                  // getOptionLabel={ x => x.label}
+                  // getOptionValue={ x => x.value}
                   // className="form-control"
                   placeholder="Xidmət Növü"
                 />
@@ -145,14 +150,13 @@ export default function OrderPageModal({ order }) {
               <div className="col-md-4">
                 <MySearchableSelect
                   defaultValue={
-                    order &&
-                    customerOptions.filter(
-                      (customerOption) =>
-                        customerOption.value === order.customer
-                    )
+                    order && {
+                      label: order.customer_id.customer_name,
+                      value: parseInt(order.customer_id.id),
+                    }
                   }
-                  id="customer"
-                  name="customer"
+                  id="customer_id"
+                  name="customer_id"
                   options={customerOptions}
                   // className="form-control"
                   placeholder="Müştəri"
@@ -163,14 +167,13 @@ export default function OrderPageModal({ order }) {
               <div className="col-md-4">
                 <MySearchableSelect
                   defaultValue={
-                    order &&
-                    orderSourceOptions.filter(
-                      (orderSourceOption) =>
-                        orderSourceOption.value === order.orderSource
-                    )
+                    order && {
+                      label: order.order_source_id.name,
+                      value: parseInt(order.order_source_id.id),
+                    }
                   }
-                  id="orderSource"
-                  name="orderSource"
+                  id="order_source_id"
+                  name="order_source_id"
                   type="text"
                   options={orderSourceOptions}
                   // className="form-control"
@@ -180,14 +183,13 @@ export default function OrderPageModal({ order }) {
               <div className="col-md-4">
                 <MySearchableSelect
                   defaultValue={
-                    order &&
-                    referenceOptions.filter(
-                      (referenceOption) =>
-                        referenceOption.value === order.orderReference
-                    )
+                    order && {
+                      label: order.reference_id.name,
+                      value: parseInt(order.reference_id.id),
+                    }
                   }
-                  name="orderReference"
-                  id="orderReference"
+                  name="reference_id"
+                  id="reference_id"
                   type="text"
                   options={referenceOptions}
                   // className="form-control"
@@ -196,8 +198,8 @@ export default function OrderPageModal({ order }) {
               </div>
               <div className="col-md-4">
                 <MyTextInput
-                  name="orderDate"
-                  id="orderDate"
+                  name="date"
+                  id="date"
                   type="date"
                   className="form-control"
                   placeholder="Sifariş tarixi"
@@ -207,8 +209,8 @@ export default function OrderPageModal({ order }) {
             <div className="row">
               <div className="col-md-12">
                 <MyTextArea
-                  name="oderAppointment"
-                  id="oderAppointment"
+                  name="description"
+                  id="description"
                   type="text"
                   className="form-control"
                   placeholder="Sifariş Təyinatı"

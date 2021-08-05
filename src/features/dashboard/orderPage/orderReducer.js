@@ -11,7 +11,10 @@ const initialState = {
   orders: [],
 };
 
-export default function orderReducer(state = initialState, { type, payload }) {
+export default function orderReducer(
+  state = initialState,
+  { type, payload, totalCount }
+) {
   switch (type) {
     case CREATE_ORDER:
       return {
@@ -36,14 +39,16 @@ export default function orderReducer(state = initialState, { type, payload }) {
       // console.log(payload.filter(order=> order.executiveStatus == 0))
       return {
         ...state,
-        orders: payload.filter((order) => order.executiveStatus == 0),
+        orders: payload.filter((order) => order.employee_id === null),
+        totalCount: totalCount,
       };
     case SEND_TO_OPERATION:
-      // console.log(payload)
       return {
         ...state,
         orders: [
-          ...state.orders.filter((order) => order.orderNumber !== payload.orderNumber),
+          ...state.orders.filter(
+            (order) => order.id !== payload.id
+          ),
         ],
       };
     default:

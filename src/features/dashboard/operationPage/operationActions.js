@@ -1,3 +1,4 @@
+import axios from "axios";
 import { toast } from "react-toastify";
 import { fetchSampleDataOrder } from "../../../app/api/mockApi";
 import {
@@ -8,18 +9,27 @@ import {
 } from "../../../app/async/asyncReducer";
 import { delay } from "../../../app/util/util";
 import { CREATE_OPERATION, DELETE_OPERATION, FETCH_OPERATION, UPDATE_OPERATION } from "./operationConstants";
+const url = 'operation';
 
-export function loadOperation() {
-  return async function (dispatch) {
-    dispatch(asyncActionStart());
-    try {
-      const operations = await fetchSampleDataOrder();
-      dispatch({ type: FETCH_OPERATION, payload: operations });
-      dispatch(asyncActionFinish());
-    } catch (error) {
-      dispatch(asyncActionError(error));
-    }
-  };
+export function loadOperation(data) {
+    return async function (dispatch) {
+        dispatch(asyncActionStart());
+    
+        const operations = await axios.get(`/${url}`, {
+          params: { ...data },
+        });
+        console.log(operations,'Operation')
+        if (operations.status === 200) {
+          dispatch({
+            type: FETCH_OPERATION,
+            payload: operations.data.data,
+            totalCount: operations.data.message,
+          });
+          dispatch(asyncActionFinish());
+        } else {
+          dispatch(asyncActionError());
+        }
+      };
 }
 export function listenToOperation(operations){
     return {
@@ -56,14 +66,16 @@ export function updateOperation(operation){
 }
 
 export function deleteOperation(operationId){
-    return async function(dispatch){
-        try {
-            await delay(1000)
-            dispatch({type:DELETE_OPERATION, payload:operationId});
-            // dispatch(asyncActionFinish())
-            toast.success("Uğurla silindi")
-        } catch (error) {
-            dispatch(asyncActionError(error))
+    return async function (dispatch) {
+        const documentDeleted = await axios.delete(
+          `/${url}/delete?id=${operationId}`
+        );
+        if (documentDeleted.status === 200) {
+          dispatch({ type: DELETE_OPERATION, payload: operationId });
+          // dispatch(asyncActionFinish())
+          toast.info("Uğurla silindi");
+        } else {
+          dispatch(asyncActionError());
         }
-    }
+      };
 }

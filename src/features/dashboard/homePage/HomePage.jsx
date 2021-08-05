@@ -75,13 +75,13 @@ export default function Dashboard() {
                 <h5>Xərc</h5>
               </div>
               <div className="widget-content widget-content-area">
-                <Chart
+                {/* <Chart
                   options={basicBar.options}
                   series={basicBar.series}
                   type="bar"
                   width="100%"
                   height="302"
-                />
+                /> */}
               </div>
             </div>
           </div>
@@ -91,14 +91,14 @@ export default function Dashboard() {
                 <h5>İşçilər-Performans</h5>
               </div>
               <div className="widget-content widget-content-area">
-                <Chart
+                {/* <Chart
                   options={chartOptions}
                   series={series}
                   type="pie"
                   width="100%"
                   height="400"
 
-                />
+                /> */}
               </div>
             </div>
           </div>

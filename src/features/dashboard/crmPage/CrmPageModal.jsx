@@ -20,10 +20,15 @@ export default function CrmPageModal({ crm }) {
   let employeeOptions = [];
   let referenceOptions = [];
   const legalStatusOptions = [
-    { label: "Hüquqi şəxs", value: 0 },
-    { label: "Fiziki şəxs", value: 1 },
-    { label: "Qeyri vergi ödəyicisi fiziki şəxs", value: 2 },
+    { label: "Hüquqi şəxs", value: parseInt(0) },
+    { label: "Fiziki şəxs", value: parseInt(1) },
+    { label: "Qeyri vergi ödəyicisi fiziki şəxs", value: parseInt(2) },
   ];
+  const selectedLegalStatus =
+    crm &&
+    legalStatusOptions.filter(
+      (legalStatusOption) => crm.legal_status_id === legalStatusOption.value
+    );
   const placeOptions = [
     { label: "Hüquqi ünvan", value: 0 },
     { label: "Faktiki ünvan", value: 1 },
@@ -32,24 +37,28 @@ export default function CrmPageModal({ crm }) {
     references &&
     references.map((reference) => {
       return {
-        value: `${reference.referenceName} `,
-        label: `${reference.referenceName}`,
+        value: `${reference.id} `,
+        label: `${reference.name}`,
       };
     });
   employeeOptions =
     employees &&
     employees.map((employee) => {
       return {
-        value: `${employee.firstname} ${employee.lastname}`,
-        label: `${employee.firstname} ${employee.lastname}`,
+        value: `${employee.id}`,
+        label: `${employee.name} ${employee.surname}`,
       };
     });
 
   const dispatch = useDispatch();
   const [modal, setModal] = useState(false);
   // dovriyye il uzre
-  const [circulationWithYears, setCirculationWithYears] = useState([]);
-  let mapCirculations = crm ? crm.circulationByYears : circulationWithYears;
+  const [circulationWithYears, setCirculationWithYears] = useState([
+    { circulationYear: "", circulation: "" },
+  ]);
+  let mapCirculations = crm
+    ? JSON.parse(crm.circulationByYears)
+    : circulationWithYears;
   const handleAddCirculationByYear = () => {
     setCirculationWithYears([
       ...circulationWithYears,
@@ -64,15 +73,14 @@ export default function CrmPageModal({ crm }) {
       setCirculationWithYears(values);
     }
   };
-  /// isciler il uzre 
+  /// isciler il uzre
 
-  const [workersYears, setWorkersYears] = useState([]);
-  let mapWorkersYears = crm ? crm.workersYears : workersYears;
+  const [workersYears, setWorkersYears] = useState([
+    { workerYear: "", worker: "" },
+  ]);
+  let mapWorkersYears = crm ? JSON.parse(crm.workersYears) : workersYears;
   const handleAddWorkersYear = () => {
-    setWorkersYears([
-      ...workersYears,
-      { workerYear: "", worker: "" },
-    ]);
+    setWorkersYears([...workersYears, { workerYear: "", worker: "" }]);
   };
   const handleRemoveWorkersYear = () => {
     if (workersYears.length > 1) {
@@ -91,73 +99,67 @@ export default function CrmPageModal({ crm }) {
   const initialValues = crm
     ? crm
     : {
-        id: "",
+        contact_name: "",
+        contact_surname: "",
+        contact_dadname: "",
+        contact_phone: "",
+        contact_whatsapp: "",
+        contact_telegram: "",
+        contact_facebook: "",
+        contact_linkedin: "",
+        contact_twitter: "",
+        contact_instagram: "",
+        contact_mail: "",
 
-        firstname: "",
-        lastname: "",
-        middlename: "",
-        birthday: "",
-        p_phone: "",
-        p_whatsapp: "",
-        p_telegram: "",
-        p_facebook: "",
-        p_linkedin: "",
-        p_twitter: "",
-        p_instagram: "",
-        p_mail: "",
+        employee_id: "",
+        legal_status_id: "",
+        customer_name: "",
+        voen: "",
+        date: "",
 
-        curator: "",
-        customerCode: "",
-        customerName: "",
-        vöen: "",
-        createDate: "",
+        // logo: "",
+        legal_adress: "",
+        actual_adress: "",
+        customer_phone: "",
+        customer_email: "",
+        customer_linkedin: "",
+        customer_twitter: "",
+        customer_instagram: "",
+        customer_website: "",
+        customer_whatsapp: "",
+        customer_telegram: "",
+        customer_facebook: "",
 
-        logo: "",
-        legalAddress: "",
-        actualAddress: "",
-        phone: "",
-        website: "",
-        whatsapp: "",
-        telegram: "",
-        facebook: "",
-        linkedin: "",
-        twitter: "",
-        instagram: "",
-        mail: "",
-
-        reference: "",
-        serviceType: "",
-        orderSource: "",
-        orderDestination: "",
-        circulation: "",
-        customerCategory: "",
-        customerSatisfaction: "",
-        note: "",
+        referans_id: "",
+        customer_category: "",
+        customer_satisfaction: "",
+        turnover: "",
         circulationByYears: circulationWithYears,
-        workersYears:workersYears
+        workersYears: workersYears,
+        note: "",
       };
   const validationSchema = Yup.object({
-    // curator: Yup.string().required("Mutuel doldurulmalıdır."),
+    // employee_id: Yup.string().required("Mutuel doldurulmalıdır."),
     // customerCode: Yup.string().required("Mütləq doldurulmalıdır."),
-    // customerName: Yup.string().required("Mütləq doldurulmalıdır."),
-    // vöen: Yup.string().required("Mütləq doldurulmalıdır."),
-    // createDate: Yup.string().required("Mütləq doldurulmalıdır."),
+    // customer_name: Yup.string().required("Mütləq doldurulmalıdır."),
+    // voen: Yup.string().required("Mütləq doldurulmalıdır."),
+    // date: Yup.string().required("Mütləq doldurulmalıdır."),
     // // logo: Yup.string().required("Mütləq doldurulmalıdır."),
-    // legalAddress: Yup.string().required("Mütləq doldurulmalıdır."),
-    // actualAddress: Yup.string().required("Mütləq doldurulmalıdır."),
-    // phone: Yup.string().required("Mütləq doldurulmalıdır."),
-    // website: Yup.string().required("Mütləq doldurulmalıdır."),
+    // legal_adress: Yup.string().required("Mütləq doldurulmalıdır."),
+    // actual_adress: Yup.string().required("Mütləq doldurulmalıdır."),
+    // customer_phone: Yup.string().required("Mütləq doldurulmalıdır."),
+    // customer_website: Yup.string().required("Mütləq doldurulmalıdır."),
     // whatsapp: Yup.string().required("Mütləq doldurulmalıdır."),
     // telegram: Yup.string().required("Mütləq doldurulmalıdır."),
     // facebook: Yup.string().required("Mütləq doldurulmalıdır."),
     // linkedin: Yup.string().required("Mütləq doldurulmalıdır."),
     // twitter: Yup.string().required("Mütləq doldurulmalıdır."),
     // instagram: Yup.string().required("Mütləq doldurulmalıdır."),
-    // mail: Yup.string().required("Mütləq doldurulmalıdır."),
-    // reference: Yup.string().required("Mütləq doldurulmalıdır."),
+    // customer_email: Yup.string().required("Mütləq doldurulmalıdır."),
+    // referans_id: Yup.string().required("Mütləq doldurulmalıdır."),
     // circulation: Yup.string().required("Mütləq doldurulmalıdır."),
-    // customerCategory: Yup.string().required("Mütləq doldurulmalıdır."),
-    // customerSatisfaction: Yup.string().required("Mütləq doldurulmalıdır."),
+    // customer_category: Yup.string().required("Mütləq doldurulmalıdır."),
+    // customer_satisfaction: Yup.string().required("Mütləq doldurulmalıdır."),
     // note: Yup.string().required("Mütləq doldurulmalıdır."),
   });
 
@@ -169,12 +171,15 @@ export default function CrmPageModal({ crm }) {
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
             crm
-              ? await dispatch(updateCrm(values))
-              : await dispatch(createCrm({ ...values, id: cuid() }));
+              ? await dispatch(
+                  updateCrm({
+                    ...values,
+                    employee_id: values.employee_id.id,
+                    referans_id: values.referans_id.id,
+                  })
+                )
+              : await dispatch(createCrm({ ...values }));
             setSubmitting(false);
-            crm
-              ? toast.success("Dəyişiklik uğurlar yerinə yetirildi")
-              : toast.success("Uğurla əlavə edildi");
             setModal(true);
             dispatch(closeModal());
           } catch (error) {
@@ -246,8 +251,8 @@ export default function CrmPageModal({ crm }) {
                     <div className="row">
                       <div className="col-md-4">
                         <MyTextInput
-                          id="firstname"
-                          name="firstname"
+                          id="contact_name"
+                          name="contact_name"
                           type="text"
                           className="form-control"
                           placeholder="Ad"
@@ -255,8 +260,8 @@ export default function CrmPageModal({ crm }) {
                       </div>
                       <div className="col-md-4">
                         <MyTextInput
-                          id="lastname"
-                          name="lastname"
+                          id="contact_surname"
+                          name="contact_surname"
                           type="text"
                           className="form-control"
                           placeholder="Soyad"
@@ -264,8 +269,8 @@ export default function CrmPageModal({ crm }) {
                       </div>
                       <div className="col-md-4">
                         <MyTextInput
-                          id="middlename"
-                          name="middlename"
+                          id="contact_dadname"
+                          name="contact_dadname"
                           type="text"
                           className="form-control"
                           placeholder="Ata adı"
@@ -275,8 +280,8 @@ export default function CrmPageModal({ crm }) {
                     <div className="row">
                       <div className="col-md-4">
                         <MyTextInput
-                          name="p_phone"
-                          id="p_phone"
+                          name="contact_phone"
+                          id="contact_phone"
                           type="text"
                           className="form-control"
                           placeholder="Telefon"
@@ -284,8 +289,8 @@ export default function CrmPageModal({ crm }) {
                       </div>
                       <div className="col-md-4">
                         <MyTextInput
-                          name="p_whatsapp"
-                          id="p_whatsapp"
+                          name="contact_whatsapp"
+                          id="contact_whatsapp"
                           type="text"
                           className="form-control"
                           placeholder="Whatsapp"
@@ -293,8 +298,8 @@ export default function CrmPageModal({ crm }) {
                       </div>
                       <div className="col-md-4">
                         <MyTextInput
-                          name="p_telegram"
-                          id="p_telegram"
+                          name="contact_telegram"
+                          id="contact_telegram"
                           type="text"
                           className="form-control"
                           placeholder="Telegram"
@@ -302,8 +307,8 @@ export default function CrmPageModal({ crm }) {
                       </div>
                       <div className="col-md-4">
                         <MyTextInput
-                          name="p_facebook"
-                          id="p_facebook"
+                          name="contact_facebook"
+                          id="contact_facebook"
                           type="text"
                           className="form-control"
                           placeholder="Facebook"
@@ -311,8 +316,8 @@ export default function CrmPageModal({ crm }) {
                       </div>
                       <div className="col-md-4">
                         <MyTextInput
-                          name="p_linkedin"
-                          id="p_linkedin"
+                          name="contact_linkedin"
+                          id="contact_linkedin"
                           type="text"
                           className="form-control"
                           placeholder="Linkedin"
@@ -320,8 +325,8 @@ export default function CrmPageModal({ crm }) {
                       </div>{" "}
                       <div className="col-md-4">
                         <MyTextInput
-                          name="p_twitter"
-                          id="p_twitter"
+                          name="contact_twitter"
+                          id="contact_twitter"
                           type="text"
                           className="form-control"
                           placeholder="Twitter"
@@ -329,8 +334,8 @@ export default function CrmPageModal({ crm }) {
                       </div>{" "}
                       <div className="col-md-4">
                         <MyTextInput
-                          name="p_instagram"
-                          id="p_instagram"
+                          name="contact_instagram"
+                          id="contact_instagram"
                           type="text"
                           className="form-control"
                           placeholder="Instagram"
@@ -338,8 +343,8 @@ export default function CrmPageModal({ crm }) {
                       </div>{" "}
                       <div className="col-md-8">
                         <MyTextInput
-                          name="p_mail"
-                          id="p_mail"
+                          name="contact_mail"
+                          id="contact_mail"
                           type="text"
                           className="form-control"
                           placeholder="Mail"
@@ -408,28 +413,36 @@ export default function CrmPageModal({ crm }) {
                     <div className="row">
                       <div className="col-md-4">
                         <MySearchableSelect
-                          name="curator"
-                          id="curator"
+                          name="employee_id"
+                          id="employee_id"
                           type="text"
                           options={employeeOptions}
                           // className="form-control"
+                          defaultValue={
+                            crm && {
+                              label: `${crm.employee_id.name} ${crm.employee_id.surname}`,
+                              value: parseInt(crm.employee_id.id),
+                            }
+                          }
                           placeholder="Kurator"
                         />
                       </div>
                       <div className="col-md-4">
                         <MySearchableSelect
-                          name="legalStatus"
-                          id="legalStatus"
+                          name="legal_status_id"
+                          labe
+                          id="legal_status_id"
                           type="text"
                           options={legalStatusOptions}
+                          defaultValue={crm && selectedLegalStatus[0]}
                           // className="form-control"
                           placeholder="Hüquqi status"
                         />
                       </div>
                       <div className="col-md-4">
                         <MyTextInput
-                          id="customerName"
-                          name="customerName"
+                          id="customer_name"
+                          name="customer_name"
                           type="text"
                           className="form-control"
                           placeholder="Müştəri adı"
@@ -439,8 +452,8 @@ export default function CrmPageModal({ crm }) {
                     <div className="row">
                       <div className="col-md-6">
                         <MyTextInput
-                          id="vöen"
-                          name="vöen"
+                          id="voen"
+                          name="voen"
                           type="text"
                           className="form-control"
                           placeholder="VÖEN"
@@ -448,8 +461,8 @@ export default function CrmPageModal({ crm }) {
                       </div>
                       <div className="col-md-6">
                         <MyTextInput
-                          name="createDate"
-                          id="createDate"
+                          name="date"
+                          id="date"
                           type="date"
                           className="form-control"
                           placeholder="Tarix"
@@ -459,8 +472,8 @@ export default function CrmPageModal({ crm }) {
                     <div className="row">
                       <div className="col-md-6">
                         <MyTextInput
-                          name="legalAddress"
-                          id="legalAddress"
+                          name="legal_adress"
+                          id="legal_adress"
                           type="text"
                           className="form-control"
                           placeholder="Hüquqi ünvan"
@@ -468,8 +481,8 @@ export default function CrmPageModal({ crm }) {
                       </div>
                       <div className="col-md-6">
                         <MyTextInput
-                          name="actualAddress"
-                          id="actualAddress"
+                          name="actual_adress"
+                          id="actual_adress"
                           type="text"
                           className="form-control"
                           placeholder="Faktiki ünvan"
@@ -477,8 +490,8 @@ export default function CrmPageModal({ crm }) {
                       </div>
                       <div className="col-md-6">
                         <MyTextInput
-                          name="phone"
-                          id="phone"
+                          name="customer_phone"
+                          id="customer_phone"
                           type="text"
                           className="form-control"
                           placeholder="Nömrə"
@@ -486,8 +499,8 @@ export default function CrmPageModal({ crm }) {
                       </div>
                       <div className="col-md-6">
                         <MyTextInput
-                          name="mail"
-                          id="mail"
+                          name="customer_email"
+                          id="customer_email"
                           type="email"
                           className="form-control"
                           placeholder="Email"
@@ -497,8 +510,8 @@ export default function CrmPageModal({ crm }) {
                     <div className="row">
                       <div className="col-md-4">
                         <MyTextInput
-                          name="linkedin"
-                          id="linkedin"
+                          name="customer_linkedin"
+                          id="customer_linkedin"
                           type="text"
                           className="form-control"
                           placeholder="Linkedin"
@@ -506,8 +519,8 @@ export default function CrmPageModal({ crm }) {
                       </div>
                       <div className="col-md-4">
                         <MyTextInput
-                          name="twitter"
-                          id="twitter"
+                          name="customer_twitter"
+                          id="customer_twitter"
                           type="text"
                           className="form-control"
                           placeholder="Twitter"
@@ -515,8 +528,8 @@ export default function CrmPageModal({ crm }) {
                       </div>
                       <div className="col-md-4">
                         <MyTextInput
-                          name="instagram"
-                          id="instagram"
+                          name="customer_instagram"
+                          id="customer_instagram"
                           type="text"
                           className="form-control"
                           placeholder="Instagram"
@@ -526,8 +539,8 @@ export default function CrmPageModal({ crm }) {
                     <div className="row">
                       <div className="col-md-3">
                         <MyTextInput
-                          name="website"
-                          id="website"
+                          name="customer_website"
+                          id="customer_website"
                           type="text"
                           className="form-control"
                           placeholder="Vebsayt"
@@ -535,8 +548,8 @@ export default function CrmPageModal({ crm }) {
                       </div>
                       <div className="col-md-3">
                         <MyTextInput
-                          name="whatsapp"
-                          id="whatsapp"
+                          name="customer_whatsapp"
+                          id="customer_whatsapp"
                           type="text"
                           className="form-control"
                           placeholder="Whatsapp"
@@ -544,8 +557,8 @@ export default function CrmPageModal({ crm }) {
                       </div>
                       <div className="col-md-3">
                         <MyTextInput
-                          name="telegram"
-                          id="telegram"
+                          name="customer_telegram"
+                          id="customer_telegram"
                           type="text"
                           className="form-control"
                           placeholder="Telegram"
@@ -553,9 +566,9 @@ export default function CrmPageModal({ crm }) {
                       </div>
                       <div className="col-md-3">
                         <MyTextInput
-                          name="facebook"
-                          id="facebook"
-                          type="email"
+                          name="customer_facebook"
+                          id="customer_facebook"
+                          type="text"
                           className="form-control"
                           placeholder="Facebook"
                         />
@@ -564,9 +577,15 @@ export default function CrmPageModal({ crm }) {
                     <div className="row">
                       <div className="col-md-3">
                         <MySearchableSelect
-                          name="reference"
-                          id="reference"
+                          name="referans_id"
+                          id="referans_id"
                           type="text"
+                          defaultValue={
+                            crm && {
+                              label: crm.referans_id.name,
+                              value: parseInt(crm.referans_id.id),
+                            }
+                          }
                           options={referenceOptions}
                           // className="form-control"
                           placeholder="Referans"
@@ -574,8 +593,8 @@ export default function CrmPageModal({ crm }) {
                       </div>
                       <div className="col-md-3">
                         <MyTextInput
-                          name="customerCategory"
-                          id="customerCategory"
+                          name="customer_category"
+                          id="customer_category"
                           type="text"
                           className="form-control"
                           placeholder="Müştəri kateqoriyası"
@@ -583,8 +602,8 @@ export default function CrmPageModal({ crm }) {
                       </div>
                       <div className="col-md-3">
                         <MyTextInput
-                          name="customerSatisfaction"
-                          id="customerSatisfaction"
+                          name="customer_satisfaction"
+                          id="customer_satisfaction"
                           type="text"
                           className="form-control"
                           placeholder="Müştəri məmnuniyyəti"
@@ -592,8 +611,8 @@ export default function CrmPageModal({ crm }) {
                       </div>
                       <div className="col-md-3">
                         <MyTextInput
-                          name="circulation"
-                          id="circulation"
+                          name="turnover"
+                          id="turnover"
                           type="text"
                           className="form-control"
                           placeholder="Dövriyyə"
@@ -614,7 +633,7 @@ export default function CrmPageModal({ crm }) {
                   </div>
                 </div>
               </div>
-              <div className="card">
+              {/* <div className="card">
                 <div className="card-header" id="headingTwo3">
                   <section className="mb-0 mt-0">
                     <div
@@ -726,15 +745,17 @@ export default function CrmPageModal({ crm }) {
                             <div className="col-md-6">
                               <MyTextInput
                                 id="circulationYear"
-                                name={`circulationByYears.${index}.circulationYear`}
+                                name={`circulationByYears[${index}].circulationYear`}
                                 type="text"
+                                defaultValue={ mapCirculations && mapCirculation.circulationYear}
                                 className="form-control"
                                 placeholder="İl"
                               />
                             </div>
                             <div className="col-md-6">
                               <MyTextInput
-                                name={`circulationByYears.${index}.circulation`}
+                                name={`circulationByYears[${index}].circulation`}
+                                defaultValue={ mapCirculations && mapCirculation.circulation}
                                 id="circulation"
                                 type="text"
                                 className="form-control"
@@ -855,12 +876,14 @@ export default function CrmPageModal({ crm }) {
                     </div>
                     <div className="row">
                       {mapWorkersYears &&
-                        mapWorkersYears.map((mapWorkersYear, index) => (
+                        mapWorkersYears.map((mapWorkersYears, index) => (
                           <React.Fragment key={index}>
                             <div className="col-md-6">
                               <MyTextInput
-                                id={`workersYears.${index}.workerYear`}
-                                name={`workersYears.${index}.workerYear`}
+                                id={`workersYears[${index}].workerYear`}
+                                name={`workersYears[${index}]workerYear`}
+                                defaultValue={ mapWorkersYears && mapWorkersYears.workerYear}
+                                
                                 type="text"
                                 className="form-control"
                                 placeholder="İl"
@@ -868,8 +891,10 @@ export default function CrmPageModal({ crm }) {
                             </div>
                             <div className="col-md-6">
                               <MyTextInput
-                                name={`workersYears.${index}.worker`}
-                                id={`workersYears.${index}.worker`}
+                                name={`workersYears[${index}]worker`}
+                                id={`workersYears[${index}].worker`}
+                                defaultValue={ mapWorkersYears && mapWorkersYears.worker}
+
                                 type="text"
                                 className="form-control"
                                 placeholder="İşçilər"
@@ -881,6 +906,7 @@ export default function CrmPageModal({ crm }) {
                   </div>
                 </div>
               </div>
+             */}
             </div>
 
             <button

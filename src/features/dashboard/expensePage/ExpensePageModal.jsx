@@ -25,8 +25,8 @@ export default function ExpensePageModal({ expense }) {
     expenseGroups &&
     expenseGroups.map((expenseGroup) => {
       return {
-        label: expenseGroup.expenseGroupName,
-        value: expenseGroup.expenseGroupName,
+        label: expenseGroup.name,
+        value: expenseGroup.id,
       };
     });
   // Options xerc novleri
@@ -34,8 +34,8 @@ export default function ExpensePageModal({ expense }) {
     expenseTypes &&
     expenseTypes.map((expenseType) => {
       return {
-        label: expenseType.expenseTypeName,
-        value: expenseType.expenseTypeName,
+        label: expenseType.name,
+        value: expenseType.id,
       };
     });
   //Options Kontragent
@@ -43,8 +43,8 @@ export default function ExpensePageModal({ expense }) {
     counterparties &&
     counterparties.map((counterparty) => {
       return {
-        label: counterparty.counterpartyName,
-        value: counterparty.counterpartyName,
+        label: counterparty.name,
+        value: counterparty.id,
       };
     });
   //Options Sened
@@ -52,16 +52,16 @@ export default function ExpensePageModal({ expense }) {
     docs &&
     docs.map((doc) => {
       return {
-        label: doc.docType,
-        value: doc.docType,
+        label: doc.document_number,
+        value: doc.id,
       };
     });
 
   // options əməliyyat növü
 
   const operationTypeOptions = [
-    { label: "Gəlir", value: 0 },
-    { label: "Xərc", value: 1 },
+    { label: "Gəlir", value: 1 },
+    { label: "Xərc", value: 0 },
   ];
 
   // options ödəniş
@@ -72,9 +72,9 @@ export default function ExpensePageModal({ expense }) {
 
   // options ödəniş tipi
   const paymentTypeOptions = [
-    { label: "Bank", value: 0 },
-    { label: "Kassa", value: 1 },
-    { label: "Nəğd", value: 2 },
+    { label: "Bank", value: 1 },
+    { label: "Kassa", value: 2 },
+    { label: "Nəğd", value: 3 },
   ];
   useEffect(() => {
     if (modal) {
@@ -85,27 +85,29 @@ export default function ExpensePageModal({ expense }) {
   const initialValues = expense
     ? expense
     : {
-        id: "",
-        expenseGroup: "",
-        expenseType: "",
-        expenseDate: "",
-        expenseCounterparty: "",
-        expenseContract: "",
-        expenseInvoice: "",
-        operationType: "",
-        payment: "",
-        paymentType: "",
+        income_expense_group_id: "",
+        expense_type_id: "",
+        date: "",
+        contractor_id: "",
+        document_id: "",
+        // expenseInvoice: "",
+        operation_id: "",
+        payment_id: "",
+        payment_type_id: "",
+        faktura:""
       };
   const validationSchema = Yup.object({
-    expenseGroup: Yup.string().required("Mütləq doldurulmalıdır."),
-    expenseType: Yup.string().required("Mütləq doldurulmalıdır."),
-    expenseDate: Yup.string().required("Mütləq doldurulmalıdır."),
-    expenseCounterparty: Yup.string().required("Mütləq doldurulmalıdır."),
-    expenseContract: Yup.string().required("Mütləq doldurulmalıdır."),
-    expenseInvoice: Yup.string().required("Mütləq doldurulmalıdır."),
-    operationType: Yup.string().required("Mütləq doldurulmalıdır."),
-    payment: Yup.string().required("Mütləq doldurulmalıdır."),
-    paymentType: Yup.string().required("Mütləq doldurulmalıdır."),
+    income_expense_group_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    expense_type_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    date: Yup.string().required("Mütləq doldurulmalıdır."),
+    contractor_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    document_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    // expenseInvoice: Yup.string().required("Mütləq doldurulmalıdır."),
+    operation_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    payment_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    payment_type_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    faktura: Yup.string().required("Mütləq doldurulmalıdır."),
+
   });
 
   return (
@@ -117,11 +119,8 @@ export default function ExpensePageModal({ expense }) {
           try {
             expense
               ? await dispatch(updateExpense(values))
-              : await dispatch(createExpense({ ...values, id: cuid() }));
+              : await dispatch(createExpense({ ...values }));
             setSubmitting(false);
-            expense
-              ? toast.success("Dəyişiklik uğurlar yerinə yetirildi")
-              : toast.success("Uğurla əlavə edildi");
             setModal(true);
             dispatch(closeModal());
           } catch (error) {
@@ -136,12 +135,15 @@ export default function ExpensePageModal({ expense }) {
             <div className="row">
               <div className="col-md-6">
                 <MySearchableSelect
-                  id="expenseGroup"
-                  name="expenseGroup"
-                  // defaultValue={expense && { label:`${expense.expenseGroupName}`, value: `${expense.expenseGroupName}` }}
-
-                  // defaultValue = { expense && {label:`${expenseGroupsOptions.filter(expenseGroupsOption=> expenseGroupsOption.label = expense.expenseGroupName )}`}   }
+                  id="income_expense_group_id"
+                  name="income_expense_group_id"
                   options={expenseGroupsOptions}
+                  defaultValue={
+                    expense && {
+                      label: expense.income_expense_group_id.name,
+                      value: expense.income_expense_group_id.id,
+                    }
+                  }
                   // type="text"
                   // className="form-control"
                   placeholder="Gəlir-Xərc qrupu"
@@ -149,9 +151,15 @@ export default function ExpensePageModal({ expense }) {
               </div>
               <div className="col-md-6">
                 <MySearchableSelect
-                  id="expenseType"
-                  name="expenseType"
+                  id="expense_type_id"
+                  name="expense_type_id"
                   options={expenseTypesOptions}
+                  defaultValue={
+                    expense && {
+                      label: expense.expense_type_id.name,
+                      value: expense.expense_type_id.id,
+                    }
+                  }
                   type="text"
                   // className="form-control"
                   placeholder="Gəlir-Xərc Növü"
@@ -161,8 +169,8 @@ export default function ExpensePageModal({ expense }) {
             <div className="row">
               <div className="col-md-4">
                 <MyTextInput
-                  id="expenseDate"
-                  name="expenseDate"
+                  id="date"
+                  name="date"
                   type="date"
                   className="form-control"
                   placeholder="Tarix"
@@ -170,9 +178,15 @@ export default function ExpensePageModal({ expense }) {
               </div>
               <div className="col-md-4">
                 <MySearchableSelect
-                  name="expenseCounterparty"
-                  id="expenseCounterparty"
+                  name="contractor_id"
+                  id="contractor_id"
                   options={counterpartiesOptions}
+                  defaultValue={
+                    expense && {
+                      label: expense.contractor_id.name,
+                      value: expense.contractor_id.id,
+                    }
+                  }
                   // type="text"
                   // className="form-control"
                   placeholder="Kontragent"
@@ -180,9 +194,15 @@ export default function ExpensePageModal({ expense }) {
               </div>
               <div className="col-md-4">
                 <MySearchableSelect
-                  name="expenseContract"
-                  id="expenseContract"
+                  name="document_id"
+                  id="document_id"
                   // type="text"
+                  defaultValue={
+                    expense && {
+                      label: expense.document_id.document_number,
+                      value: expense.document_id.id,
+                    }
+                  }
                   options={docsOptions}
                   // className="form-control"
                   placeholder="Müqavilə"
@@ -192,30 +212,51 @@ export default function ExpensePageModal({ expense }) {
             <div className="row">
               <div className="col-md-4">
                 <MySearchableSelect
-                  name="operationType"
-                  id="operationType"
+                  name="operation_id"
+                  id="operation_id"
                   // type="text"
                   options={operationTypeOptions}
+                  defaultValue={
+                    expense &&
+                    operationTypeOptions.filter(
+                      (operationTypeOption) =>
+                        expense.operation_id === operationTypeOption.value
+                    )
+                  }
                   // className="form-control"
                   placeholder="Əməliyyat növü"
                 />
               </div>
               <div className="col-md-4">
                 <MySearchableSelect
-                  name="payment"
-                  id="payment"
+                  name="payment_id"
+                  id="payment_id"
                   // type="text"
                   options={paymentOptions}
+                  defaultValue={
+                    expense &&
+                    paymentOptions.filter(
+                      (paymentOption) =>
+                        expense.payment_id === paymentOption.value
+                    )
+                  }
                   // className="form-control"
                   placeholder="Ödəniş"
                 />
               </div>
               <div className="col-md-4">
                 <MySearchableSelect
-                  name="paymentType"
-                  id="paymentType"
+                  name="payment_type_id"
+                  id="payment_type_id"
                   // type="text"
                   options={paymentTypeOptions}
+                  defaultValue={
+                    expense &&
+                    paymentTypeOptions.filter(
+                      (paymentTypeOption) =>
+                        expense.payment_type_id === paymentTypeOption.value
+                    )
+                  }
                   // className="form-control"
                   placeholder="Ödəniş növü"
                 />
@@ -224,12 +265,11 @@ export default function ExpensePageModal({ expense }) {
 
             <div className="row">
               <div className="col-md-12">
-                <MySearchableSelect
-                  name="expenseInvoice"
-                  id="expenseInvoice"
+                <MyTextInput
+                  name="faktura"
+                  id="faktura"
                   // type="text"
-                  options={docsOptions}
-                  // className="form-control"
+                  className="form-control"
                   placeholder="Hesab faktura"
                 />
               </div>

@@ -18,6 +18,7 @@ export default function OperationPageModal({ operation }) {
   const { serviceTypes } = useSelector((state) => state.serviceTypes);
   const { orderSources } = useSelector((state) => state.orderSources);
   const { references } = useSelector((state) => state.references);
+  const { crms } = useSelector((state) => state.crms);
   const { employees } = useSelector((state) => state.employees);
   const { labs } = useSelector((state) => state.labs);
   const { docs } = useSelector((state) => state.docs);
@@ -26,6 +27,7 @@ export default function OperationPageModal({ operation }) {
   let serviceTypeOptions = [];
   let orderSourceOptions = [];
   let referenceOptions = [];
+  let customerOptions = [];
   let employeeOptions = [];
   let labOptions = [];
   let docOptions = [];
@@ -37,7 +39,7 @@ export default function OperationPageModal({ operation }) {
     serviceTypes.map((serviceType) => {
       return {
         value: `${serviceType.id}`,
-        label: `${serviceType.serviceTypeName}`,
+        label: `${serviceType.name}`,
       };
     });
 
@@ -45,56 +47,64 @@ export default function OperationPageModal({ operation }) {
     orderSources &&
     orderSources.map((orderSource) => {
       return {
-        value: `${orderSource.orderSourceName}`,
-        label: `${orderSource.orderSourceName}`,
+        value: `${orderSource.id}`,
+        label: `${orderSource.name}`,
       };
     });
   referenceOptions =
     references &&
     references.map((reference) => {
       return {
-        value: `${reference.referenceName}`,
-        label: `${reference.referenceName}`,
+        value: `${reference.id}`,
+        label: `${reference.name}`,
+      };
+    });
+  customerOptions =
+    crms &&
+    crms.map((crm) => {
+      return {
+        value: crm.id,
+        label: crm.customer_name,
       };
     });
   employeeOptions =
     employees &&
     employees.map((employee) => {
       return {
-        value: `${employee.firstname} ${employee.lastname}`,
-        label: `${employee.firstname} ${employee.lastname}`,
+        value: employee.id,
+        label: `${employee.name} ${employee.surname}`,
       };
     });
   labOptions =
     labs &&
     labs.map((lab) => {
       return {
-        value: `${lab.labName}`,
-        label: `${lab.labName}`,
+        value: `${lab.id}`,
+        label: `${lab.name}`,
       };
     });
   docOptions =
     docs &&
     docs.map((doc) => {
       return {
-        value: `${doc.docType}`,
-        label: `${doc.docType}`,
+        value: `${doc.id}`,
+        label: `${doc.document_number}`,
       };
     });
   expenseGroupOptions =
     expenseGroups &&
     expenseGroups.map((expenseGroup) => {
       return {
-        value: `${expenseGroup.expenseGroupName}`,
-        label: `${expenseGroup.expenseGroupName}`,
+        value: `${expenseGroup.id}`,
+        label: `${expenseGroup.name}`,
       };
     });
   expenseTypeOptions =
     expenseTypes &&
     expenseTypes.map((expenseType) => {
       return {
-        value: `${expenseType.expenseTypeName}`,
-        label: `${expenseType.expenseTypeName}`,
+        value: `${expenseType.id}`,
+        label: `${expenseType.name}`,
       };
     });
   const dispatch = useDispatch();
@@ -107,7 +117,7 @@ export default function OperationPageModal({ operation }) {
   const [addedStudents, setAddedStudents] = useState([]);
   let mapAddedStudents = addedStudents;
   const handleAddStudent = () => {
-    setAddedStudents([...addedStudents, {  studentName: "" }]);
+    setAddedStudents([...addedStudents, { studentName: "" }]);
   };
   const handleRemoveStudent = () => {
     if (addedStudents.length > 1) {
@@ -120,36 +130,39 @@ export default function OperationPageModal({ operation }) {
   const initialValues = operation
     ? operation
     : {
-        id: "",
-        orderNumber: "",
-        serviceType: "",
-        orderSource: "",
-        oderAppointment: "",
+        number: "",
+        service_type_id: "",
+        customer_id: "",
+        order_source_id: "",
         orderReference: "",
-        operationDate: "",
-        orderNote: "",
-        /////
-        executor: "",
-        contractNumber: "",
-        invoice: "",
-        sum: "",
-        lab: "",
-        expenseGroup: "",
-        expenseType: "",
-        executorBonus: "",
-        performance: "",
-        students:addedStudents
+        date: "",
+        description: "",
+        employee_id: "",
+        document_id: "",
+        faktura_id: "",
+        lab_id: "",
+        income_expense_group_id: "",
+        expense_type_id: "",
+        bonus: "",
+        performans: "",
       };
   const validationSchema = Yup.object({
-    orderNumber: Yup.string().required("Mütləq doldurulmalıdır."),
-    serviceType: Yup.string().required("Mütləq doldurulmalıdır."),
-    orderSource: Yup.string().required("Mütləq doldurulmalıdır."),
-    oderAppointment: Yup.string().required("Mütləq doldurulmalıdır."),
-    orderReference: Yup.string().required("Mütləq doldurulmalıdır."),
-    operationDate: Yup.string().required("Mütləq doldurulmalıdır."),
+    number: Yup.string().required("Mütləq doldurulmalıdır."),
+    service_type_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    customer_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    order_source_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    reference_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    date: Yup.string().required("Mütləq doldurulmalıdır."),
+    description: Yup.string().required("Mütləq doldurulmalıdır."),
+    employee_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    document_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    faktura_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    lab_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    income_expense_group_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    expense_type_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    bonus: Yup.string().required("Mütləq doldurulmalıdır."),
+    performans: Yup.string().required("Mütləq doldurulmalıdır."),
 
-    ////////
-    executor: Yup.string().required("Mütləq doldurulmalıdır."),
     contractNumber: Yup.string().required("Mütləq doldurulmalıdır."),
     invoice: Yup.string().required("Mütləq doldurulmalıdır."),
     sum: Yup.string().required("Mütləq doldurulmalıdır."),
@@ -187,18 +200,34 @@ export default function OperationPageModal({ operation }) {
       >
         {({ isSubmitting, isValid, dirty, errors, values }) => (
           <Form id="emp">
-
             <div className="row">
-              <div className="col-md-6">
+              <div className="col-md-4">
                 <MyTextInput
-                  id="orderNumber"
-                  name="orderNumber"
+                  id="number"
+                  name="number"
                   type="text"
                   className="form-control"
                   placeholder="Sifariş Nömrəsi"
                 />
               </div>
-              <div className="col-md-6">
+              <div className="col-md-4">
+                <MySearchableSelect
+                  defaultValue={
+                    // operation &&
+                    customerOptions.filter(
+                      (customerOption) =>
+                        customerOption.value === operation.customer_id.id
+                    )
+                  }
+                  id="customer_id"
+                  name="customer_id"
+                  type="text"
+                  options={customerOptions}
+                  // className="form-control"
+                  placeholder="Müştəri"
+                />
+              </div>
+              <div className="col-md-4">
                 <MySearchableSelect
                   defaultValue={
                     operation &&
@@ -207,8 +236,8 @@ export default function OperationPageModal({ operation }) {
                         serviceTypeOption.value === operation.serviceType
                     )
                   }
-                  id="serviceType"
-                  name="serviceType"
+                  id="service_type_id"
+                  name="service_type_id"
                   type="text"
                   options={serviceTypeOptions}
                   // className="form-control"
@@ -226,8 +255,8 @@ export default function OperationPageModal({ operation }) {
                         orderSourceOption.value === operation.orderSource
                     )
                   }
-                  id="orderSource"
-                  name="orderSource"
+                  id="order_source_id"
+                  name="order_source_id"
                   type="text"
                   options={orderSourceOptions}
                   // className="form-control"
@@ -243,8 +272,8 @@ export default function OperationPageModal({ operation }) {
                         referenceOption.value === operation.orderReference
                     )
                   }
-                  name="orderReference"
-                  id="orderReference"
+                  name="reference_id"
+                  id="reference_id"
                   type="text"
                   options={referenceOptions}
                   // className="form-control"
@@ -253,8 +282,8 @@ export default function OperationPageModal({ operation }) {
               </div>
               <div className="col-md-4">
                 <MyTextInput
-                  name="operationDate"
-                  id="operationDate"
+                  name="date"
+                  id="date"
                   type="text"
                   onFocus={(e) => (e.target.type = "date")}
                   className="form-control"
@@ -265,8 +294,8 @@ export default function OperationPageModal({ operation }) {
             <div className="row">
               <div className="col-md-12">
                 <MyTextArea
-                  name="oderAppointment"
-                  id="oderAppointment"
+                  name="description"
+                  id="description"
                   type="text"
                   className="form-control"
                   placeholder="Sifariş Təyinatı"
@@ -284,8 +313,8 @@ export default function OperationPageModal({ operation }) {
                   //       referenceOption.value === operation.orderReference
                   //   )
                   // }
-                  name="executor"
-                  id="executor"
+                  name="employee_id"
+                  id="employee_id"
                   type="text"
                   options={employeeOptions}
                   // className="form-control"
@@ -303,8 +332,8 @@ export default function OperationPageModal({ operation }) {
                   //       referenceOption.value === operation.orderReference
                   //   )
                   // }
-                  name="contractNumber"
-                  id="contractNumber"
+                  name="document_id"
+                  id="document_id"
                   type="text"
                   options={docOptions}
                   // className="form-control"
@@ -320,8 +349,8 @@ export default function OperationPageModal({ operation }) {
                   //       referenceOption.value === operation.orderReference
                   //   )
                   // }
-                  name="invoice"
-                  id="invoice"
+                  name="faktura_id"
+                  id="faktura_id"
                   type="text"
                   options={docOptions}
                   // className="form-control"
@@ -349,8 +378,8 @@ export default function OperationPageModal({ operation }) {
                   //       referenceOption.value === operation.orderReference
                   //   )
                   // }
-                  name="lab"
-                  id="lab"
+                  name="lab_id"
+                  id="lab_id"
                   type="text"
                   options={labOptions}
                   // className="form-control"
@@ -366,8 +395,8 @@ export default function OperationPageModal({ operation }) {
                   //       referenceOption.value === operation.orderReference
                   //   )
                   // }
-                  name="expenseGroup"
-                  id="expenseGroup"
+                  name="income_expense_group_id"
+                  id="income_expense_group_id"
                   type="text"
                   options={expenseGroupOptions}
                   // className="form-control"
@@ -383,8 +412,8 @@ export default function OperationPageModal({ operation }) {
                   //       referenceOption.value === operation.orderReference
                   //   )
                   // }
-                  name="expenseType"
-                  id="expenseType"
+                  name="expense_type_id"
+                  id="expense_type_id"
                   type="text"
                   options={expenseTypeOptions}
                   // className="form-control"
@@ -395,8 +424,8 @@ export default function OperationPageModal({ operation }) {
             <div className="row">
               <div className="col-md-6">
                 <MyTextInput
-                  name="executorBonus"
-                  id="executorBonus"
+                  name="bonus"
+                  id="bonus"
                   type="text"
                   className="form-control"
                   placeholder="İcracı bonusu"
@@ -404,85 +433,83 @@ export default function OperationPageModal({ operation }) {
               </div>
               <div className="col-md-6">
                 <MyTextInput
-                  name="performance"
-                  id="performance"
+                  name="performans"
+                  id="performans"
                   type="text"
                   className="form-control"
                   placeholder="Performans"
                 />
               </div>
             </div>
-            {values.serviceType === '0' && 
-                        <div className="student mt-5">
-                        <div className="row">
-                          <div className="col-md-2 offset-10 text-right">
-                            <div className="icon-container">
-                              <button
-                                type="button"
-                                className="close"
-                                onClick={() => handleAddStudent()}
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width={24}
-                                  height={24}
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth={2}
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  className="feather feather-plus-circle"
-                                >
-                                  <circle cx={12} cy={12} r={10} />
-                                  <line x1={12} y1={8} x2={12} y2={16} />
-                                  <line x1={8} y1={12} x2={16} y2={12} />
-                                </svg>
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => handleRemoveStudent()}
-                                className="close"
-                              >
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width={24}
-                                  height={24}
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth={2}
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  className="feather feather-minus-circle"
-                                >
-                                  <circle cx={12} cy={12} r={10} />
-                                  <line x1={8} y1={12} x2={16} y2={12} />
-                                </svg>
-                              </button>
-                            </div>
-                          </div>
+            {values.serviceType === "0" && (
+              <div className="student mt-5">
+                <div className="row">
+                  <div className="col-md-2 offset-10 text-right">
+                    <div className="icon-container">
+                      <button
+                        type="button"
+                        className="close"
+                        onClick={() => handleAddStudent()}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width={24}
+                          height={24}
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="feather feather-plus-circle"
+                        >
+                          <circle cx={12} cy={12} r={10} />
+                          <line x1={12} y1={8} x2={12} y2={16} />
+                          <line x1={8} y1={12} x2={16} y2={12} />
+                        </svg>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveStudent()}
+                        className="close"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width={24}
+                          height={24}
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="feather feather-minus-circle"
+                        >
+                          <circle cx={12} cy={12} r={10} />
+                          <line x1={8} y1={12} x2={16} y2={12} />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div className="row">
+                  {mapAddedStudents &&
+                    mapAddedStudents.map((mapAddedStudent, index) => (
+                      <React.Fragment key={index}>
+                        <div className="col-md-12">
+                          <MyTextInput
+                            id={`students.${index}.studentName`}
+                            name={`students.${index}.studentName`}
+                            type="text"
+                            className="form-control"
+                            placeholder="İştirakçı adı"
+                          />
                         </div>
-                        <div className="row">
-                          {mapAddedStudents &&
-                            mapAddedStudents.map((mapAddedStudent, index) => (
-                              <React.Fragment key={index}>
-                                <div className="col-md-12">
-                                  <MyTextInput
-                                    id={`students.${index}.studentName`}
-                                    name={`students.${index}.studentName`}
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="İştirakçı adı"
-                                  />
-                                </div>
-          
-                              </React.Fragment>
-                            ))}
-                        </div>
-                      </div>
-                      
-            }
+                      </React.Fragment>
+                    ))}
+                </div>
+              </div>
+            )}
             <button
               disabled={!isValid || !dirty || isSubmitting}
               type="submit"

@@ -9,7 +9,7 @@ const initialState = {
   crms: []
 };
 
-export default function crmReducer(state = initialState, { type, payload }) {
+export default function crmReducer(state = initialState, { type, payload,totalCount }) {
   switch (type) {
     case CREATE_CRM:
       return {
@@ -34,6 +34,7 @@ export default function crmReducer(state = initialState, { type, payload }) {
       return {
         ...state,
         crms: payload,
+        totalCount:totalCount
       };
     default:
       return state;

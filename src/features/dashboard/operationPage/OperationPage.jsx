@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import DataTable, { defaultThemes } from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
 import { openModal } from "../../../app/modal/modalReducer";
+import { loadCrm } from "../crmPage/crmActions";
 import { loadDocs } from "../docPage/docActions";
 import { loadEmployees } from "../employees/employeesActions";
 import { loadLab } from "../labPage/labActions";
@@ -14,14 +15,17 @@ import { loadServiceType } from "../settings/serviceType/serviceTypeActions";
 
 import { deleteOperation, loadOperation } from "./operationActions";
 export default function OperationPage() {
-  useEffect(() => {
-    dispatch(loadOperation())
-  //   // return () => {
-  //   //   // dispatch(loadOrder())
-  //   // }
-  },[])
   const dispatch = useDispatch();
-  const { operations } = useSelector((state) => state.operations);
+
+  useEffect(() => {
+    dispatch(loadOperation());
+    //   // return () => {
+    //   //   // dispatch(loadOrder())
+    //   // }
+  }, []);
+  const [perPage, setPerPage] = useState(10);
+  const [PageNumber, setPageNumber] = useState(1);
+  const { operations, totalCount } = useSelector((state) => state.operations);
   const [hover, sethover] = useState(false);
   const [target, setTarget] = useState({ id: null, name: null });
 
@@ -59,7 +63,15 @@ export default function OperationPage() {
     color: "#515365",
     fill: "#ffcacd",
   };
+  const handlePageChange = (page) => {
+    dispatch(loadOperation({ s: page, take: perPage }));
+    setPageNumber(page);
+  };
 
+  const handlePerRowsChange = async (newPerPage, page) => {
+    dispatch(loadOperation({ s: page, take: newPerPage }));
+    setPerPage(newPerPage);
+  };
   // const actions = (
   //   <svg
   //     data-name="add"
@@ -78,7 +90,6 @@ export default function OperationPage() {
   //       dispatch(loadLab());
   //       dispatch(loadExpenseGroup());
   //       dispatch(loadExpenseType());
-
 
   //     }}
   //     style={{
@@ -118,38 +129,44 @@ export default function OperationPage() {
   const columns = [
     {
       name: "№",
-      selector: "orderNumber",
+      selector: "number",
       sortable: true,
     },
     {
       name: "Xidmət növü",
-      selector: "serviceType",
+      cell: (operation) => <p>{operation.service_type_id.name}</p>,
       sortable: true,
     },
     {
       name: "Müştəri",
-      selector: "customer",
+      cell: (operation) => <p>{operation.customer_id.customer_name}</p>,
       sortable: true,
     },
     {
       name: "Əməliyyat tarixi",
-      selector: "operationDate",
+      selector: "date",
       sortable: true,
     },
     {
       name: "Referans",
-      selector: "orderReference",
+      cell: (operation) => <p>{operation.reference_id.name}</p>,
       sortable: true,
     },
     {
       name: "Sifariş təyinatı",
-      selector: "oderAppointment",
+      selector: "description",
       sortable: true,
     },
     {
-      name:"Məbləğ",
-      selector:"sum",
-      sortable:""
+      name: "Məbləğ",
+      cell: (operation) => {
+        if (operation.amount == null) {
+          return "Təyin edilməyib";
+        } else {
+          return operation.amount;
+        }
+      },
+      sortable: true,
     },
 
     {
@@ -172,27 +189,23 @@ export default function OperationPage() {
       cell: (operation) => (
         <div className="action-btn">
           <svg
-            onClick={() =>
-              {
-                dispatch(
-                
-                  openModal({
-                    modalType: "OperationPageModal",
-                    modalProps: { operation },
-                  })
-                )
-                dispatch(loadServiceType());
-                dispatch(loadReference());
-                dispatch(loadOrderSource());
-                dispatch(loadEmployees());
-                dispatch(loadDocs());
-                dispatch(loadLab());
-                dispatch(loadExpenseGroup());
-                dispatch(loadExpenseType());
-
-              }
-
-            }
+            onClick={() => {
+              dispatch(
+                openModal({
+                  modalType: "OperationPageModal",
+                  modalProps: { operation },
+                })
+              );
+              dispatch(loadServiceType());
+              dispatch(loadReference());
+              dispatch(loadCrm());
+              dispatch(loadOrderSource());
+              dispatch(loadEmployees());
+              dispatch(loadDocs());
+              dispatch(loadLab());
+              dispatch(loadExpenseGroup());
+              dispatch(loadExpenseType());
+            }}
             data-name="edit"
             id={operation.id}
             onMouseEnter={(e) => {
@@ -285,23 +298,21 @@ export default function OperationPage() {
         <div className="row layout-top-spacing">
           <div className="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
             <div className="widget-content widget-content-area br-6">
-
               <DataTable
                 // className="dataTables_wrapper container-fluid dt-bootstrap4 table-responsive"
                 // selectableRows
                 title="Əməliyyatlar"
                 columns={columns}
                 data={data}
-                // customStyles={customStyles}
-                // progressPending={loading}
                 pagination
-                // paginationServer
+                paginationServer
+                paginationTotalRows={totalCount}
+                paginationDefaultPage={PageNumber}
+                onChangeRowsPerPage={handlePerRowsChange}
+                onChangePage={handlePageChange}
                 highlightOnHover
                 Clicked
                 // actions={actions}
-                // loading={loading}
-                // dense
-                // paginationTotalRows={totalRows}
               />
             </div>
           </div>

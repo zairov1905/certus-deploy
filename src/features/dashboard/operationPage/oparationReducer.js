@@ -10,13 +10,13 @@ const initialState = {
   operations: []
 };
 
-export default function operationReducer(state = initialState, { type, payload }) {
+export default function operationReducer(state = initialState, { type, payload,totalCount }) {
   switch (type) {
-    case CREATE_OPERATION:
-      return {
-        ...state,
-        operations: [...state.operations, payload],
-      };
+    // case CREATE_OPERATION:
+    //   return {
+    //     ...state,
+    //     operations: [...state.operations, payload],
+    //   };
     case UPDATE_OPERATION:
       return {
         ...state,
@@ -34,7 +34,7 @@ export default function operationReducer(state = initialState, { type, payload }
     case FETCH_OPERATION:
       return {
         ...state,
-        operations: payload.filter(operation=> operation.executiveStatus == 1),
+        operations: payload.filter(operation => operation.employee_id != null),
       };
     default:
       return state;

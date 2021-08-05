@@ -9,14 +9,17 @@ import { loadExpenseType } from "../settings/expenseType/expenseTypeActions";
 
 import { deleteExpense, loadExpense } from "./expenseActions";
 export default function ExpensePage() {
+  const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(loadExpense());
     //   // return () => {
     //   //   // dispatch(loadOrder())
     //   // }
   }, []);
-  const dispatch = useDispatch();
-  const { expenses } = useSelector((state) => state.expenses);
+  const [perPage, setPerPage] = useState(10);
+  const [PageNumber, setPageNumber] = useState(1);
+  const { expenses,totalCount } = useSelector((state) => state.expenses);
   const [hover, sethover] = useState(false);
   const [target, setTarget] = useState({ id: null, name: null });
 
@@ -54,7 +57,15 @@ export default function ExpensePage() {
     color: "#515365",
     fill: "#ffcacd",
   };
+  const handlePageChange = (page) => {
+    dispatch(loadExpense({ s: page, take: perPage }));
+    setPageNumber(page);
+  };
 
+  const handlePerRowsChange = async (newPerPage, page) => {
+    dispatch(loadExpense({ s: page, take: newPerPage }));
+    setPerPage(newPerPage);
+  };
   const actions = (
     <svg
       data-name="add"
@@ -107,35 +118,46 @@ export default function ExpensePage() {
   const columns = [
     {
       name: "Gəlir-Xərc qrupu",
-      selector: "expenseGroup",
       sortable: true,
+      cell:expense=>(
+        <p>{expense.income_expense_group_id.name}</p>
+      )
     },
     {
       name: "Gəlir-Xərc növü",
-      selector: "expenseType",
+      selector: "expense_type_id",
       sortable: true,
+      cell:expense=>(
+        <p>{expense.expense_type_id.name}</p>
+      )
     },
     {
       name: "Tarix",
-      selector: "expenseDate",
+      selector: "date",
       sortable: true,
     },
     {
       name: "Kontragent",
-      selector: "expenseCounterparty",
       sortable: true,
+      cell:expense=>(
+        <p>{expense.contractor_id.name}</p>
+      )
+      
     },
     {
       name: "Müqavilə",
-      selector: "expenseContract",
+      selector: "document_id",
+      cell:expense=>(
+        <p>{expense.document_id.document_number}</p>
+      ),
       sortable: true,
     },
     {
-      name: "Hesab faktura",
+      name: "Əməliyyat növü",
       selector: "expenseInvoice",
       sortable: true,
       cell:expense => (
-        expense.operationType === 0  ? <span className="badge badge-danger">{expense.expenseInvoice}</span> : <span className="badge badge-success">{expense.expenseInvoice}</span>
+        expense.operation_id === 0  ? <span className="badge badge-danger">{expense.faktura}</span> : <span className="badge badge-success">{expense.faktura}</span>
       )
     },
     {
@@ -254,16 +276,15 @@ export default function ExpensePage() {
                 title="Gəlir-Xərc"
                 columns={columns}
                 data={data}
-                // customStyles={customStyles}
-                // progressPending={loading}
                 pagination
-                // paginationServer
+                paginationServer
+                paginationTotalRows={totalCount}
+                paginationDefaultPage={PageNumber}
+                onChangeRowsPerPage={handlePerRowsChange}
+                onChangePage={handlePageChange}
                 highlightOnHover
                 Clicked
                 actions={actions}
-                // loading={loading}
-                // dense
-                // paginationTotalRows={totalRows}
               />
             </div>
           </div>

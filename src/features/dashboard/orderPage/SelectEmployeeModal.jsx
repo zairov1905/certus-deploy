@@ -23,16 +23,16 @@ export default function SelectEmployeeModal({order}) {
     employees &&
     employees.map((employee) => {
       return {
-        value: `${employee.firstname} ${employee.lastname}`,
-        label: `${employee.firstname} ${employee.lastname}`,
+        value: employee.id,
+        label: `${employee.name} ${employee.surname}`,
       };
     });
   const initialValues = {
-    executor: "",
+    employee_id: "",
     /////
   };
   const validationSchema = Yup.object({
-    executor: Yup.string().required("Mütləq doldurulmalıdır."),
+    employee_id: Yup.string().required("Mütləq doldurulmalıdır."),
   });
 
   return (
@@ -42,7 +42,7 @@ export default function SelectEmployeeModal({order}) {
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
-            await dispatch(sendToOperation({ ...values, executiveStatus: 1, orderNumber:order.orderNumber }));
+            await dispatch(sendToOperation({ ...values,id:order.id}));
             setSubmitting(false);
             setModal(true);
             dispatch(closeModal());
@@ -58,8 +58,8 @@ export default function SelectEmployeeModal({order}) {
             <div className="row">
               <div className="col-md-12">
                 <MySearchableSelect
-                  name="executor"
-                  id="executor"
+                  name="employee_id"
+                  id="employee_id"
                   type="text"
                   options={employeeOptions}
                   placeholder="İcraçı seç"

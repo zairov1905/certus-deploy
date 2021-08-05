@@ -10,14 +10,17 @@ import { loadServiceType } from "../settings/serviceType/serviceTypeActions";
 
 import { deleteOrder, loadOrder } from "./orderActions";
 export default function OrderPage() {
+  const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(loadOrder());
     //   // return () => {
     //   //   // dispatch(loadOrder())
     //   // }
   }, []);
-  const dispatch = useDispatch();
-  const { orders } = useSelector((state) => state.orders);
+  const [perPage, setPerPage] = useState(10);
+  const [PageNumber, setPageNumber] = useState(1);
+  const { orders, totalCount } = useSelector((state) => state.orders);
   const [hover, sethover] = useState(false);
   const [target, setTarget] = useState({ id: null, name: null });
 
@@ -55,6 +58,15 @@ export default function OrderPage() {
     color: "#515365",
     fill: "#ffcacd",
   };
+  const handlePageChange = (page) => {
+    dispatch(loadReference({ s: page, take: perPage }));
+    setPageNumber(page);
+  };
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    dispatch(loadReference({ s: page, take: newPerPage }));
+    setPerPage(newPerPage);
+  };
 
   const actions = (
     <svg
@@ -69,8 +81,7 @@ export default function OrderPage() {
         dispatch(loadServiceType());
         dispatch(loadReference());
         dispatch(loadOrderSource());
-        dispatch(loadCrm())
-
+        dispatch(loadCrm());
       }}
       style={{
         ...buttonStyle,
@@ -109,33 +120,33 @@ export default function OrderPage() {
   const columns = [
     {
       name: "Sifariş nömrəsi",
-      selector: "orderNumber",
+      selector: "number",
       sortable: true,
     },
     {
       name: "Xidmət növü",
-      selector: "serviceType",
+      cell: (order) => <p>{order.service_type_id.name}</p>,
       sortable: true,
     },
     {
       name: "Müştəri",
-      selector: "customer",
+      cell: (order) => <p>{order.customer_id.customer_name}</p>,
       sortable: true,
     },
 
     {
       name: "Sifariş tarixi",
-      selector: "orderDate",
+      selector: "date",
       sortable: true,
     },
     {
       name: "Referans",
-      selector: "orderReference",
+      cell: (order) => <p>{order.reference_id.name}</p>,
       sortable: true,
     },
     {
       name: "Sifariş təyinatı",
-      selector: "oderAppointment",
+      selector: "description",
       sortable: true,
     },
 
@@ -144,8 +155,8 @@ export default function OrderPage() {
 
       cell: (order) => (
         <button
-        data-toggle="modal"
-        data-target="#exampleModal"
+          data-toggle="modal"
+          data-target="#exampleModal"
           onClick={() => {
             dispatch(
               openModal({
@@ -153,8 +164,7 @@ export default function OrderPage() {
                 modalProps: { order },
               })
             );
-            dispatch(loadEmployees())
-          
+            dispatch(loadEmployees());
           }}
           className="btn btn-sm btn-danger btn-rounded"
         >
@@ -177,7 +187,7 @@ export default function OrderPage() {
               dispatch(loadServiceType());
               dispatch(loadReference());
               dispatch(loadOrderSource());
-              dispatch(loadCrm())
+              dispatch(loadCrm());
             }}
             data-name="edit"
             id={order.id}
@@ -277,16 +287,15 @@ export default function OrderPage() {
                 title="Sifarişlər"
                 columns={columns}
                 data={data}
-                // customStyles={customStyles}
-                // progressPending={loading}
                 pagination
-                // paginationServer
+                paginationServer
+                paginationTotalRows={totalCount}
+                paginationDefaultPage={PageNumber}
+                onChangeRowsPerPage={handlePerRowsChange}
+                onChangePage={handlePageChange}
                 highlightOnHover
                 Clicked
                 actions={actions}
-                // loading={loading}
-                // dense
-                // paginationTotalRows={totalRows}
               />
             </div>
           </div>

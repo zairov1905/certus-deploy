@@ -7,14 +7,17 @@ import { loadReference } from "../settings/reference/referenceActions";
 
 import { deleteCrm, loadCrm } from "./crmActions";
 export default function CrmPage() {
+  const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(loadCrm());
     //   // return () => {
     //   //   // dispatch(loadOrder())
     //   // }
   }, []);
-  const dispatch = useDispatch();
-  const { crms } = useSelector((state) => state.crms);
+  const [perPage, setPerPage] = useState(10);
+  const [PageNumber, setPageNumber] = useState(1);
+  const { crms , totalCount} = useSelector((state) => state.crms);
   const [hover, sethover] = useState(false);
   const [target, setTarget] = useState({ id: null, name: null });
 
@@ -51,6 +54,15 @@ export default function CrmPage() {
   const buttonHover = {
     color: "#515365",
     fill: "#ffcacd",
+  };
+  const handlePageChange = (page) => {
+    dispatch(loadCrm({ s: page, take: perPage }));
+    setPageNumber(page);
+  };
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    dispatch(loadCrm({ s: page, take: newPerPage }));
+    setPerPage(newPerPage);
   };
 
   const actions = (
@@ -104,43 +116,38 @@ export default function CrmPage() {
     {
       name: "Kurator",
       selector: "curator",
+      cell:crm =>(
+        <p>{crm.employee_id.name} {crm.employee_id.surname} </p>
+      ),
       sortable: true,
-    },
-    {
-      name: "Müştəri kodu",
-      selector: "customerCode",
-      sortable: true,
+
     },
     {
       name: "Müştəri adı",
-      selector: "customerName",
+      selector: "customer_name",
       sortable: true,
     },
     {
       name: "VÖEN",
-      selector: "vöen",
+      selector: "voen",
       sortable: true,
     },
     {
       name: "Tarix",
-      selector: "createDate",
+      selector: "date",
       sortable: true,
     },
     {
       name: "Əlaqə nömrəsi",
-      selector: "phone",
+      selector: "customer_phone",
       sortable: true,
     },
     {
       name: "Whatsapp",
-      selector: "whatsapp",
+      selector: "customer_whatsapp",
       sortable: true,
     },
-    {
-      name: "Referans",
-      selector: "reference",
-      sortable: true,
-    },
+
     {
       name: "",
       cell: (crm) => (
@@ -255,16 +262,15 @@ export default function CrmPage() {
                 title="Müştəri"
                 columns={columns}
                 data={data}
-                // customStyles={customStyles}
-                // progressPending={loading}
                 pagination
-                // paginationServer
+                paginationServer
+                paginationTotalRows={totalCount}
+                paginationDefaultPage={PageNumber}
+                onChangeRowsPerPage={handlePerRowsChange}
+                onChangePage={handlePageChange}
                 highlightOnHover
                 Clicked
                 actions={actions}
-                // loading={loading}
-                // dense
-                // paginationTotalRows={totalRows}
               />
             </div>
           </div>
