@@ -5,15 +5,19 @@ import { openModal } from "../../../../app/modal/modalReducer";
 
 
 import { deleteProductService, loadProductService } from "./productServiceActions";
+
 export default function ProductServicePage() {
+  const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(loadProductService());
     //   // return () => {
     //   //   // dispatch(loadOrder())
     //   // }
   }, []);
-  const dispatch = useDispatch();
-  const { productServices } = useSelector((state) => state.productServices);
+  const [perPage, setPerPage] = useState(10);
+  const [PageNumber, setPageNumber] = useState(1);
+  const { productServices,totalCount } = useSelector((state) => state.productServices);
   const [hover, sethover] = useState(false);
   const [target, setTarget] = useState({ id: null, name: null });
 
@@ -50,6 +54,15 @@ export default function ProductServicePage() {
   const buttonHover = {
     color: "#515365",
     fill: "#ffcacd",
+  };
+  const handlePageChange = (page) => {
+    dispatch(loadProductService({ s: page, take: perPage }));
+    setPageNumber(page);
+  };
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    dispatch(loadProductService({ s: page, take: newPerPage }));
+    setPerPage(newPerPage);
   };
 
   const actions = (
@@ -335,16 +348,15 @@ export default function ProductServicePage() {
                 title="Məhsul/Xidmət sertifikatları"
                 columns={columns}
                 data={data}
-                // customStyles={customStyles}
-                // progressPending={loading}
                 pagination
-                // paginationServer
+                paginationServer
+                paginationTotalRows={totalCount}
+                paginationDefaultPage={PageNumber}
+                onChangeRowsPerPage={handlePerRowsChange}
+                onChangePage={handlePageChange}
                 highlightOnHover
                 Clicked
                 actions={actions}
-                // loading={loading}
-                // dense
-                // paginationTotalRows={totalRows}
               />
             </div>
           </div>

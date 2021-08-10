@@ -53,16 +53,25 @@ export function createOperation(operation){
 }
 
 export function updateOperation(operation){
-    return async function(dispatch){
-        dispatch(asyncActionStart)
-        try {
-            await delay(1000);
-            dispatch({type:UPDATE_OPERATION,payload:operation});
-            dispatch(asyncActionFinish());
-        } catch (error) {
-            asyncActionError(error);
-        }
+  return async function (dispatch) {
+    dispatch(asyncActionStart);
+console.log(operation);
+    const operationUpdated = await axios.put(
+      `/${url}/update`,
+      operation
+    );
+    console.log(operationUpdated)
+    if (operationUpdated.status === 200) {
+      toast.success("Dəyişiklik uğurlar yerinə yetirildi");
+      dispatch({
+        type: UPDATE_OPERATION,
+        payload: operationUpdated.data.data,
+      });
+      dispatch(asyncActionFinish());
+    } else {
+      asyncActionError();
     }
+  };
 }
 
 export function deleteOperation(operationId){

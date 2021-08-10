@@ -2,16 +2,7 @@ import React, { useEffect, useState } from "react";
 import DataTable, { defaultThemes } from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
 import { openModal } from "../../../app/modal/modalReducer";
-import { loadCrm } from "../crmPage/crmActions";
-import { loadDocs } from "../docPage/docActions";
-import { loadEmployees } from "../employees/employeesActions";
-import { loadLab } from "../labPage/labActions";
-import { loadDocumentTypes } from "../settings/documentType/documentTypeActions";
-import { loadExpenseGroup } from "../settings/expenseGroup/expenseGroupActions";
-import { loadExpenseType } from "../settings/expenseType/expenseTypeActions";
-import { loadOrderSource } from "../settings/orderSource/orderSourceActions";
-import { loadReference } from "../settings/reference/referenceActions";
-import { loadServiceType } from "../settings/serviceType/serviceTypeActions";
+
 
 import { deleteOperation, loadOperation } from "./operationActions";
 export default function OperationPage() {
@@ -190,21 +181,13 @@ export default function OperationPage() {
         <div className="action-btn">
           <svg
             onClick={() => {
+
               dispatch(
                 openModal({
                   modalType: "OperationPageModal",
                   modalProps: { operation },
                 })
               );
-              dispatch(loadServiceType());
-              dispatch(loadReference());
-              dispatch(loadCrm());
-              dispatch(loadOrderSource());
-              dispatch(loadEmployees());
-              dispatch(loadDocs());
-              dispatch(loadLab());
-              dispatch(loadExpenseGroup());
-              dispatch(loadExpenseType());
             }}
             data-name="edit"
             id={operation.id}

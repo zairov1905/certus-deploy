@@ -15,11 +15,13 @@ import {
 } from "./productServiceActions";
 import { loadSignOfLegalAct } from "../../settings/signOfLegalAct/signOfLegalActActions";
 import { loadLab } from "../../labPage/labActions";
+import { loadCrm } from "../../crmPage/crmActions";
 
 export default function ProductServicePageModal({ productService }) {
   useEffect(() => {
     dispatch(loadSignOfLegalAct());
     dispatch(loadLab());
+    dispatch(loadCrm());
   }, []);
   const snCodeOptions = [
     { value: "1", label: "01" },
@@ -301,7 +303,7 @@ export default function ProductServicePageModal({ productService }) {
     signOfLegalActs &&
     signOfLegalActs.map((signOfLegalAct) => {
       return {
-        label: signOfLegalAct.signOfLegalActName,
+        label: signOfLegalAct.name,
         value: signOfLegalAct.id,
       };
     });
@@ -311,12 +313,20 @@ export default function ProductServicePageModal({ productService }) {
     labs &&
     labs.map((lab) => {
       return {
-        label: lab.labName,
+        label: lab.name,
         value: lab.id,
       };
     });
   // ++++++++++++++
-
+  const { crms } = useSelector((state) => state.crms);
+  let customerOptions =
+    crms &&
+    crms.map((crm) => {
+      return {
+        value: parseInt(crm.id),
+        label: crm.customer_name,
+      };
+    });
   const [modal, setModal] = useState(false);
   useEffect(() => {
     if (modal) {
@@ -327,55 +337,68 @@ export default function ProductServicePageModal({ productService }) {
   const initialValues = productService
     ? productService
     : {
-        id: "",
-        snCode: "",
-        registrationNumber: "",
-        blankNumber: "",
-        accreditationNumber: "",
-        certificateIssueDate: "",
-        certificateExpirationDate: "",
-        businessEntityName: "",
-        legalStatus: "",
-        VOEN: "",
-        economicEntityPhoneNumber: "",
-        legalAddressOfTheBusinessEntity: "",
-        actualAddressOfTheBusiness: "",
-        nameOfTheProduct: "",
+        sn_code_id: "",
+        registration_number: "",
+        blank_number: "",
+        serial_number: "",
+        issue_date: "",
+        expiration_date: "",
+        customer_id: "",
+        // only customer_id den gelecek data
+        // legalStatus: "",
+        // VOEN: "",
+        // economicEntityPhoneNumber: "",
+        // legalAddressOfTheBusinessEntity: "",
+        // actualAddressOfTheBusiness: "",
+        //
+
+        product_name: "",
         quantity: "",
-        productNote: "",
-        productCode: "",
-        countryOfOrigin: "",
-        signOfLegalAct: "",
-        certificateIsRecognized: "",
-        recognitionProcessNote: "",
-        accreditedLaboratoryName: "",
-        accreditedLaboratoryNumber: "",
-        testQuantity: "",
-        productBatchHistory: "",
+
+        product_type_id: "",
+        product_code: "",
+        country_id: "",
+        certificate_country_id: "",
+        test_note: "",
+
+        lab_id: "",
+        // laba aid olan
+        // accreditedLaboratoryNumber: "",
+        //
+        test_number: "",
+        product_batch_date: "",
+        act_sign_id: "",
+
       };
   const validationSchema = Yup.object({
-    // id:"",
-
-    snCode: Yup.string().required("Mütləq doldurulmalıdır."),
-    registrationNumber: Yup.string().required("Mütləq doldurulmalıdır."),
-    blankNumber: Yup.string().required("Mütləq doldurulmalıdır."),
-    accreditationNumber: Yup.string().required("Mütləq doldurulmalıdır."),
-    certificateIssueDate: Yup.string().required("Mütləq doldurulmalıdır."),
-    certificateExpirationDate: Yup.string().required("Mütləq doldurulmalıdır."),
-    businessEntityName: Yup.string().required("Mütləq doldurulmalıdır."),
-    nameOfTheProduct: Yup.string().required("Mütləq doldurulmalıdır."),
-    quantity: Yup.string().required("Mütləq doldurulmalıdır."),
-    productNote: Yup.string().required("Mütləq doldurulmalıdır."),
-    productCode: Yup.string().required("Mütləq doldurulmalıdır."),
-    countryOfOrigin: Yup.string().required("Mütləq doldurulmalıdır."),
-    signOfLegalAct: Yup.string().required("Mütləq doldurulmalıdır."),
-    certificateIsRecognized: Yup.string().required("Mütləq doldurulmalıdır."),
-    recognitionProcessNote: Yup.string().required("Mütləq doldurulmalıdır."),
-    accreditedLaboratoryNumber: Yup.string().required(
-      "Mütləq doldurulmalıdır."
-    ),
-    testQuantity: Yup.string().required("Mütləq doldurulmalıdır."),
-    productBatchHistory: Yup.string().required("Mütləq doldurulmalıdır."),
+    // sn_code_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    // registration_number: Yup.string().required("Mütləq doldurulmalıdır."),
+    // blank_number: Yup.string().required("Mütləq doldurulmalıdır."),
+    // serial_number: Yup.string().required("Mütləq doldurulmalıdır."),
+    // issue_date: Yup.string().required("Mütləq doldurulmalıdır."),
+    // expiration_date: Yup.string().required("Mütləq doldurulmalıdır."),
+    // customer_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    // // only customer_id den gelecek data
+    // // legalStatus: "",
+    // // VOEN: "",
+    // // economicEntityPhoneNumber: "",
+    // // legalAddressOfTheBusinessEntity: "",
+    // // actualAddressOfTheBusiness: "",
+    // //
+    // product_name: Yup.string().required("Mütləq doldurulmalıdır."),
+    // quantity: Yup.string().required("Mütləq doldurulmalıdır."),
+    // product_type_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    // product_code: Yup.string().required("Mütləq doldurulmalıdır."),
+    // country_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    // certificate_country_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    // act_sign_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    // test_note: Yup.string().required("Mütləq doldurulmalıdır."),
+    // lab_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    // // laba aid olan
+    // accreditedLaboratoryNumber: "",
+    // //
+    // test_number: Yup.string().required("Mütləq doldurulmalıdır."),
+    // product_batch_date: Yup.string().required("Mütləq doldurulmalıdır."),
   });
 
   return (
@@ -393,14 +416,9 @@ export default function ProductServicePageModal({ productService }) {
               : await dispatch(
                   createProductService({
                     ...values,
-                    id: cuid(),
-                    labNumber: `Lab${cuid()}`,
                   })
                 );
             setSubmitting(false);
-            productService
-              ? toast.success("Dəyişiklik uğurlar yerinə yetirildi")
-              : toast.success("Uğurla əlavə edildi");
             setModal(true);
             dispatch(closeModal());
           } catch (error) {
@@ -410,13 +428,13 @@ export default function ProductServicePageModal({ productService }) {
           }
         }}
       >
-        {({ isSubmitting, isValid, dirty, errors }) => (
+        {({ isSubmitting, isValid, dirty, errors, values }) => (
           <Form id="emp">
             <div className="row mb-4">
               <div className="col-md-12 mb-4">
                 <MySearchableSelect
-                  id="snCode"
-                  name="snCode"
+                  id="sn_code_id"
+                  name="sn_code_id"
                   type="text"
                   options={snCodeOptions}
                   placeholder="SN kodu daxil edin"
@@ -425,8 +443,8 @@ export default function ProductServicePageModal({ productService }) {
               </div>
               <div className="col-md-12 mb-4">
                 <MyTextInput
-                  id="registrationNumber"
-                  name="registrationNumber"
+                  id="registration_number"
+                  name="registration_number"
                   type="text"
                   className="form-control"
                   placeholder="Reyestr nömrəsi daxil edin"
@@ -435,18 +453,19 @@ export default function ProductServicePageModal({ productService }) {
               </div>
               <div className="col-md-12 mb-4">
                 <MyTextInput
-                  id="blankNumber"
-                  name="blankNumber"
+                  id="blank_number"
+                  name="blank_number"
                   type="text"
                   className="form-control"
                   placeholder="Blank nömrəsi daxil edin"
                   label="Blank nömrəsi"
                 />
+                {/* {console.log(values)} */}
               </div>
               <div className="col-md-12 mb-4">
                 <MyTextInput
-                  id="accreditationNumber"
-                  name="accreditationNumber"
+                  id="serial_number"
+                  name="serial_number"
                   type="text"
                   className="form-control"
                   placeholder="Akkreditasiya sahəsində sıra nömrəsi daxil edin"
@@ -455,8 +474,8 @@ export default function ProductServicePageModal({ productService }) {
               </div>
               <div className="col-md-12 mb-4">
                 <MyTextInput
-                  id="certificateIssueDate"
-                  name="certificateIssueDate"
+                  id="issue_date"
+                  name="issue_date"
                   type="date"
                   className="form-control"
                   placeholder="Sertifikatın verilmə tarixi daxil edin"
@@ -465,8 +484,8 @@ export default function ProductServicePageModal({ productService }) {
               </div>
               <div className="col-md-12 mb-4">
                 <MyTextInput
-                  id="certificateExpirationDate"
-                  name="certificateExpirationDate"
+                  id="expiration_date"
+                  name="expiration_date"
                   type="date"
                   className="form-control"
                   placeholder="Sertifikatın qüvvədən düşdüyü tarix daxil edin"
@@ -474,11 +493,12 @@ export default function ProductServicePageModal({ productService }) {
                 />
               </div>
               <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="businessEntityName"
-                  name="businessEntityName"
+                <MySearchableSelect
+                  id="customer_id"
+                  name="customer_id"
                   type="text"
-                  className="form-control"
+                  options={customerOptions}
+                  // className="form-control"
                   placeholder="Sertifikat təqdim edilən təsərrüfat subyektinin adını daxil edin"
                   label="Sertifikat təqdim edilən təsərrüfat subyektinin adı"
                 />
@@ -540,8 +560,8 @@ export default function ProductServicePageModal({ productService }) {
               </div>
               <div className="col-md-12 mb-4">
                 <MyTextInput
-                  id="nameOfTheProduct"
-                  name="nameOfTheProduct"
+                  id="product_name"
+                  name="product_name"
                   type="text"
                   className="form-control"
                   placeholder="Məhsulun(xidmətin) adını daxil edin"
@@ -560,8 +580,8 @@ export default function ProductServicePageModal({ productService }) {
               </div>
               <div className="col-md-12 mb-4">
                 <MySearchableSelect
-                  id="productNote"
-                  name="productNote"
+                  id="product_type_id"
+                  name="product_type_id"
                   options={productNoteOptions}
                   type="text"
                   placeholder="Məhsulun ərzaq və ya qeyri ərzaq qrupuna aid olması barədə qeyd daxil edin"
@@ -570,8 +590,8 @@ export default function ProductServicePageModal({ productService }) {
               </div>
               <div className="col-md-12 mb-4">
                 <MyTextInput
-                  id="productCode"
-                  name="productCode"
+                  id="product_code"
+                  name="product_code"
                   type="text"
                   className="form-control"
                   placeholder="Məhsulun kodunu daxil edin"
@@ -580,8 +600,8 @@ export default function ProductServicePageModal({ productService }) {
               </div>
               <div className="col-md-12 mb-4">
                 <MySearchableSelect
-                  id="countryOfOrigin"
-                  name="countryOfOrigin"
+                  id="country_id"
+                  name="country_id"
                   type="text"
                   options={allCountriesListOptions}
                   // className="form-control"
@@ -591,8 +611,8 @@ export default function ProductServicePageModal({ productService }) {
               </div>
               <div className="col-md-12 mb-4">
                 <MySearchableSelect
-                  id="certificateIsRecognized"
-                  name="certificateIsRecognized"
+                  id="certificate_country_id"
+                  name="certificate_country_id"
                   type="text"
                   options={allCountriesListOptions}
                   // className="form-control"
@@ -601,22 +621,35 @@ export default function ProductServicePageModal({ productService }) {
                 />
               </div>
               <div className="col-md-12 mb-4">
-                <MySearchableSelect
-                  id="signOfLegalAct"
-                  name="signOfLegalAct"
-                  isMulti
-                  type="text"
+                {/* <MySearchableSelect
+                  id="act_sign_id"
+                  name="act_sign_id"
                   options={signOfLegalActOptions}
+
+                  isMulti
                   // className="form-control"
                   placeholder="Hüquqi normativ texniki aktın işarəsini daxil edin"
                   label="Hüquqi normativ texniki aktın işarəsi"
+                /> */}
+                <MySearchableSelect
+                  id="act_sign_id"
+                  name="act_sign_id"
+                  options={signOfLegalActOptions}
+                  // defaultValue={
+                  //   productService &&
+                  //   signOfLegalActOptions.filter(
+                  //     (signOfLegalActOption) =>
+                  //     signOfLegalActOption.act_sign_id.id == skillOption.value
+                  //   )
+                  // }
+                  // isMulti
+                  placeholder="Təlimin səriştələri"
                 />
               </div>
               <div className="col-md-12 mb-4">
                 <MySearchableSelect
-                  id="recognitionProcessNote"
-                  name="recognitionProcessNote"
-                  type="text"
+                  id="test_note"
+                  name="test_note"
                   options={recognitionProcessNoteOptions}
                   // className="form-control"
                   placeholder="Tanınma prosesində məhsulun sınağının aparılması haqqında qeydi daxil edin"
@@ -625,8 +658,8 @@ export default function ProductServicePageModal({ productService }) {
               </div>
               <div className="col-md-12 mb-4">
                 <MySearchableSelect
-                  id="accreditedLaboratoryName"
-                  name="accreditedLaboratoryName"
+                  id="lab_id"
+                  name="lab_id"
                   // type="text"
                   options={accreditedLaboratoryNameOptions}
                   // className="form-control"
@@ -647,8 +680,8 @@ export default function ProductServicePageModal({ productService }) {
               </div>
               <div className="col-md-12 mb-4">
                 <MyTextInput
-                  id="testQuantity"
-                  name="testQuantity"
+                  id="test_number"
+                  name="test_number"
                   type="text"
                   className="form-control"
                   placeholder="Aparılmış sınaqların miqdarını edin"
@@ -657,9 +690,9 @@ export default function ProductServicePageModal({ productService }) {
               </div>
               <div className="col-md-12">
                 <MyTextInput
-                  id="productBatchHistory"
-                  name="productBatchHistory"
-                  type="text"
+                  id="product_batch_date"
+                  name="product_batch_date"
+                  type="date"
                   className="form-control"
                   placeholder="Məhsul partiyasının tarixini edin"
                   label="Məhsul partiyasının tarixi"

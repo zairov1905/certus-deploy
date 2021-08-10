@@ -9,7 +9,7 @@ const initialState = {
   productServices: []
 };
 
-export default function productServiceReducer(state = initialState, { type, payload }) {
+export default function productServiceReducer(state = initialState, { type, payload,totalCount }) {
   switch (type) {
     case CREATE_PRODUCT_SERVICE:
       return {
@@ -34,6 +34,7 @@ export default function productServiceReducer(state = initialState, { type, payl
       return {
         ...state,
         productServices: payload,
+        totalCount:totalCount
       };
     default:
       return state;
