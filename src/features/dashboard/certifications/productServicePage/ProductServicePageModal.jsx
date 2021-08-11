@@ -293,8 +293,8 @@ export default function ProductServicePageModal({ productService }) {
     { label: "Zimbabwe", value: "ZW" },
   ];
   const recognitionProcessNoteOptions = [
-    { value: "1", label: "Aparılıb" },
-    { value: "2", label: "Aparılmayıb" },
+    { value: 0, label: "Aparılıb" },
+    { value: 1, label: "Aparılmayıb" },
   ];
   const dispatch = useDispatch();
   // ++++++++++++++
@@ -304,7 +304,7 @@ export default function ProductServicePageModal({ productService }) {
     signOfLegalActs.map((signOfLegalAct) => {
       return {
         label: signOfLegalAct.name,
-        value: signOfLegalAct.id,
+        value: parseInt(signOfLegalAct.id),
       };
     });
   // ++++++++++++++
@@ -368,7 +368,6 @@ export default function ProductServicePageModal({ productService }) {
         test_number: "",
         product_batch_date: "",
         act_sign_id: "",
-
       };
   const validationSchema = Yup.object({
     // sn_code_id: Yup.string().required("Mütləq doldurulmalıdır."),
@@ -437,6 +436,12 @@ export default function ProductServicePageModal({ productService }) {
                   name="sn_code_id"
                   type="text"
                   options={snCodeOptions}
+                  defaultValue={
+                    productService && {
+                      label: `0${productService.sn_code_id}`,
+                      value: parseInt(productService.sn_code_id),
+                    }
+                  }
                   placeholder="SN kodu daxil edin"
                   label="SN kodu"
                 />
@@ -498,6 +503,12 @@ export default function ProductServicePageModal({ productService }) {
                   name="customer_id"
                   type="text"
                   options={customerOptions}
+                  defaultValue={
+                    productService && {
+                      label: `${productService.customer_id.customer_name}`,
+                      value: parseInt(productService.customer_id.id),
+                    }
+                  }
                   // className="form-control"
                   placeholder="Sertifikat təqdim edilən təsərrüfat subyektinin adını daxil edin"
                   label="Sertifikat təqdim edilən təsərrüfat subyektinin adı"
@@ -583,6 +594,14 @@ export default function ProductServicePageModal({ productService }) {
                   id="product_type_id"
                   name="product_type_id"
                   options={productNoteOptions}
+                  defaultValue={
+                    productService &&
+                    productNoteOptions.filter(
+                      (productNoteOption) =>
+                      parseInt(productNoteOption.value) ===
+                        parseInt(productService.product_type_id)
+                    )
+                  }
                   type="text"
                   placeholder="Məhsulun ərzaq və ya qeyri ərzaq qrupuna aid olması barədə qeyd daxil edin"
                   label="Məhsulun ərzaq və ya qeyri ərzaq qrupuna aid olması barədə qeyd"
@@ -605,6 +624,14 @@ export default function ProductServicePageModal({ productService }) {
                   type="text"
                   options={allCountriesListOptions}
                   // className="form-control"
+                  defaultValue={
+                    productService &&
+                    allCountriesListOptions.filter(
+                      (allCountriesListOption) =>
+                        allCountriesListOption.value ===
+                        productService.country_id
+                    )
+                  }
                   placeholder="Məhsulun istehsal olunduğu ölkəni daxil edin"
                   label="Məhsulun istehsal olunduğu ölkə"
                 />
@@ -615,6 +642,14 @@ export default function ProductServicePageModal({ productService }) {
                   name="certificate_country_id"
                   type="text"
                   options={allCountriesListOptions}
+                  defaultValue={
+                    productService &&
+                    allCountriesListOptions.filter(
+                      (allCountriesListOption) =>
+                        allCountriesListOption.value ===
+                        productService.certificate_country_id
+                    )
+                  }
                   // className="form-control"
                   placeholder="Sertifikatı tanınan ölkənin adını daxil edin"
                   label="Sertifikatı tanınan ölkənin adı"
@@ -635,22 +670,34 @@ export default function ProductServicePageModal({ productService }) {
                   id="act_sign_id"
                   name="act_sign_id"
                   options={signOfLegalActOptions}
-                  // defaultValue={
-                  //   productService &&
-                  //   signOfLegalActOptions.filter(
-                  //     (signOfLegalActOption) =>
-                  //     signOfLegalActOption.act_sign_id.id == skillOption.value
-                  //   )
-                  // }
-                  // isMulti
-                  placeholder="Təlimin səriştələri"
+                  defaultValue={
+                    productService &&
+                    signOfLegalActOptions.filter((signOfLegalActOption) =>
+                      JSON.parse(productService.act_sign_id).includes(
+                        parseInt(signOfLegalActOption)
+                      )
+                    )
+                  }
+                
+                  isMulti
+                  placeholder="Hüquqi normativ texniki aktın işarəsini daxil edin"
+                  label="Hüquqi normativ texniki aktın işarəsi"
                 />
+                {console.log([...JSON.parse(productService.act_sign_id)])}
               </div>
               <div className="col-md-12 mb-4">
                 <MySearchableSelect
                   id="test_note"
                   name="test_note"
                   options={recognitionProcessNoteOptions}
+                  defaultValue={
+                    productService &&
+                    recognitionProcessNoteOptions.filter(
+                      (recognitionProcessNoteOption) =>
+                        parseInt(recognitionProcessNoteOption.value) ===
+                        parseInt(productService.test_note)
+                    )
+                  }
                   // className="form-control"
                   placeholder="Tanınma prosesində məhsulun sınağının aparılması haqqında qeydi daxil edin"
                   label="Tanınma prosesində məhsulun sınağının aparılması haqqında qeyd"
@@ -662,6 +709,12 @@ export default function ProductServicePageModal({ productService }) {
                   name="lab_id"
                   // type="text"
                   options={accreditedLaboratoryNameOptions}
+                  defaultValue={
+                    productService && {
+                      label: `${productService.lab_id.name}`,
+                      value: parseInt(productService.lab_id.id),
+                    }
+                  }
                   // className="form-control"
                   placeholder="Akkreditasiya olunmuş sınaq laboratoriyasının adını daxil edin"
                   label="Akkreditasiya olunmuş sınaq laboratoriyasının adı"
