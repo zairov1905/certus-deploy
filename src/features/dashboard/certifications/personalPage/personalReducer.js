@@ -6,10 +6,13 @@ import {
 } from "./personalConstants";
 
 const initialState = {
-  personals: []
+  personals: [],
 };
 
-export default function personalReducer(state = initialState, { type, payload }) {
+export default function personalReducer(
+  state = initialState,
+  { type, payload, totalCount }
+) {
   switch (type) {
     case CREATE_PERSONAL:
       return {
@@ -28,12 +31,15 @@ export default function personalReducer(state = initialState, { type, payload })
     case DELETE_PERSONAL:
       return {
         ...state,
-        personals: [...state.personals.filter((personal) => personal.id !== payload)],
+        personals: [
+          ...state.personals.filter((personal) => personal.id !== payload),
+        ],
       };
     case FETCH_PERSONAL:
       return {
         ...state,
         personals: payload,
+        totalCount: totalCount,
       };
     default:
       return state;

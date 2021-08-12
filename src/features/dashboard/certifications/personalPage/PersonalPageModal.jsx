@@ -6,12 +6,12 @@ import * as Yup from "yup";
 import MyTextInput from "../../../../app/common/form/MyTextInput";
 import MySearchableSelect from "../../../../app/common/form/MySearchableSelect";
 import { toast } from "react-toastify";
-import cuid from "cuid";
 import { Form, Formik } from "formik";
 import { closeModal } from "../../../../app/modal/modalReducer";
 import { createPersonal, updatePersonal } from "./personalActions";
 import { loadSignOfLegalAct } from "../../settings/signOfLegalAct/signOfLegalActActions";
 import { loadLab } from "../../labPage/labActions";
+import moment from "moment";
 
 export default function PersonalPageModal({ personal }) {
   useEffect(() => {
@@ -19,20 +19,20 @@ export default function PersonalPageModal({ personal }) {
     dispatch(loadLab());
   }, []);
   const snCodeOptions = [
-    { value: "1", label: "01" },
-    { value: "2", label: "02" },
-    { value: "3", label: "03" },
+    { value: 1, label: "01" },
+    { value: 2, label: "02" },
+    { value: 3, label: "03" },
   ];
 
   const dispatch = useDispatch();
   // ++++++++++++++
   const { trainings } = useSelector((state) => state.trainings);
   const trainingOptions =
-  trainings &&
-  trainings.map((training) => {
+    trainings &&
+    trainings.map((training) => {
       return {
-        label: training.trainingName,
-        value: training.id,
+        label: training.name,
+        value: parseInt(training.id),
       };
     });
   // ++++++++++++++
@@ -45,36 +45,56 @@ export default function PersonalPageModal({ personal }) {
   });
 
   const initialValues = personal
-    ? personal
+    ? {
+        sn_code_id: personal.sn_code_id && personal.sn_code_id,
+        registration_number:
+          personal.registration_number && personal.registration_number,
+        blank_number: personal.blank_number && personal.blank_number,
+        serial_number: personal.serial_number && personal.serial_number,
+        issue_date:
+          personal.issue_date &&
+          moment(personal.issue_date).format("YYYY-MM-DD"),
+        expiration_date:
+          personal.expiration_date &&
+          moment(personal.expiration_date).format("YYYY-MM-DD"),
+        participant_name: personal.participant_name && personal.participant_name,
+        trainer_name: personal.trainer_name && personal.trainer_name,
+        training_id: personal.training_id && personal.training_id.id,
+        // skill: [],
+        product_code: personal.product_code && personal.product_code,
+        normative_document_sign_id: personal.normative_document_sign_id && personal.normative_document_sign_id.id,
+        note:personal.note && personal.note,
+      }
     : {
-        id: cuid(),
-        snCode: "",
-        registrationNumber: "",
-        blankNumber: "",
-        accreditationNumber: "",
-        certificateIssueDate: "",
-        certificateExpirationDate: "",
-        participantName: "",
-        instructorName: "",
-        training: "",
-        skill: [],
-        productCode: "",
-        signOfDocument: "",
+        sn_code_id: "",
+        registration_number: "",
+        blank_number: "",
+        serial_number: "",
+        issue_date: "",
+        expiration_date: "",
+        participant_name: "",
+        trainer_name: "",
+        training_id: "",
+        // skill: [],
+        product_code: "",
+        normative_document_sign_id: "",
         note: "",
       };
   const validationSchema = Yup.object({
     // id:"",
-    snCode: Yup.string().required("Mütləq doldurulmalıdır."),
-    registrationNumber: Yup.string().required("Mütləq doldurulmalıdır."),
-    blankNumber: Yup.string().required("Mütləq doldurulmalıdır."),
-    accreditationNumber: Yup.string().required("Mütləq doldurulmalıdır."),
-    certificateIssueDate: Yup.string().required("Mütləq doldurulmalıdır."),
-    certificateExpirationDate: Yup.string().required("Mütləq doldurulmalıdır."),
-    participantName: Yup.string().required("Mütləq doldurulmalıdır."),
-    instructorName: Yup.string().required("Mütləq doldurulmalıdır."),
-    training: Yup.string().required("Mütləq doldurulmalıdır."),
-    productCode: Yup.string().required("Mütləq doldurulmalıdır."),
-    signOfDocument: Yup.string().required("Mütləq doldurulmalıdır."),
+    sn_code_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    registration_number: Yup.string().required("Mütləq doldurulmalıdır."),
+    blank_number: Yup.string().required("Mütləq doldurulmalıdır."),
+    serial_number: Yup.string().required("Mütləq doldurulmalıdır."),
+    issue_date: Yup.string().required("Mütləq doldurulmalıdır."),
+    expiration_date: Yup.string().required("Mütləq doldurulmalıdır."),
+    participant_name: Yup.string().required("Mütləq doldurulmalıdır."),
+    trainer_name: Yup.string().required("Mütləq doldurulmalıdır."),
+    training_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    product_code: Yup.string().required("Mütləq doldurulmalıdır."),
+    normative_document_sign_id: Yup.string().required(
+      "Mütləq doldurulmalıdır."
+    ),
   });
 
   return (
@@ -85,18 +105,13 @@ export default function PersonalPageModal({ personal }) {
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
             personal
-              ? await dispatch(updatePersonal(values))
+              ? await dispatch(updatePersonal({ ...values, id: personal.id }))
               : await dispatch(
                   createPersonal({
                     ...values,
-                    id: cuid(),
-                    labNumber: `Lab${cuid()}`,
                   })
                 );
             setSubmitting(false);
-            personal
-              ? toast.success("Dəyişiklik uğurlar yerinə yetirildi")
-              : toast.success("Uğurla əlavə edildi");
             setModal(true);
             dispatch(closeModal());
           } catch (error) {
@@ -111,18 +126,24 @@ export default function PersonalPageModal({ personal }) {
             <div className="row mb-4">
               <div className="col-md-12 mb-4">
                 <MySearchableSelect
-                  id="snCode"
-                  name="snCode"
+                  id="sn_code_id"
+                  name="sn_code_id"
                   type="text"
                   options={snCodeOptions}
                   placeholder="SN kodu daxil edin"
+                  defaultValue={
+                    personal && {
+                      label: `${personal.sn_code_id}`,
+                      value: parseInt(personal.sn_code_id),
+                    }
+                  }
                   label="SN kodu"
                 />
               </div>
               <div className="col-md-12 mb-4">
                 <MyTextInput
-                  id="registrationNumber"
-                  name="registrationNumber"
+                  id="registration_number"
+                  name="registration_number"
                   type="text"
                   className="form-control"
                   placeholder="Reyestr nömrəsi daxil edin"
@@ -131,8 +152,8 @@ export default function PersonalPageModal({ personal }) {
               </div>
               <div className="col-md-12 mb-4">
                 <MyTextInput
-                  id="blankNumber"
-                  name="blankNumber"
+                  id="blank_number"
+                  name="blank_number"
                   type="text"
                   className="form-control"
                   placeholder="Blank nömrəsi daxil edin"
@@ -141,8 +162,8 @@ export default function PersonalPageModal({ personal }) {
               </div>
               <div className="col-md-12 mb-4">
                 <MyTextInput
-                  id="accreditationNumber"
-                  name="accreditationNumber"
+                  id="serial_number"
+                  name="serial_number"
                   type="text"
                   className="form-control"
                   placeholder="Akkreditasiya sahəsində sıra nömrəsi daxil edin"
@@ -151,8 +172,8 @@ export default function PersonalPageModal({ personal }) {
               </div>
               <div className="col-md-12 mb-4">
                 <MyTextInput
-                  id="certificateIssueDate"
-                  name="certificateIssueDate"
+                  id="issue_date"
+                  name="issue_date"
                   type="date"
                   className="form-control"
                   placeholder="Sertifikatın verilmə tarixi daxil edin"
@@ -161,8 +182,8 @@ export default function PersonalPageModal({ personal }) {
               </div>
               <div className="col-md-12 mb-4">
                 <MyTextInput
-                  id="certificateExpirationDate"
-                  name="certificateExpirationDate"
+                  id="expiration_date"
+                  name="expiration_date"
                   type="date"
                   className="form-control"
                   placeholder="Sertifikatın qüvvədən düşdüyü tarix daxil edin"
@@ -171,8 +192,8 @@ export default function PersonalPageModal({ personal }) {
               </div>
               <div className="col-md-12 mb-4">
                 <MyTextInput
-                  id="participantName"
-                  name="participantName"
+                  id="participant_name"
+                  name="participant_name"
                   type="text"
                   className="form-control"
                   placeholder="İştirakçı adını daxil edin"
@@ -181,8 +202,8 @@ export default function PersonalPageModal({ personal }) {
               </div>
               <div className="col-md-12 mb-4">
                 <MyTextInput
-                  id="instructorName"
-                  name="instructorName"
+                  id="trainer_name"
+                  name="trainer_name"
                   type="text"
                   className="form-control"
                   placeholder="Təlimçinin adını daxil edin"
@@ -191,9 +212,16 @@ export default function PersonalPageModal({ personal }) {
               </div>
               <div className="col-md-12 mb-4">
                 <MySearchableSelect
-                  id="training"
-                  name="training"
+                  id="training_id"
+                  name="training_id"
                   options={trainingOptions}
+                  defaultValue={
+                    personal && {
+                      label: personal.training_id.name,
+                      value: parseInt(personal.training_id.id),
+                    }
+                  }
+                  
                   type="text"
                   // className="form-control"
                   placeholder="Təlimin adın daxil edin"
@@ -213,8 +241,8 @@ export default function PersonalPageModal({ personal }) {
               </div>
               <div className="col-md-12 mb-4">
                 <MyTextInput
-                  id="productCode"
-                  name="productCode"
+                  id="product_code"
+                  name="product_code"
                   type="text"
                   className="form-control"
                   placeholder="Məhsulun kodunu daxil edin"
@@ -223,8 +251,8 @@ export default function PersonalPageModal({ personal }) {
               </div>
               <div className="col-md-12 mb-4">
                 <MyTextInput
-                  id="signOfDocument"
-                  name="signOfDocument"
+                  id="normative_document_sign_id"
+                  name="normative_document_sign_id"
                   type="text"
                   className="form-control"
                   placeholder="Normativ sənədin işarəsini daxil edin"

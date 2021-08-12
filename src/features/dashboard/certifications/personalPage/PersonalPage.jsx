@@ -7,14 +7,17 @@ import { loadTraining } from "../../settings/training/trainingActions";
 
 import { deletePersonal, loadPersonal } from "./personalActions";
 export default function PersonalPage() {
+  const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(loadPersonal());
     //   // return () => {
     //   //   // dispatch(loadOrder())
     //   // }
   }, []);
-  const dispatch = useDispatch();
-  const { personals } = useSelector((state) => state.personals);
+  const [perPage, setPerPage] = useState(10);
+  const [PageNumber, setPageNumber] = useState(1);
+  const { personals, totalCount } = useSelector((state) => state.personals);
   const [hover, sethover] = useState(false);
   const [target, setTarget] = useState({ id: null, name: null });
 
@@ -52,7 +55,15 @@ export default function PersonalPage() {
     color: "#515365",
     fill: "#ffcacd",
   };
+  const handlePageChange = (page) => {
+    dispatch(loadPersonal({ s: page, take: perPage }));
+    setPageNumber(page);
+  };
 
+  const handlePerRowsChange = async (newPerPage, page) => {
+    dispatch(loadPersonal({ s: page, take: newPerPage }));
+    setPerPage(newPerPage);
+  };
   const actions = (
     <svg
       data-name="add"
@@ -102,63 +113,61 @@ export default function PersonalPage() {
   const columns = [
     {
       name: "SN kodu",
-      selector: "snCode",
+      selector: "sn_code_id",
       sortable: true,
     },
     {
       name: "Reyestr nömrəsi",
-      selector: "registrationNumber",
+      selector: "registration_number",
       sortable: true,
     },
 
     {
       name: "Blank nömrəsi",
-      selector: "blankNumber",
+      selector: "blank_number",
       sortable: true,
     },
     {
       name: "Akkreditasiya sahəsində sıra nömrəsi",
-      selector: "accreditationNumber",
+      selector: "serial_number",
       sortable: true,
     },
     {
       name: "Sertifikatın verilmə tarixi",
-      selector: "certificateIssueDate",
+      selector: "issue_date",
       sortable:true
     },
     {
       name: "Sertifikatın qüvvədən düşdüyü tarix",
-      selector: "certificateExpirationDate",
+      selector: "expiration_date",
       sortable: true,
     },
     {
       name: "İştirakçı adı",
-      selector: "participantName",
+      selector: "participant_name",
       sortable: true,
     },
     {
       name: "Təlimçinin adı",
-      selector: "instructorName",
+      selector: "trainer_name",
       sortable: true,
     },
     {
       name: "Təlimin adı",
-      selector: "training",
-      sortable: true,
-    },
-    {
-      name: "Səriştələr",
-      selector: "skill",
+      // selector: "training_id",
+      cell:personal => (
+        <p>{personal.training_id ? personal.training_id.name :'Təlim qeyd olunmayıb'}</p>
+      ),
       sortable: true,
     },
     {
       name: "Məhsulun kodu",
-      selector: "productCode",
+      selector: "product_code",
       sortable: true,
     },
     {
       name: "Normativ sənədin işarəsi",
-      selector: "signOfDocument",
+      selector: "normative_document_sign_id",
       sortable: true,
     },
     {
@@ -280,16 +289,15 @@ export default function PersonalPage() {
                 title="Personal sertifikatları"
                 columns={columns}
                 data={data}
-                // customStyles={customStyles}
-                // progressPending={loading}
                 pagination
-                // paginationServer
+                paginationServer
+                paginationTotalRows={totalCount}
+                paginationDefaultPage={PageNumber}
+                onChangeRowsPerPage={handlePerRowsChange}
+                onChangePage={handlePageChange}
                 highlightOnHover
                 Clicked
                 actions={actions}
-                // loading={loading}
-                // dense
-                // paginationTotalRows={totalRows}
               />
             </div>
           </div>

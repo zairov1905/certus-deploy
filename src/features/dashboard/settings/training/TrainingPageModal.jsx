@@ -12,15 +12,25 @@ import { Form, Formik } from "formik";
 import { closeModal } from "../../../../app/modal/modalReducer";
 import { createTraining, updateTraining } from "./trainingActions";
 import MySearchableSelect from "../../../../app/common/form/MySearchableSelect";
+import { loadSkill } from "../skill/skillActions";
 
 export default function TrainingPageModal({ training }) {
   const dispatch = useDispatch();
+
+  const [loader, setLoader] = useState(true);
+  useEffect(async () => {
+    await dispatch(loadSkill());
+    setLoader(false);
+  }, []);
+
   const [modal, setModal] = useState(false);
   const { skills } = useSelector((state) => state.skills);
-  const skillOptions = 
+  const skillIds = training && training.skill_id.map(skillIds => skillIds.id);
+  // console.log(skillIds,'safasd');
+  const skillOptions =
     skills &&
     skills.map((skill) => {
-      return  {
+      return {
         label: skill.name,
         value: skill.id,
       };
@@ -49,108 +59,125 @@ export default function TrainingPageModal({ training }) {
 
   return (
     <ModalWrapper size="modal-lg" header={training ? "Redakte Et" : "Əlavə et"}>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={async (values, { setSubmitting, setErrors }) => {
-          try {
-            training
-              ? await dispatch(updateTraining(values))
-              : await dispatch(createTraining({ ...values}));
-            setSubmitting(false);
-            setModal(true);
-            dispatch(closeModal());
-          } catch (error) {
-            setErrors({ auth: error.message });
-            // console.log(error);
-            setSubmitting(false);
-          }
-        }}
-      >
-        {({ isSubmitting, isValid, dirty, errors, values }) => (
-          <Form id="emp">
-            <div className="row">
-              <div className="col-md-12">
-                <MyTextInput
-                  id="name"
-                  name="name"
-                  type="text"
-                  className="form-control"
-                  placeholder="Təlim adı"
-                />
+      {loader ? (
+        <div className="loader text-center">
+          {" "}
+          <div className="loader-content">
+            <div className="spinner-grow align-self-center"></div>
+          </div>
+        </div>
+      ) : (
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={async (values, { setSubmitting, setErrors }) => {
+            try {
+              training
+                ? await dispatch(updateTraining(values))
+                : await dispatch(createTraining({ ...values }));
+              setSubmitting(false);
+              setModal(true);
+              dispatch(closeModal());
+            } catch (error) {
+              setErrors({ auth: error.message });
+              // console.log(error);
+              setSubmitting(false);
+            }
+          }}
+        >
+          {({ isSubmitting, isValid, dirty, errors, values }) => (
+            <Form id="emp">
+              <div className="row">
+                <div className="col-md-12">
+                  <MyTextInput
+                    id="name"
+                    name="name"
+                    type="text"
+                    className="form-control"
+                    placeholder="Təlim adı"
+                  />
+                </div>
+                <div className="col-md-12">
+                  <MyTextInput
+                    id="about"
+                    name="about"
+                    type="text"
+                    className="form-control"
+                    placeholder="Təlim haqqında"
+                  />
+                </div>
+                <div className="col-md-12">
+                  {/* {console.log(values)} */}
+                  <MySearchableSelect
+                    id=""
+                    name="skill_id"
+                    options={skillOptions}
+                    // defaultValue={
+                    //   training &&
+                    //   skillOptions.filter(
+                    //     (skillOption) =>
+                    //     training.skill_id.id == skillOption.value
+                    //   )
+                    // }
+                    defaultValue={
+                      training &&
+                      skillOptions.filter((skillOption) =>
+                      skillIds.includes(
+                          parseInt(skillOption.value)
+                        )
+                      )
+                    }
+                    isMulti
+                    placeholder="Təlimin səriştələri"
+                  />
+                </div>
               </div>
-              <div className="col-md-12">
-                <MyTextInput
-                  id="about"
-                  name="about"
-                  type="text"
-                  className="form-control"
-                  placeholder="Təlim haqqında"
-                />
-              </div>
-              <div className="col-md-12">
-                {/* {console.log(values)} */}
-                <MySearchableSelect
-                  id="skill_id"
-                  name="skill_id"
-                  options={skillOptions}
-                  defaultValue={
-                    training &&
-                    skillOptions.filter(
-                      (skillOption) =>
-                      skillOption.skill_id.id == skillOption.value
-                    )
-                  }
-                  isMulti
-                  placeholder="Təlimin səriştələri"
-                />
-              </div>
-            </div>
 
-            <button
-              disabled={!isValid || !dirty || isSubmitting}
-              type="submit"
-              // name="time"
-              className="btn btn-primary float-right  btn-lg mt-3 "
-            >
-              {isSubmitting && (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width={24}
-                  height={24}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="feather feather-loader spin mr-2"
-                >
-                  <line x1={12} y1={2} x2={12} y2={6} />
-                  <line x1={12} y1={18} x2={12} y2={22} />
-                  <line x1="4.93" y1="4.93" x2="7.76" y2="7.76" />
-                  <line x1="16.24" y1="16.24" x2="19.07" y2="19.07" />
-                  <line x1={2} y1={12} x2={6} y2={12} />
-                  <line x1={18} y1={12} x2={22} y2={12} />
-                  <line x1="4.93" y1="19.07" x2="7.76" y2="16.24" />
-                  <line x1="16.24" y1="7.76" x2="19.07" y2="4.93" />
-                </svg>
-              )}
-              Yadda saxla
-            </button>
-            <button
-              id="closeModal"
-              onClick={() => {
-                dispatch(closeModal());
-              }}
-              className="btn btn-lg float-right mt-3 mr-2"
-              data-dismiss="modal"
-            >
-              <i className="flaticon-cancel-12" /> Ləğv et
-            </button>
-          </Form>
-        )}
-      </Formik>
+              <button
+                disabled={!isValid || !dirty || isSubmitting}
+                type="submit"
+                // name="time"
+                className="btn btn-primary float-right  btn-lg mt-3 "
+              >
+                {isSubmitting && (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width={24}
+                    height={24}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="feather feather-loader spin mr-2"
+                  >
+                    <line x1={12} y1={2} x2={12} y2={6} />
+                    <line x1={12} y1={18} x2={12} y2={22} />
+                    <line x1="4.93" y1="4.93" x2="7.76" y2="7.76" />
+                    <line x1="16.24" y1="16.24" x2="19.07" y2="19.07" />
+                    <line x1={2} y1={12} x2={6} y2={12} />
+                    <line x1={18} y1={12} x2={22} y2={12} />
+                    <line x1="4.93" y1="19.07" x2="7.76" y2="16.24" />
+                    <line x1="16.24" y1="7.76" x2="19.07" y2="4.93" />
+                  </svg>
+                )}
+                Yadda saxla
+              </button>
+              <button
+                id="closeModal"
+                onClick={() => {
+                  dispatch(closeModal());
+                }}
+                className="btn btn-lg float-right mt-3 mr-2"
+                data-dismiss="modal"
+              >
+                <i className="flaticon-cancel-12" /> Ləğv et
+              </button>
+            </Form>
+          )}
+        </Formik>
+      )}
     </ModalWrapper>
   );
 }

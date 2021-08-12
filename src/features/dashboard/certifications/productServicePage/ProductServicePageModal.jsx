@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import MyTextInput from "../../../../app/common/form/MyTextInput";
 import MySearchableSelect from "../../../../app/common/form/MySearchableSelect";
-import { toast } from "react-toastify";
-import cuid from "cuid";
+import moment from "moment";
+
 import { Form, Formik } from "formik";
 import { closeModal } from "../../../../app/modal/modalReducer";
 import {
@@ -18,10 +18,13 @@ import { loadLab } from "../../labPage/labActions";
 import { loadCrm } from "../../crmPage/crmActions";
 
 export default function ProductServicePageModal({ productService }) {
-  useEffect(() => {
-    dispatch(loadSignOfLegalAct());
+  const [loader, setLoader] = useState(true);
+
+  useEffect(async () => {
     dispatch(loadLab());
     dispatch(loadCrm());
+    await dispatch(loadSignOfLegalAct());
+    setLoader(false);
   }, []);
   const snCodeOptions = [
     { value: "1", label: "01" },
@@ -335,7 +338,63 @@ export default function ProductServicePageModal({ productService }) {
   });
 
   const initialValues = productService
-    ? productService
+    ? {
+        sn_code_id: productService.sn_code_id && productService.sn_code_id,
+        registration_number:
+          productService.registration_number &&
+          productService.registration_number,
+        blank_number:
+          productService.blank_number && productService.blank_number,
+        serial_number:
+          productService.serial_number && productService.serial_number,
+        issue_date:
+          productService.issue_date &&
+          moment(productService.issue_date).format("YYYY-MM-DD"),
+        expiration_date:
+          productService.expiration_date &&
+          moment(productService.expiration_date).format("YYYY-MM-DD"),
+        customer_id:
+          productService.customer_id && productService.customer_id.id,
+        // only customer_id den gelecek data
+        legalStatus:
+          productService.customer_id &&
+          productService.customer_id.legal_status_id,
+        VOEN: productService.customer_id && productService.customer_id.voen,
+        economicEntityPhoneNumber:
+          productService.customer_id &&
+          productService.customer_id.customer_phone,
+        legalAddressOfTheBusinessEntity:
+          productService.customer_id && productService.customer_id.legal_adress,
+        actualAddressOfTheBusiness:
+          productService.customer_id &&
+          productService.customer_id.actual_adress,
+        //
+
+        product_name:
+          productService.product_name && productService.product_name,
+        quantity: productService.quantity && productService.quantity,
+
+        product_type_id:
+          productService.product_type_id && productService.product_type_id,
+        product_code:
+          productService.product_code && productService.product_code,
+        country_id: productService.country_id && productService.country_id,
+        certificate_country_id:
+          productService.country_id && productService.country_id,
+        test_note: productService.test_note && productService.test_note,
+
+        lab_id: productService.lab_id && productService.lab_id.id,
+        // laba aid olan
+        accreditedLaboratoryNumber:
+          productService.lab_id && productService.lab_id.certificate_number,
+        //
+        test_number: productService.test_number && productService.test_number,
+        product_batch_date:
+          productService.product_batch_date &&
+          moment(productService.product_batch_date).format("YYYY-MM-DD"),
+        act_sign_id:
+          productService.act_sign_id && JSON.parse(productService.act_sign_id),
+      }
     : {
         sn_code_id: "",
         registration_number: "",
@@ -367,7 +426,7 @@ export default function ProductServicePageModal({ productService }) {
         //
         test_number: "",
         product_batch_date: "",
-        act_sign_id: "",
+        act_sign_id: [],
       };
   const validationSchema = Yup.object({
     // sn_code_id: Yup.string().required("Mütləq doldurulmalıdır."),
@@ -405,398 +464,395 @@ export default function ProductServicePageModal({ productService }) {
       size="modal-lg"
       header={productService ? "Redakte Et" : "Əlavə et"}
     >
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={async (values, { setSubmitting, setErrors }) => {
-          try {
-            productService
-              ? await dispatch(updateProductService(values))
-              : await dispatch(
-                  createProductService({
-                    ...values,
-                  })
-                );
-            setSubmitting(false);
-            setModal(true);
-            dispatch(closeModal());
-          } catch (error) {
-            setErrors({ auth: error.message });
-            // console.log(error);
-            setSubmitting(false);
-          }
-        }}
-      >
-        {({ isSubmitting, isValid, dirty, errors, values }) => (
-          <Form id="emp">
-            <div className="row mb-4">
-              <div className="col-md-12 mb-4">
-                <MySearchableSelect
-                  id="sn_code_id"
-                  name="sn_code_id"
-                  type="text"
-                  options={snCodeOptions}
-                  defaultValue={
-                    productService && {
-                      label: `0${productService.sn_code_id}`,
-                      value: parseInt(productService.sn_code_id),
+      {loader ? (
+        <div className="loader text-center">
+          {" "}
+          <div className="loader-content">
+            <div className="spinner-grow align-self-center"></div>
+          </div>
+        </div>
+      ) : (
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={async (values, { setSubmitting, setErrors }) => {
+            try {
+              productService
+                ? await dispatch(updateProductService({...values, id:productService.id}))
+                : await dispatch(
+                    createProductService({
+                      ...values,
+                    })
+                  );
+              setSubmitting(false);
+              setModal(true);
+              dispatch(closeModal());
+            } catch (error) {
+              setErrors({ auth: error.message });
+              // console.log(error);
+              setSubmitting(false);
+            }
+          }}
+        >
+          {({ isSubmitting, isValid, dirty, errors, values }) => (
+            <Form id="emp">
+              <div className="row mb-4">
+                <div className="col-md-12 mb-4">
+                  <MySearchableSelect
+                    id="sn_code_id"
+                    name="sn_code_id"
+                    type="text"
+                    options={snCodeOptions}
+                    defaultValue={
+                      productService && {
+                        label: `0${productService.sn_code_id}`,
+                        value: parseInt(productService.sn_code_id),
+                      }
                     }
-                  }
-                  placeholder="SN kodu daxil edin"
-                  label="SN kodu"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="registration_number"
-                  name="registration_number"
-                  type="text"
-                  className="form-control"
-                  placeholder="Reyestr nömrəsi daxil edin"
-                  label="Reyestr nömrəsi"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="blank_number"
-                  name="blank_number"
-                  type="text"
-                  className="form-control"
-                  placeholder="Blank nömrəsi daxil edin"
-                  label="Blank nömrəsi"
-                />
-                {/* {console.log(values)} */}
-              </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="serial_number"
-                  name="serial_number"
-                  type="text"
-                  className="form-control"
-                  placeholder="Akkreditasiya sahəsində sıra nömrəsi daxil edin"
-                  label="Akkreditasiya sahəsində sıra nömrəsi"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="issue_date"
-                  name="issue_date"
-                  type="date"
-                  className="form-control"
-                  placeholder="Sertifikatın verilmə tarixi daxil edin"
-                  label="Sertifikatın verilmə tarixi"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="expiration_date"
-                  name="expiration_date"
-                  type="date"
-                  className="form-control"
-                  placeholder="Sertifikatın qüvvədən düşdüyü tarix daxil edin"
-                  label="Sertifikatın qüvvədən düşdüyü tarix"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MySearchableSelect
-                  id="customer_id"
-                  name="customer_id"
-                  type="text"
-                  options={customerOptions}
-                  defaultValue={
-                    productService && {
-                      label: `${productService.customer_id.customer_name}`,
-                      value: parseInt(productService.customer_id.id),
+                    placeholder="SN kodu daxil edin"
+                    label="SN kodu"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MyTextInput
+                    id="registration_number"
+                    name="registration_number"
+                    type="text"
+                    className="form-control"
+                    placeholder="Reyestr nömrəsi daxil edin"
+                    label="Reyestr nömrəsi"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MyTextInput
+                    id="blank_number"
+                    name="blank_number"
+                    type="text"
+                    className="form-control"
+                    placeholder="Blank nömrəsi daxil edin"
+                    label="Blank nömrəsi"
+                  />
+                  {/* {console.log(values)} */}
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MyTextInput
+                    id="serial_number"
+                    name="serial_number"
+                    type="text"
+                    className="form-control"
+                    placeholder="Akkreditasiya sahəsində sıra nömrəsi daxil edin"
+                    label="Akkreditasiya sahəsində sıra nömrəsi"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MyTextInput
+                    id="issue_date"
+                    name="issue_date"
+                    type="date"
+                    className="form-control"
+                    placeholder="Sertifikatın verilmə tarixi daxil edin"
+                    label="Sertifikatın verilmə tarixi"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MyTextInput
+                    id="expiration_date"
+                    name="expiration_date"
+                    type="date"
+                    className="form-control"
+                    placeholder="Sertifikatın qüvvədən düşdüyü tarix daxil edin"
+                    label="Sertifikatın qüvvədən düşdüyü tarix"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MySearchableSelect
+                    id="customer_id"
+                    name="customer_id"
+                    type="text"
+                    options={customerOptions}
+                    defaultValue={
+                      productService && {
+                        label: `${productService.customer_id.customer_name}`,
+                        value: parseInt(productService.customer_id.id),
+                      }
                     }
-                  }
-                  // className="form-control"
-                  placeholder="Sertifikat təqdim edilən təsərrüfat subyektinin adını daxil edin"
-                  label="Sertifikat təqdim edilən təsərrüfat subyektinin adı"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="legalStatus"
-                  name="legalStatus"
-                  type="text"
-                  readOnly
-                  className="form-control"
-                  placeholder="Hüquqi statusunu daxil edin"
-                  label="Hüquqi statusu"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="VOEN"
-                  name="VOEN"
-                  type="text"
-                  readOnly
-                  className="form-control"
-                  placeholder="VÖEN daxil edin"
-                  label="VÖEN"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="economicEntityPhoneNumber"
-                  name="economicEntityPhoneNumber"
-                  type="text"
-                  readOnly
-                  className="form-control"
-                  placeholder="Təsərrüfat subyektinin rəhbərinin telefon nömrəsini daxil edin"
-                  label="Təsərrüfat subyektinin rəhbərinin telefon nömrəsi"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="legalAddressOfTheBusinessEntity"
-                  name="legalAddressOfTheBusinessEntity"
-                  type="text"
-                  readOnly
-                  className="form-control"
-                  placeholder="Sertifikat təqdim edilən təsərrüfat subyektinin hüquqi ünvanını daxil edin"
-                  label="Sertifikat təqdim edilən təsərrüfat subyektinin hüquqi ünvanı"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="actualAddressOfTheBusiness"
-                  name="actualAddressOfTheBusiness"
-                  type="text"
-                  readOnly
-                  className="form-control"
-                  placeholder="Sertifikat təqdim edilən təsərrüfat subyektinin faktiki ünvanını daxil edin"
-                  label="Sertifikat təqdim edilən təsərrüfat subyektinin faktiki ünvanı"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="product_name"
-                  name="product_name"
-                  type="text"
-                  className="form-control"
-                  placeholder="Məhsulun(xidmətin) adını daxil edin"
-                  label="Məhsulun(xidmətin) adı"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="quantity"
-                  name="quantity"
-                  type="text"
-                  className="form-control"
-                  placeholder="Miqdarı daxil edin"
-                  label="Miqdarı"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MySearchableSelect
-                  id="product_type_id"
-                  name="product_type_id"
-                  options={productNoteOptions}
-                  defaultValue={
-                    productService &&
-                    productNoteOptions.filter(
-                      (productNoteOption) =>
-                      parseInt(productNoteOption.value) ===
-                        parseInt(productService.product_type_id)
-                    )
-                  }
-                  type="text"
-                  placeholder="Məhsulun ərzaq və ya qeyri ərzaq qrupuna aid olması barədə qeyd daxil edin"
-                  label="Məhsulun ərzaq və ya qeyri ərzaq qrupuna aid olması barədə qeyd"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="product_code"
-                  name="product_code"
-                  type="text"
-                  className="form-control"
-                  placeholder="Məhsulun kodunu daxil edin"
-                  label="Məhsulun kodu"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MySearchableSelect
-                  id="country_id"
-                  name="country_id"
-                  type="text"
-                  options={allCountriesListOptions}
-                  // className="form-control"
-                  defaultValue={
-                    productService &&
-                    allCountriesListOptions.filter(
-                      (allCountriesListOption) =>
-                        allCountriesListOption.value ===
-                        productService.country_id
-                    )
-                  }
-                  placeholder="Məhsulun istehsal olunduğu ölkəni daxil edin"
-                  label="Məhsulun istehsal olunduğu ölkə"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MySearchableSelect
-                  id="certificate_country_id"
-                  name="certificate_country_id"
-                  type="text"
-                  options={allCountriesListOptions}
-                  defaultValue={
-                    productService &&
-                    allCountriesListOptions.filter(
-                      (allCountriesListOption) =>
-                        allCountriesListOption.value ===
-                        productService.certificate_country_id
-                    )
-                  }
-                  // className="form-control"
-                  placeholder="Sertifikatı tanınan ölkənin adını daxil edin"
-                  label="Sertifikatı tanınan ölkənin adı"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                {/* <MySearchableSelect
-                  id="act_sign_id"
-                  name="act_sign_id"
-                  options={signOfLegalActOptions}
-
-                  isMulti
-                  // className="form-control"
-                  placeholder="Hüquqi normativ texniki aktın işarəsini daxil edin"
-                  label="Hüquqi normativ texniki aktın işarəsi"
-                /> */}
-                <MySearchableSelect
-                  id="act_sign_id"
-                  name="act_sign_id"
-                  options={signOfLegalActOptions}
-                  defaultValue={
-                    productService &&
-                    signOfLegalActOptions.filter((signOfLegalActOption) =>
-                      JSON.parse(productService.act_sign_id).includes(
-                        parseInt(signOfLegalActOption)
+                    // className="form-control"
+                    placeholder="Sertifikat təqdim edilən təsərrüfat subyektinin adını daxil edin"
+                    label="Sertifikat təqdim edilən təsərrüfat subyektinin adı"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MyTextInput
+                    id="legalStatus"
+                    name="legalStatus"
+                    type="text"
+                    readOnly
+                    className="form-control"
+                    placeholder="Hüquqi statusunu daxil edin"
+                    label="Hüquqi statusu"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MyTextInput
+                    id="VOEN"
+                    name="VOEN"
+                    type="text"
+                    readOnly
+                    className="form-control"
+                    placeholder="VÖEN daxil edin"
+                    label="VÖEN"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MyTextInput
+                    id="economicEntityPhoneNumber"
+                    name="economicEntityPhoneNumber"
+                    type="text"
+                    readOnly
+                    className="form-control"
+                    placeholder="Təsərrüfat subyektinin rəhbərinin telefon nömrəsini daxil edin"
+                    label="Təsərrüfat subyektinin rəhbərinin telefon nömrəsi"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MyTextInput
+                    id="legalAddressOfTheBusinessEntity"
+                    name="legalAddressOfTheBusinessEntity"
+                    type="text"
+                    readOnly
+                    className="form-control"
+                    placeholder="Sertifikat təqdim edilən təsərrüfat subyektinin hüquqi ünvanını daxil edin"
+                    label="Sertifikat təqdim edilən təsərrüfat subyektinin hüquqi ünvanı"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MyTextInput
+                    id="actualAddressOfTheBusiness"
+                    name="actualAddressOfTheBusiness"
+                    type="text"
+                    readOnly
+                    className="form-control"
+                    placeholder="Sertifikat təqdim edilən təsərrüfat subyektinin faktiki ünvanını daxil edin"
+                    label="Sertifikat təqdim edilən təsərrüfat subyektinin faktiki ünvanı"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MyTextInput
+                    id="product_name"
+                    name="product_name"
+                    type="text"
+                    className="form-control"
+                    placeholder="Məhsulun(xidmətin) adını daxil edin"
+                    label="Məhsulun(xidmətin) adı"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MyTextInput
+                    id="quantity"
+                    name="quantity"
+                    type="text"
+                    className="form-control"
+                    placeholder="Miqdarı daxil edin"
+                    label="Miqdarı"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MySearchableSelect
+                    id="product_type_id"
+                    name="product_type_id"
+                    options={productNoteOptions}
+                    defaultValue={
+                      productService &&
+                      productNoteOptions.filter(
+                        (productNoteOption) =>
+                          parseInt(productNoteOption.value) ===
+                          parseInt(productService.product_type_id)
                       )
-                    )
-                  }
-                
-                  isMulti
-                  placeholder="Hüquqi normativ texniki aktın işarəsini daxil edin"
-                  label="Hüquqi normativ texniki aktın işarəsi"
-                />
-                {console.log([...JSON.parse(productService.act_sign_id)])}
-              </div>
-              <div className="col-md-12 mb-4">
-                <MySearchableSelect
-                  id="test_note"
-                  name="test_note"
-                  options={recognitionProcessNoteOptions}
-                  defaultValue={
-                    productService &&
-                    recognitionProcessNoteOptions.filter(
-                      (recognitionProcessNoteOption) =>
-                        parseInt(recognitionProcessNoteOption.value) ===
-                        parseInt(productService.test_note)
-                    )
-                  }
-                  // className="form-control"
-                  placeholder="Tanınma prosesində məhsulun sınağının aparılması haqqında qeydi daxil edin"
-                  label="Tanınma prosesində məhsulun sınağının aparılması haqqında qeyd"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MySearchableSelect
-                  id="lab_id"
-                  name="lab_id"
-                  // type="text"
-                  options={accreditedLaboratoryNameOptions}
-                  defaultValue={
-                    productService && {
-                      label: `${productService.lab_id.name}`,
-                      value: parseInt(productService.lab_id.id),
                     }
-                  }
-                  // className="form-control"
-                  placeholder="Akkreditasiya olunmuş sınaq laboratoriyasının adını daxil edin"
-                  label="Akkreditasiya olunmuş sınaq laboratoriyasının adı"
-                />
+                    type="text"
+                    placeholder="Məhsulun ərzaq və ya qeyri ərzaq qrupuna aid olması barədə qeyd daxil edin"
+                    label="Məhsulun ərzaq və ya qeyri ərzaq qrupuna aid olması barədə qeyd"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MyTextInput
+                    id="product_code"
+                    name="product_code"
+                    type="text"
+                    className="form-control"
+                    placeholder="Məhsulun kodunu daxil edin"
+                    label="Məhsulun kodu"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MySearchableSelect
+                    id="country_id"
+                    name="country_id"
+                    type="text"
+                    options={allCountriesListOptions}
+                    // className="form-control"
+                    defaultValue={
+                      productService &&
+                      allCountriesListOptions.filter(
+                        (allCountriesListOption) =>
+                          allCountriesListOption.value ===
+                          productService.country_id
+                      )
+                    }
+                    placeholder="Məhsulun istehsal olunduğu ölkəni daxil edin"
+                    label="Məhsulun istehsal olunduğu ölkə"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MySearchableSelect
+                    id="certificate_country_id"
+                    name="certificate_country_id"
+                    type="text"
+                    options={allCountriesListOptions}
+                    defaultValue={
+                      productService &&
+                      allCountriesListOptions.filter(
+                        (allCountriesListOption) =>
+                          allCountriesListOption.value ===
+                          productService.certificate_country_id
+                      )
+                    }
+                    // className="form-control"
+                    placeholder="Sertifikatı tanınan ölkənin adını daxil edin"
+                    label="Sertifikatı tanınan ölkənin adı"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MySearchableSelect
+                    id="act_sign_id"
+                    name="act_sign_id"
+                    options={signOfLegalActOptions}
+                    defaultValue={
+                      productService &&
+                      signOfLegalActOptions.filter((signOfLegalActOption) =>
+                        JSON.parse(productService.act_sign_id).includes(
+                          parseInt(signOfLegalActOption.value)
+                        )
+                      )
+                    }
+                    isMulti
+                    placeholder="Hüquqi normativ texniki aktın işarəsini daxil edin"
+                    label="Hüquqi normativ texniki aktın işarəsi"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MySearchableSelect
+                    id="test_note"
+                    name="test_note"
+                    options={recognitionProcessNoteOptions}
+                    defaultValue={
+                      productService &&
+                      recognitionProcessNoteOptions.filter(
+                        (recognitionProcessNoteOption) =>
+                          parseInt(recognitionProcessNoteOption.value) ===
+                          parseInt(productService.test_note)
+                      )
+                    }
+                    // className="form-control"
+                    placeholder="Tanınma prosesində məhsulun sınağının aparılması haqqında qeydi daxil edin"
+                    label="Tanınma prosesində məhsulun sınağının aparılması haqqında qeyd"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MySearchableSelect
+                    id="lab_id"
+                    name="lab_id"
+                    // type="text"
+                    options={accreditedLaboratoryNameOptions}
+                    defaultValue={
+                      productService && {
+                        label: `${productService.lab_id.name}`,
+                        value: parseInt(productService.lab_id.id),
+                      }
+                    }
+                    // className="form-control"
+                    placeholder="Akkreditasiya olunmuş sınaq laboratoriyasının adını daxil edin"
+                    label="Akkreditasiya olunmuş sınaq laboratoriyasının adı"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MyTextInput
+                    id="accreditedLaboratoryNumber"
+                    name="accreditedLaboratoryNumber"
+                    type="text"
+                    readOnly
+                    className="form-control"
+                    placeholder="Akkreditasiya olunmuş laboratoriyanın attestat nömrəsini daxil edin"
+                    label="Akkreditasiya olunmuş laboratoriyanın attestat nömrəsi"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MyTextInput
+                    id="test_number"
+                    name="test_number"
+                    type="text"
+                    className="form-control"
+                    placeholder="Aparılmış sınaqların miqdarını edin"
+                    label="Aparılmış sınaqların miqdarı"
+                  />
+                </div>
+                <div className="col-md-12">
+                  <MyTextInput
+                    id="product_batch_date"
+                    name="product_batch_date"
+                    type="date"
+                    className="form-control"
+                    placeholder="Məhsul partiyasının tarixini edin"
+                    label="Məhsul partiyasının tarixi"
+                  />
+                </div>
               </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="accreditedLaboratoryNumber"
-                  name="accreditedLaboratoryNumber"
-                  type="text"
-                  readOnly
-                  className="form-control"
-                  placeholder="Akkreditasiya olunmuş laboratoriyanın attestat nömrəsini daxil edin"
-                  label="Akkreditasiya olunmuş laboratoriyanın attestat nömrəsi"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="test_number"
-                  name="test_number"
-                  type="text"
-                  className="form-control"
-                  placeholder="Aparılmış sınaqların miqdarını edin"
-                  label="Aparılmış sınaqların miqdarı"
-                />
-              </div>
-              <div className="col-md-12">
-                <MyTextInput
-                  id="product_batch_date"
-                  name="product_batch_date"
-                  type="date"
-                  className="form-control"
-                  placeholder="Məhsul partiyasının tarixini edin"
-                  label="Məhsul partiyasının tarixi"
-                />
-              </div>
-            </div>
 
-            <button
-              disabled={!isValid || !dirty || isSubmitting}
-              type="submit"
-              // name="time"
-              className="btn btn-primary float-right  btn-lg mt-3 "
-            >
-              {isSubmitting && (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width={24}
-                  height={24}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="feather feather-loader spin mr-2"
-                >
-                  <line x1={12} y1={2} x2={12} y2={6} />
-                  <line x1={12} y1={18} x2={12} y2={22} />
-                  <line x1="4.93" y1="4.93" x2="7.76" y2="7.76" />
-                  <line x1="16.24" y1="16.24" x2="19.07" y2="19.07" />
-                  <line x1={2} y1={12} x2={6} y2={12} />
-                  <line x1={18} y1={12} x2={22} y2={12} />
-                  <line x1="4.93" y1="19.07" x2="7.76" y2="16.24" />
-                  <line x1="16.24" y1="7.76" x2="19.07" y2="4.93" />
-                </svg>
-              )}
-              Yadda saxla
-            </button>
-            <button
-              id="closeModal"
-              onClick={() => {
-                dispatch(closeModal());
-              }}
-              className="btn btn-lg float-right mt-3 mr-2"
-              data-dismiss="modal"
-            >
-              <i className="flaticon-cancel-12" /> Ləğv et
-            </button>
-          </Form>
-        )}
-      </Formik>
+              <button
+                disabled={!isValid || !dirty || isSubmitting}
+                type="submit"
+                // name="time"
+                className="btn btn-primary float-right  btn-lg mt-3 "
+              >
+                {isSubmitting && (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width={24}
+                    height={24}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="feather feather-loader spin mr-2"
+                  >
+                    <line x1={12} y1={2} x2={12} y2={6} />
+                    <line x1={12} y1={18} x2={12} y2={22} />
+                    <line x1="4.93" y1="4.93" x2="7.76" y2="7.76" />
+                    <line x1="16.24" y1="16.24" x2="19.07" y2="19.07" />
+                    <line x1={2} y1={12} x2={6} y2={12} />
+                    <line x1={18} y1={12} x2={22} y2={12} />
+                    <line x1="4.93" y1="19.07" x2="7.76" y2="16.24" />
+                    <line x1="16.24" y1="7.76" x2="19.07" y2="4.93" />
+                  </svg>
+                )}
+                Yadda saxla
+              </button>
+              <button
+                id="closeModal"
+                onClick={() => {
+                  dispatch(closeModal());
+                }}
+                className="btn btn-lg float-right mt-3 mr-2"
+                data-dismiss="modal"
+              >
+                <i className="flaticon-cancel-12" /> Ləğv et
+              </button>
+            </Form>
+          )}
+        </Formik>
+      )}
     </ModalWrapper>
   );
 }

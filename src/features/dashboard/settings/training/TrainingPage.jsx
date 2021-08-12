@@ -144,7 +144,6 @@ export default function TrainingPage() {
                   modalProps: { training },
                 })
               );
-              dispatch(loadSkill());
             }}
             data-name="edit"
             id={training.id}

@@ -114,126 +114,35 @@ export default function ProductServicePage() {
   const columns = [
     {
       name: "SN kodu",
-      selector: "snCode",
+      selector: "sn_code_id",
       sortable: true,
     },
     {
       name: "Reyestr nömrəsi",
-      selector: "registrationNumber",
+      selector: "registration_number",
       sortable: true,
     },
 
     {
       name: "Blank nömrəsi",
-      selector: "blankNumber",
+      selector: "blank_number",
       sortable: true,
     },
     {
       name: "Akkreditasiya sahəsində sıra nömrəsi",
-      selector: "accreditationNumber",
+      selector: "serial_number",
       sortable: true,
     },
     {
       name: "Sertifikatın verilmə tarixi",
-      selector: "certificateIssueDate",
+      selector: "issue_date",
       sortable:true
     },
     {
       name: "Sertifikatın qüvvədən düşdüyü tarix",
-      selector: "certificateExpirationDate",
+      selector: "expiration_date",
       sortable: true,
     },
-    {
-      name: "Sertifikat təqdim edilən təsərrüfat subyektinin adı",
-      selector: "businessEntityName",
-      sortable: true,
-    },
-    {
-      name: "Hüquqi statusu",
-      selector: "legalStatus",
-      sortable: true,
-    },
-    {
-      name: "VÖEN",
-      selector: "VOEN",
-      sortable: true,
-    },
-    {
-      name: "Təsərrüfat subyektinin rəhbərinin telefon nömrəsi",
-      selector: "economicEntityPhoneNumber",
-      sortable: true,
-    },
-    {
-      name: "Sertifikat təqdim edilən təsərrüfat subyektinin hüquqi ünvanı",
-      selector: "legalAddressOfTheBusinessEntity",
-      sortable: true,
-    },
-    {
-      name: "Sertifikat təqdim edilən təsərrüfat subyektinin faktiki ünvanı",
-      selector: "actualAddressOfTheBusiness",
-      sortable: true,
-    },
-    {
-      name: "Məhsulun(xidmətin) adı",
-      selector: "nameOfTheProduct",
-      sortable: true,
-    },
-    {
-      name: "Miqdarı",
-      selector: "quantity",
-      sortable: true,
-    },
-    {
-      name: "Məhsulun ərzaq və ya qeyri ərzaq qrupuna aid olması barədə qeyd",
-      selector: "productNote",
-      sortable: true,
-    },
-    {
-      name: "Məhsulun kodu",
-      selector: "productCode",
-      sortable: true,
-    },
-    {
-      name: "Məhsulun istehsal olunduğu ölkə",
-      selector: "countryOfOrigin",
-      sortable: true,
-    },
-    {
-      name: "Hüquqi normativ texniki aktın işarəsi",
-      selector: "signOfLegalAct",
-      sortable: true,
-    },
-    {
-      name: "Sertifikatı tanınan ölkənin adı",
-      selector: "certificateIsRecognized",
-      sortable: true,
-    },
-    {
-      name: "Tanınma prosesində məhsulun sınağının aparılması haqqında qeyd",
-      selector: "recognitionProcessNote",
-      sortable: true,
-    },
-    {
-      name: "Akkreditasiya olunmuş sınaq laboratoriyasının adı",
-      selector: "accreditedLaboratoryName",
-      sortable: true,
-    },
-    {
-      name: "Akkreditasiya olunmuş laboratoriyanın attestat nömrəsi",
-      selector: "accreditedLaboratoryNumber",
-      sortable: true,
-    },
-    {
-      name: "Aparılmış sınaqların miqdarı",
-      selector: "testQuantity",
-      sortable: true,
-    },
-    {
-      name: "Məhsul partiyasının tarixi",
-      selector: "productBatchHistory",
-      sortable: true,
-    },
-
     {
       name: "",
       cell: (productService) => (
