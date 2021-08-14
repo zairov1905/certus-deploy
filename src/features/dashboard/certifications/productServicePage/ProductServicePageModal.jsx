@@ -429,34 +429,34 @@ export default function ProductServicePageModal({ productService }) {
         act_sign_id: [],
       };
   const validationSchema = Yup.object({
-    // sn_code_id: Yup.string().required("Mütləq doldurulmalıdır."),
-    // registration_number: Yup.string().required("Mütləq doldurulmalıdır."),
-    // blank_number: Yup.string().required("Mütləq doldurulmalıdır."),
-    // serial_number: Yup.string().required("Mütləq doldurulmalıdır."),
-    // issue_date: Yup.string().required("Mütləq doldurulmalıdır."),
-    // expiration_date: Yup.string().required("Mütləq doldurulmalıdır."),
-    // customer_id: Yup.string().required("Mütləq doldurulmalıdır."),
-    // // only customer_id den gelecek data
-    // // legalStatus: "",
-    // // VOEN: "",
-    // // economicEntityPhoneNumber: "",
-    // // legalAddressOfTheBusinessEntity: "",
-    // // actualAddressOfTheBusiness: "",
-    // //
-    // product_name: Yup.string().required("Mütləq doldurulmalıdır."),
-    // quantity: Yup.string().required("Mütləq doldurulmalıdır."),
-    // product_type_id: Yup.string().required("Mütləq doldurulmalıdır."),
-    // product_code: Yup.string().required("Mütləq doldurulmalıdır."),
-    // country_id: Yup.string().required("Mütləq doldurulmalıdır."),
-    // certificate_country_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    sn_code_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    registration_number: Yup.string().required("Mütləq doldurulmalıdır."),
+    blank_number: Yup.string().required("Mütləq doldurulmalıdır."),
+    serial_number: Yup.string().required("Mütləq doldurulmalıdır."),
+    issue_date: Yup.string().required("Mütləq doldurulmalıdır."),
+    expiration_date: Yup.string().required("Mütləq doldurulmalıdır."),
+    customer_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    // only customer_id den gelecek data
+    // legalStatus: "",
+    // VOEN: "",
+    // economicEntityPhoneNumber: "",
+    // legalAddressOfTheBusinessEntity: "",
+    // actualAddressOfTheBusiness: "",
+    //
+    product_name: Yup.string().required("Mütləq doldurulmalıdır."),
+    quantity: Yup.string().required("Mütləq doldurulmalıdır."),
+    product_type_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    product_code: Yup.string().required("Mütləq doldurulmalıdır."),
+    country_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    certificate_country_id: Yup.string().required("Mütləq doldurulmalıdır."),
     // act_sign_id: Yup.string().required("Mütləq doldurulmalıdır."),
-    // test_note: Yup.string().required("Mütləq doldurulmalıdır."),
-    // lab_id: Yup.string().required("Mütləq doldurulmalıdır."),
-    // // laba aid olan
+    test_note: Yup.string().required("Mütləq doldurulmalıdır."),
+    lab_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    // laba aid olan
     // accreditedLaboratoryNumber: "",
-    // //
-    // test_number: Yup.string().required("Mütləq doldurulmalıdır."),
-    // product_batch_date: Yup.string().required("Mütləq doldurulmalıdır."),
+    //
+    test_number: Yup.string().required("Mütləq doldurulmalıdır."),
+    product_batch_date: Yup.string().required("Mütləq doldurulmalıdır."),
   });
 
   return (

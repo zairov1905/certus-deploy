@@ -124,7 +124,7 @@ export default function LabsPage() {
       name: "Müqavilə nömrəsi",
       sortable: true,
 
-      cell: (lab) => <p>{lab.document_id.document_number}</p>,
+      cell: (lab) => <p>{lab.document_id && lab.document_id.document_number}</p>,
     },
 
     {

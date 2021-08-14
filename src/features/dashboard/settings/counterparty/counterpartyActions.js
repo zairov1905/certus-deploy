@@ -22,6 +22,7 @@ export function loadCounterparty(data) {
     const counterparties = await axios.get("/contractor", {
       params: { ...data },
     });
+    console.log(counterparties)
     if (counterparties.status === 200) {
       dispatch({
         type: FETCH_COUNTERPARTY,
@@ -48,7 +49,7 @@ export function createCounterparty(counterparty) {
       withCredentials: true,
     });
     if (data.status === 201) {
-      toast.success("Uğurla əlavə edildi");
+      toast.success(" Kontragent uğurla əlavə edildi");
       dispatch({ type: CREATE_COUNTERPARTY, payload: data.data.data });
       dispatch(asyncActionFinish());
     } else {

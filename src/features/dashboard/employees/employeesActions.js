@@ -8,6 +8,7 @@ import {
     asyncActionStart,
   } from "../../../app/async/asyncReducer";
 import { delay } from "../../../app/util/util";
+import { createCounterparty } from "../settings/counterparty/counterpartyActions";
 // import { delay } from "../../../app/common/util/util";
 
 
@@ -53,6 +54,7 @@ export function createEmployees(employee){
         if (data.status === 201) {
           toast.success("Uğurla əlavə edildi");
           dispatch({ type: CREATE_EMPLOYEES, payload: data.data.data });
+          dispatch(createCounterparty({name:employee.name,about:"işçidən gələn",contact:employee.phone}))
           dispatch(asyncActionFinish());
         } else {
           toast.danger("Xəta baş verdi, yenidən cəht edin.");

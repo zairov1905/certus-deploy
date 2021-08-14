@@ -3,6 +3,7 @@ import DataTable, { defaultThemes } from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
 import { openModal } from "../../../app/modal/modalReducer";
 import { loadCrm } from "../crmPage/crmActions";
+import { loadDocs } from "../docPage/docActions";
 import { loadEmployees } from "../employees/employeesActions";
 import { loadOrderSource } from "../settings/orderSource/orderSourceActions";
 import { loadReference } from "../settings/reference/referenceActions";
@@ -82,6 +83,9 @@ export default function OrderPage() {
         dispatch(loadReference());
         dispatch(loadOrderSource());
         dispatch(loadCrm());
+        dispatch(loadCrm());
+
+
       }}
       style={{
         ...buttonStyle,
@@ -188,6 +192,8 @@ export default function OrderPage() {
               dispatch(loadReference());
               dispatch(loadOrderSource());
               dispatch(loadCrm());
+              dispatch(loadCrm());
+
             }}
             data-name="edit"
             id={order.id}

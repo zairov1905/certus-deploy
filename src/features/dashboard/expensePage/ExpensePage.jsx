@@ -128,7 +128,7 @@ export default function ExpensePage() {
       selector: "expense_type_id",
       sortable: true,
       cell:expense=>(
-        <p>{expense.expense_type_id.name}</p>
+        <p>{expense.expense_type_id && expense.expense_type_id.name}</p>
       )
     },
     {
@@ -148,7 +148,7 @@ export default function ExpensePage() {
       name: "Müqavilə",
       selector: "document_id",
       cell:expense=>(
-        <p>{expense.document_id.document_number}</p>
+        <p>{expense.document_id && expense.document_id.document_number}</p>
       ),
       sortable: true,
     },

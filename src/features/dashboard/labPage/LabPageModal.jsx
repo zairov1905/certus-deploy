@@ -12,6 +12,7 @@ import { Form, Formik } from "formik";
 import { closeModal } from "../../../app/modal/modalReducer";
 import { createLab, updateLab } from "./labActions";
 import MySearchableSelect from "../../../app/common/form/MySearchableSelect";
+import { createCounterparty } from "../settings/counterparty/counterpartyActions";
 
 export default function LabPageModal({ lab }) {
   //   const { employees } = useSelector((state) => state.employees);
@@ -78,6 +79,7 @@ export default function LabPageModal({ lab }) {
                   createLab({
                     ...values,
                   })
+                 
                 );
             setSubmitting(false);
             setModal(true);

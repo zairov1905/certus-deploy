@@ -9,6 +9,7 @@ import {
 } from "../../../app/async/asyncReducer";
 import { delay } from "../../../app/util/util";
 import { DELETE_DOC } from "../docPage/docConstants";
+import { createCounterparty } from "../settings/counterparty/counterpartyActions";
 import { CREATE_LAB, DELETE_LAB, FETCH_LAB, UPDATE_LAB } from "./labConstants";
 
 const url = "lab";
@@ -48,6 +49,7 @@ export function createLab(lab){
         if (data.status === 201) {
           toast.success("Uğurla əlavə edildi");
           dispatch({ type: CREATE_LAB, payload: data.data.data });
+          dispatch(createCounterparty({name:lab.name,about:lab.note,contact:"lab"}))
           dispatch(asyncActionFinish());
         } else {
           toast.danger("Xəta baş verdi, yenidən cəht edin.");

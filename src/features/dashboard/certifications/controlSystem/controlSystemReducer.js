@@ -9,7 +9,7 @@ const initialState = {
   controlSystems: []
 };
 
-export default function controlSystemReducer(state = initialState, { type, payload }) {
+export default function controlSystemReducer(state = initialState, { type, payload, totalCount }) {
   switch (type) {
     case CREATE_CONTROL_SYSTEM:
       return {
@@ -34,6 +34,7 @@ export default function controlSystemReducer(state = initialState, { type, paylo
       return {
         ...state,
         controlSystems: payload,
+        totalCount:totalCount
       };
     default:
       return state;

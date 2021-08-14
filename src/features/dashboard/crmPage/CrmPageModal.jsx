@@ -248,10 +248,12 @@ export default function CrmPageModal({ crm }) {
                   style={{}}
                 >
                   <div className="card-body">
-                    <div className="row">
+                    <div className={`row ${crm && "mb-4"}`}>
                       <div className="col-md-4">
                         <MyTextInput
                           id="contact_name"
+                          //  label={crm ? 'Ad' : ''}
+                          label={crm && "Ad"}
                           name="contact_name"
                           type="text"
                           className="form-control"
@@ -263,6 +265,7 @@ export default function CrmPageModal({ crm }) {
                           id="contact_surname"
                           name="contact_surname"
                           type="text"
+                          label={crm && "Soyad"}
                           className="form-control"
                           placeholder="Soyad"
                         />
@@ -274,10 +277,11 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Ata adı"
+                          label={crm && "Ata adı"}
                         />
                       </div>
                     </div>
-                    <div className="row">
+                    <div className={`row ${crm && "mb-4"}`}>
                       <div className="col-md-4">
                         <MyTextInput
                           name="contact_phone"
@@ -285,6 +289,7 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Telefon"
+                          label={crm && "Telefon"}
                         />
                       </div>
                       <div className="col-md-4">
@@ -294,6 +299,7 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Whatsapp"
+                          label={crm && "Whatsapp"}
                         />
                       </div>
                       <div className="col-md-4">
@@ -303,8 +309,11 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Telegram"
+                          label={crm && "Telegram"}
                         />
                       </div>
+                    </div>
+                    <div className={`row ${crm && "mb-4"}`}>
                       <div className="col-md-4">
                         <MyTextInput
                           name="contact_facebook"
@@ -312,6 +321,7 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Facebook"
+                          label={crm && "Facebook"}
                         />
                       </div>
                       <div className="col-md-4">
@@ -321,6 +331,7 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Linkedin"
+                          label={crm && "Linkedin"}
                         />
                       </div>{" "}
                       <div className="col-md-4">
@@ -330,8 +341,11 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Twitter"
+                          label={crm && "Twitter"}
                         />
                       </div>{" "}
+                    </div>
+                    <div className={`row ${crm && "mb-4"}`}>
                       <div className="col-md-4">
                         <MyTextInput
                           name="contact_instagram"
@@ -339,6 +353,7 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Instagram"
+                          label={crm && "Instagram"}
                         />
                       </div>{" "}
                       <div className="col-md-8">
@@ -348,6 +363,7 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Mail"
+                          label={crm && "Ad"}
                         />
                       </div>
                     </div>
@@ -410,7 +426,7 @@ export default function CrmPageModal({ crm }) {
                   data-parent="#iconsAccordion"
                 >
                   <div className="card-body">
-                    <div className="row">
+                    <div className={`row ${crm && "mb-4"}`}>
                       <div className="col-md-4">
                         <MySearchableSelect
                           name="employee_id"
@@ -425,6 +441,7 @@ export default function CrmPageModal({ crm }) {
                             }
                           }
                           placeholder="Kurator"
+                          label={crm && "Ad"}
                         />
                       </div>
                       <div className="col-md-4">
@@ -437,6 +454,7 @@ export default function CrmPageModal({ crm }) {
                           defaultValue={crm && selectedLegalStatus[0]}
                           // className="form-control"
                           placeholder="Hüquqi status"
+                          label={crm && "Ad"}
                         />
                       </div>
                       <div className="col-md-4">
@@ -446,10 +464,11 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Müştəri adı"
+                          label={crm && "Ad"}
                         />
                       </div>
                     </div>
-                    <div className="row">
+                    <div className={`row ${crm && "mb-4"}`}>
                       <div className="col-md-6">
                         <MyTextInput
                           id="voen"
@@ -457,6 +476,7 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="VÖEN"
+                          label={crm && "Ad"}
                         />
                       </div>
                       <div className="col-md-6">
@@ -466,10 +486,11 @@ export default function CrmPageModal({ crm }) {
                           type="date"
                           className="form-control"
                           placeholder="Tarix"
+                          label={crm && "Ad"}
                         />
                       </div>
                     </div>
-                    <div className="row">
+                    <div className={`row ${crm && "mb-4"}`}>
                       <div className="col-md-6">
                         <MyTextInput
                           name="legal_adress"
@@ -477,6 +498,7 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Hüquqi ünvan"
+                          label={crm && "Ad"}
                         />
                       </div>
                       <div className="col-md-6">
@@ -485,15 +507,19 @@ export default function CrmPageModal({ crm }) {
                           id="actual_adress"
                           type="text"
                           className="form-control"
+                          label={crm && "Ad"}
                           placeholder="Faktiki ünvan"
                         />
                       </div>
+                    </div>
+                    <div className={`row ${crm && "mb-4"}`}>
                       <div className="col-md-6">
                         <MyTextInput
                           name="customer_phone"
                           id="customer_phone"
                           type="text"
                           className="form-control"
+                          label={crm && "Ad"}
                           placeholder="Nömrə"
                         />
                       </div>
@@ -504,10 +530,11 @@ export default function CrmPageModal({ crm }) {
                           type="email"
                           className="form-control"
                           placeholder="Email"
+                          label={crm && "Ad"}
                         />
                       </div>
                     </div>
-                    <div className="row">
+                    <div className={`row ${crm && "mb-4"}`}>
                       <div className="col-md-4">
                         <MyTextInput
                           name="customer_linkedin"
@@ -515,6 +542,7 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Linkedin"
+                          label={crm && "Ad"}
                         />
                       </div>
                       <div className="col-md-4">
@@ -524,6 +552,7 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Twitter"
+                          label={crm && "Ad"}
                         />
                       </div>
                       <div className="col-md-4">
@@ -533,16 +562,18 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Instagram"
+                          label={crm && "Ad"}
                         />
                       </div>
                     </div>
-                    <div className="row">
+                    <div className={`row ${crm && "mb-4"}`}>
                       <div className="col-md-3">
                         <MyTextInput
                           name="customer_website"
                           id="customer_website"
                           type="text"
                           className="form-control"
+                          label={crm && "Ad"}
                           placeholder="Vebsayt"
                         />
                       </div>
@@ -553,6 +584,7 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Whatsapp"
+                          label={crm && "Ad"}
                         />
                       </div>
                       <div className="col-md-3">
@@ -562,6 +594,7 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Telegram"
+                          label={crm && "Ad"}
                         />
                       </div>
                       <div className="col-md-3">
@@ -571,10 +604,11 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Facebook"
+                          label={crm && "Ad"}
                         />
                       </div>
                     </div>
-                    <div className="row">
+                    <div className={`row ${crm && "mb-4"}`}>
                       <div className="col-md-3">
                         <MySearchableSelect
                           name="referans_id"
@@ -589,6 +623,7 @@ export default function CrmPageModal({ crm }) {
                           options={referenceOptions}
                           // className="form-control"
                           placeholder="Referans"
+                          label={crm && "Ad"}
                         />
                       </div>
                       <div className="col-md-3">
@@ -598,6 +633,7 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Müştəri kateqoriyası"
+                          label={crm && "Ad"}
                         />
                       </div>
                       <div className="col-md-3">
@@ -607,6 +643,7 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Müştəri məmnuniyyəti"
+                          label={crm && "Ad"}
                         />
                       </div>
                       <div className="col-md-3">
@@ -616,6 +653,7 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Dövriyyə"
+                          label={crm && "Ad"}
                         />
                       </div>
                     </div>
@@ -627,6 +665,7 @@ export default function CrmPageModal({ crm }) {
                           type="email"
                           className="form-control"
                           placeholder="Qeyd"
+                          label={crm && "Ad"}
                         />
                       </div>
                     </div>

@@ -19,10 +19,14 @@ export default function OrderPageModal({ order }) {
   const { orderSources } = useSelector((state) => state.orderSources);
   const { references } = useSelector((state) => state.references);
   const { crms } = useSelector((state) => state.crms);
+  const { docs } = useSelector((state) => state.docs);
+  console.log(docs);
+
   let serviceTypeOptions = [];
   let orderSourceOptions = [];
   let referenceOptions = [];
   let customerOptions = [];
+  let docOptions = [];
 
   serviceTypeOptions =
     serviceTypes &&
@@ -55,6 +59,14 @@ export default function OrderPageModal({ order }) {
       return {
         value: `${crm.id}`,
         label: `${crm.customer_name}`,
+      };
+    });
+  docOptions =
+    docs &&
+    docs.map((doc) => {
+      return {
+        value: doc.document_number,
+        label: doc.document_number,
       };
     });
   const dispatch = useDispatch();
@@ -112,17 +124,22 @@ export default function OrderPageModal({ order }) {
             setSubmitting(false);
           }
         }}
-        
       >
         {({ isSubmitting, isValid, dirty, errors, values }) => (
           <Form id="emp">
             <div className="row">
               <div className="col-md-4">
-                <MyTextInput
+                <MySearchableSelect
                   id="number"
                   name="number"
                   type="text"
-                  className="form-control"
+                  defaultValue={
+                    order && {
+                      label: order.number,
+                      value: parseInt(order.number),
+                    }
+                  }
+                  options={docOptions}
                   placeholder="Sifariş Nömrəsi"
                 />
                 {/* {console.log(values.service_type_id)} */}
@@ -133,13 +150,11 @@ export default function OrderPageModal({ order }) {
                   name="service_type_id"
                   type="text"
                   defaultValue={
-                    order &&
-                    {
+                    order && {
                       label: order.service_type_id.name,
                       value: parseInt(order.service_type_id.id),
                     }
                   }
-                  
                   options={serviceTypeOptions}
                   // getOptionLabel={ x => x.label}
                   // getOptionValue={ x => x.value}

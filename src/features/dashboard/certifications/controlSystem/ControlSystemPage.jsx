@@ -6,14 +6,17 @@ import { openModal } from "../../../../app/modal/modalReducer";
 
 import { deleteControlSystem, loadControlSystem } from "./controlSystemActions";
 export default function ControlSystemPage() {
+  const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(loadControlSystem());
     //   // return () => {
     //   //   // dispatch(loadOrder())
     //   // }
   }, []);
-  const dispatch = useDispatch();
-  const { controlSystems } = useSelector((state) => state.controlSystems);
+  const [perPage, setPerPage] = useState(10);
+  const [PageNumber, setPageNumber] = useState(1);
+  const { controlSystems, totalCount } = useSelector((state) => state.controlSystems);
   const [hover, sethover] = useState(false);
   const [target, setTarget] = useState({ id: null, name: null });
 
@@ -50,6 +53,15 @@ export default function ControlSystemPage() {
   const buttonHover = {
     color: "#515365",
     fill: "#ffcacd",
+  };
+  const handlePageChange = (page) => {
+    dispatch(loadControlSystem({ s: page, take: perPage }));
+    setPageNumber(page);
+  };
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    dispatch(loadControlSystem({ s: page, take: newPerPage }));
+    setPerPage(newPerPage);
   };
 
   const actions = (
@@ -101,93 +113,33 @@ export default function ControlSystemPage() {
   const columns = [
     {
       name: "SN kodu",
-      selector: "snCode",
+      selector: "sn_code_id",
       sortable: true,
     },
     {
       name: "Reyestr nömrəsi",
-      selector: "registrationNumber",
+      selector: "registration_number",
       sortable: true,
     },
 
     {
       name: "Blank nömrəsi",
-      selector: "blankNumber",
+      selector: "blank_number",
       sortable: true,
     },
     {
       name: "Akkreditasiya sahəsində sıra nömrəsi",
-      selector: "accreditationNumber",
+      selector: "serial_number",
       sortable: true,
     },
     {
       name: "Sertifikatın verilmə tarixi",
-      selector: "certificateIssueDate",
+      selector: "issue_date",
       sortable:true
     },
     {
       name: "Sertifikatın qüvvədən düşdüyü tarix",
-      selector: "certificateExpirationDate",
-      sortable: true,
-    },
-    {
-      name: "Sertifikat təqdim edilən təsərrüfat subyektinin adı",
-      selector: "businessEntityName",
-      sortable: true,
-    },
-    {
-      name: "Hüquqi statusu",
-      selector: "legalStatus",
-      sortable: true,
-    },
-    {
-      name: "VÖEN",
-      selector: "VOEN",
-      sortable: true,
-    },
-    {
-      name: "Təsərrüfat subyektinin rəhbərinin telefon nömrəsi",
-      selector: "economicEntityPhoneNumber",
-      sortable: true,
-    },
-    {
-      name: "Sertifikat təqdim edilən təsərrüfat subyektinin hüquqi ünvanı",
-      selector: "legalAddressOfTheBusinessEntity",
-      sortable: true,
-    },
-    {
-      name: "Sertifikat təqdim edilən təsərrüfat subyektinin faktiki ünvanı",
-      selector: "actualAddressOfTheBusiness",
-      sortable: true,
-    },
-    {
-      name: "Məhsulun(xidmətin) adı",
-      selector: "nameOfTheProduct",
-      sortable: true,
-    },
-    {
-      name: "Məhsulun kodu",
-      selector: "productCode",
-      sortable: true,
-    },
-    {
-      name: "Hüquqi normativ texniki aktın işarəsi",
-      selector: "signOfLegalAct",
-      sortable: true,
-    },
-    {
-      name: "Tanınma prosesində auditin aparılması haqqında qeyd",
-      selector: "recognitionProcessNote",
-      sortable: true,
-    },
-    {
-      name: "Aparılmış sınaqların miqdarı",
-      selector: "testQuantity",
-      sortable: true,
-    },
-    {
-      name: "Məhsul partiyasının tarixi",
-      selector: "productBatchHistory",
+      selector: "expiration_date",
       sortable: true,
     },
 
@@ -305,16 +257,15 @@ export default function ControlSystemPage() {
                 title="İdarəetmə sertifikatları"
                 columns={columns}
                 data={data}
-                // customStyles={customStyles}
-                // progressPending={loading}
                 pagination
-                // paginationServer
+                paginationServer
+                paginationTotalRows={totalCount}
+                paginationDefaultPage={PageNumber}
+                onChangeRowsPerPage={handlePerRowsChange}
+                onChangePage={handlePageChange}
                 highlightOnHover
                 Clicked
                 actions={actions}
-                // loading={loading}
-                // dense
-                // paginationTotalRows={totalRows}
               />
             </div>
           </div>

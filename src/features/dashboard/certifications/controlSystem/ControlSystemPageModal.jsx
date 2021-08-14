@@ -15,16 +15,22 @@ import {
 } from "./controlSystemActions";
 import { loadSignOfLegalAct } from "../../settings/signOfLegalAct/signOfLegalActActions";
 import { loadLab } from "../../labPage/labActions";
+import { loadCrm } from "../../crmPage/crmActions";
+import moment from "moment";
 
 export default function ControlSystemPageModal({ controlSystem }) {
-  useEffect(() => {
-    dispatch(loadSignOfLegalAct());
+  const [loader, setLoader] = useState(true);
+
+  useEffect(async () => {
+    dispatch(loadCrm());
     dispatch(loadLab());
+    await dispatch(loadSignOfLegalAct());
+    setLoader(false);
   }, []);
   const snCodeOptions = [
-    { value: "1", label: "01" },
-    { value: "2", label: "02" },
-    { value: "3", label: "03" },
+    { value: 1, label: "01" },
+    { value: 2, label: "02" },
+    { value: 3, label: "03" },
   ];
 
   const productNoteOptions = [
@@ -301,8 +307,8 @@ export default function ControlSystemPageModal({ controlSystem }) {
     signOfLegalActs &&
     signOfLegalActs.map((signOfLegalAct) => {
       return {
-        label: signOfLegalAct.signOfLegalActName,
-        value: signOfLegalAct.id,
+        label: signOfLegalAct.name,
+        value: parseInt(signOfLegalAct.id),
       };
     });
   // ++++++++++++++
@@ -316,6 +322,16 @@ export default function ControlSystemPageModal({ controlSystem }) {
       };
     });
   // ++++++++++++++
+  // ++++++++++++++
+  const { crms } = useSelector((state) => state.crms);
+  let customerOptions =
+    crms &&
+    crms.map((crm) => {
+      return {
+        value: parseInt(crm.id),
+        label: crm.customer_name,
+      };
+    });
 
   const [modal, setModal] = useState(false);
   useEffect(() => {
@@ -325,46 +341,83 @@ export default function ControlSystemPageModal({ controlSystem }) {
   });
 
   const initialValues = controlSystem
-    ? controlSystem
+    ? {
+        sn_code_id: controlSystem.sn_code_id && controlSystem.sn_code_id,
+        registration_number:
+          controlSystem.registration_number &&
+          controlSystem.registration_number,
+        blank_number: controlSystem.blank_number && controlSystem.blank_number,
+        serial_number:
+          controlSystem.serial_number && controlSystem.serial_number,
+        issue_date:
+          controlSystem.issue_date &&
+          moment(controlSystem.issue_date).format("YYYY-MM-DD"),
+        expiration_date:
+          controlSystem.expiration_date &&
+          moment(controlSystem.expiration_date).format("YYYY-MM-DD"),
+        customer_id: controlSystem.customer_id && controlSystem.customer_id.id,
+        // only customer_id den gelecek data
+        legalStatus:
+          controlSystem.customer_id &&
+          controlSystem.customer_id.legal_status_id,
+        VOEN: controlSystem.customer_id && controlSystem.customer_id.voen,
+        economicEntityPhoneNumber:
+          controlSystem.customer_id && controlSystem.customer_id.customer_phone,
+        legalAddressOfTheBusinessEntity:
+          controlSystem.customer_id && controlSystem.customer_id.legal_adress,
+        actualAddressOfTheBusiness:
+          controlSystem.customer_id && controlSystem.customer_id.actual_adress,
+        //
+        product_name: controlSystem.product_name && controlSystem.product_name,
+        product_code: controlSystem.product_code && controlSystem.product_code,
+        act_sign_id:
+          controlSystem.act_sign_id && JSON.parse(controlSystem.act_sign_id),
+        test_id: controlSystem.test_id && controlSystem.test_id,
+        test_number: controlSystem.test_number && controlSystem.test_number,
+        product_batch_date:
+          controlSystem.product_batch_date &&
+          moment(controlSystem.product_batch_date).format("YYYY-MM-DD"),
+        note: controlSystem.note && controlSystem.note,
+      }
     : {
-        id: "",
-        snCode: "",
-        registrationNumber: "",
-        blankNumber: "",
-        accreditationNumber: "",
-        certificateIssueDate: "",
-        certificateExpirationDate: "",
-        businessEntityName: "",
-        legalStatus: "",
-        VOEN: "",
-        economicEntityPhoneNumber: "",
-        legalAddressOfTheBusinessEntity: "",
-        actualAddressOfTheBusiness: "",
-        nameOfTheProduct: "",
-        productCode: "",
-        signOfLegalAct: "",
-        recognitionProcessNote: "",
-        testQuantity: "",
-        productBatchHistory: "",
-        note:""
+        sn_code_id: "",
+        registration_number: "",
+        blank_number: "",
+        serial_number: "",
+        issue_date: "",
+        expiration_date: "",
+        customer_id: "",
+        // only customer_id den gelecek data
+
+        // legalStatus: "",
+        // VOEN: "",
+        // economicEntityPhoneNumber: "",
+        // legalAddressOfTheBusinessEntity: "",
+        // actualAddressOfTheBusiness: "",
+        product_name: "",
+        product_code: "",
+        act_sign_id: "",
+        test_id: "",
+        test_number: "",
+        product_batch_date: "",
+        note: "",
       };
   const validationSchema = Yup.object({
     // id:"",
-
-    snCode: Yup.string().required("Mütləq doldurulmalıdır."),
-    registrationNumber: Yup.string().required("Mütləq doldurulmalıdır."),
-    blankNumber: Yup.string().required("Mütləq doldurulmalıdır."),
-    accreditationNumber: Yup.string().required("Mütləq doldurulmalıdır."),
-    certificateIssueDate: Yup.string().required("Mütləq doldurulmalıdır."),
-    certificateExpirationDate: Yup.string().required("Mütləq doldurulmalıdır."),
-    businessEntityName: Yup.string().required("Mütləq doldurulmalıdır."),
-    nameOfTheProduct: Yup.string().required("Mütləq doldurulmalıdır."),
-    productCode: Yup.string().required("Mütləq doldurulmalıdır."),
-    signOfLegalAct: Yup.string().required("Mütləq doldurulmalıdır."),
-    certificateIsRecognized: Yup.string().required("Mütləq doldurulmalıdır."),
-    recognitionProcessNote: Yup.string().required("Mütləq doldurulmalıdır."),
-    testQuantity: Yup.string().required("Mütləq doldurulmalıdır."),
-    productBatchHistory: Yup.string().required("Mütləq doldurulmalıdır."),
+    // sn_code_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    // registration_number: Yup.string().required("Mütləq doldurulmalıdır."),
+    // blank_number: Yup.string().required("Mütləq doldurulmalıdır."),
+    // serial_number: Yup.string().required("Mütləq doldurulmalıdır."),
+    // issue_date: Yup.string().required("Mütləq doldurulmalıdır."),
+    // expiration_date: Yup.string().required("Mütləq doldurulmalıdır."),
+    // customer_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    // product_name: Yup.string().required("Mütləq doldurulmalıdır."),
+    // product_code: Yup.string().required("Mütləq doldurulmalıdır."),
+    // act_sign_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    // certificateIsRecognized: Yup.string().required("Mütləq doldurulmalıdır."),
+    // test_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    // test_number: Yup.string().required("Mütləq doldurulmalıdır."),
+    // product_batch_date: Yup.string().required("Mütləq doldurulmalıdır."),
   });
 
   return (
@@ -372,272 +425,306 @@ export default function ControlSystemPageModal({ controlSystem }) {
       size="modal-lg"
       header={controlSystem ? "Redakte Et" : "Əlavə et"}
     >
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={async (values, { setSubmitting, setErrors }) => {
-          try {
-            controlSystem
-              ? await dispatch(updateControlSystem(values))
-              : await dispatch(
-                  createControlSystem({
-                    ...values,
-                    id: cuid(),
-                    labNumber: `Lab${cuid()}`,
-                  })
-                );
-            setSubmitting(false);
-            controlSystem
-              ? toast.success("Dəyişiklik uğurlar yerinə yetirildi")
-              : toast.success("Uğurla əlavə edildi");
-            setModal(true);
-            dispatch(closeModal());
-          } catch (error) {
-            setErrors({ auth: error.message });
-            // console.log(error);
-            setSubmitting(false);
-          }
-        }}
-      >
-        {({ isSubmitting, isValid, dirty, errors }) => (
-          <Form id="emp">
-            <div className="row mb-4">
-              <div className="col-md-12 mb-4">
-                <MySearchableSelect
-                  id="snCode"
-                  name="snCode"
-                  type="text"
-                  options={snCodeOptions}
-                  placeholder="SN kodu daxil edin"
-                  label="SN kodu"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="registrationNumber"
-                  name="registrationNumber"
-                  type="text"
-                  className="form-control"
-                  placeholder="Reyestr nömrəsi daxil edin"
-                  label="Reyestr nömrəsi"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="blankNumber"
-                  name="blankNumber"
-                  type="text"
-                  className="form-control"
-                  placeholder="Blank nömrəsi daxil edin"
-                  label="Blank nömrəsi"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="accreditationNumber"
-                  name="accreditationNumber"
-                  type="text"
-                  className="form-control"
-                  placeholder="Akkreditasiya sahəsində sıra nömrəsi daxil edin"
-                  label="Akkreditasiya sahəsində sıra nömrəsi"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="certificateIssueDate"
-                  name="certificateIssueDate"
-                  type="date"
-                  className="form-control"
-                  placeholder="Sertifikatın verilmə tarixi daxil edin"
-                  label="Sertifikatın verilmə tarixi"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="certificateExpirationDate"
-                  name="certificateExpirationDate"
-                  type="date"
-                  className="form-control"
-                  placeholder="Sertifikatın qüvvədən düşdüyü tarix daxil edin"
-                  label="Sertifikatın qüvvədən düşdüyü tarix"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="businessEntityName"
-                  name="businessEntityName"
-                  type="text"
-                  className="form-control"
-                  placeholder="Sertifikat təqdim edilən təsərrüfat subyektinin adını daxil edin"
-                  label="Sertifikat təqdim edilən təsərrüfat subyektinin adı"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="legalStatus"
-                  name="legalStatus"
-                  type="text"
-                  readOnly
-                  className="form-control"
-                  placeholder="Hüquqi statusunu daxil edin"
-                  label="Hüquqi statusu"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="VOEN"
-                  name="VOEN"
-                  type="text"
-                  readOnly
-                  className="form-control"
-                  placeholder="VÖEN daxil edin"
-                  label="VÖEN"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="economicEntityPhoneNumber"
-                  name="economicEntityPhoneNumber"
-                  type="text"
-                  readOnly
-                  className="form-control"
-                  placeholder="Təsərrüfat subyektinin rəhbərinin telefon nömrəsini daxil edin"
-                  label="Təsərrüfat subyektinin rəhbərinin telefon nömrəsi"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="legalAddressOfTheBusinessEntity"
-                  name="legalAddressOfTheBusinessEntity"
-                  type="text"
-                  readOnly
-                  className="form-control"
-                  placeholder="Sertifikat təqdim edilən təsərrüfat subyektinin hüquqi ünvanını daxil edin"
-                  label="Sertifikat təqdim edilən təsərrüfat subyektinin hüquqi ünvanı"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="actualAddressOfTheBusiness"
-                  name="actualAddressOfTheBusiness"
-                  type="text"
-                  readOnly
-                  className="form-control"
-                  placeholder="Sertifikat təqdim edilən təsərrüfat subyektinin faktiki ünvanını daxil edin"
-                  label="Sertifikat təqdim edilən təsərrüfat subyektinin faktiki ünvanı"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="nameOfTheProduct"
-                  name="nameOfTheProduct"
-                  type="text"
-                  className="form-control"
-                  placeholder="Məhsulun(xidmətin) adını daxil edin"
-                  label="Məhsulun(xidmətin) adı"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="productCode"
-                  name="productCode"
-                  type="text"
-                  className="form-control"
-                  placeholder="Məhsulun kodunu daxil edin"
-                  label="Məhsulun kodu"
-                />
+      {loader ? (
+        <div className="loader text-center">
+          {" "}
+          <div className="loader-content">
+            <div className="spinner-grow align-self-center"></div>
+          </div>
+        </div>
+      ) : (
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={async (values, { setSubmitting, setErrors }) => {
+            try {
+              controlSystem
+                ? await dispatch(updateControlSystem({...values, id: controlSystem.id}))
+                : await dispatch(
+                    createControlSystem({
+                      ...values,
+                    })
+                  );
+              setSubmitting(false);
+              setModal(true);
+              dispatch(closeModal());
+            } catch (error) {
+              setErrors({ auth: error.message });
+              // console.log(error);
+              setSubmitting(false);
+            }
+          }}
+        >
+          {({ isSubmitting, isValid, dirty, errors }) => (
+            <Form id="emp">
+              <div className="row mb-4">
+                <div className="col-md-12 mb-4">
+                  <MySearchableSelect
+                    id="sn_code_id"
+                    name="sn_code_id"
+                    type="text"
+                    options={snCodeOptions}
+
+                    defaultValue={
+                      controlSystem && {
+                        label: `0${controlSystem.sn_code_id}`,
+                        value: parseInt(controlSystem.sn_code_id),
+                      }
+                    }
+                    placeholder="SN kodu daxil edin"
+                    label="SN kodu"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MyTextInput
+                    id="registration_number"
+                    name="registration_number"
+                    type="text"
+                    className="form-control"
+                    placeholder="Reyestr nömrəsi daxil edin"
+                    label="Reyestr nömrəsi"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MyTextInput
+                    id="blank_number"
+                    name="blank_number"
+                    type="text"
+                    className="form-control"
+                    placeholder="Blank nömrəsi daxil edin"
+                    label="Blank nömrəsi"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MyTextInput
+                    id="serial_number"
+                    name="serial_number"
+                    type="text"
+                    className="form-control"
+                    placeholder="Akkreditasiya sahəsində sıra nömrəsi daxil edin"
+                    label="Akkreditasiya sahəsində sıra nömrəsi"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MyTextInput
+                    id="issue_date"
+                    name="issue_date"
+                    type="date"
+                    className="form-control"
+                    placeholder="Sertifikatın verilmə tarixi daxil edin"
+                    label="Sertifikatın verilmə tarixi"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MyTextInput
+                    id="expiration_date"
+                    name="expiration_date"
+                    type="date"
+                    className="form-control"
+                    placeholder="Sertifikatın qüvvədən düşdüyü tarix daxil edin"
+                    label="Sertifikatın qüvvədən düşdüyü tarix"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MySearchableSelect
+                    id="customer_id"
+                    name="customer_id"
+                    type="text"
+                    options={customerOptions}
+                    defaultValue={
+                      controlSystem && {
+                        label: `${controlSystem.customer_id.customer_name}`,
+                        value: parseInt(controlSystem.customer_id.id),
+                      }
+                    }
+                    // className="form-control"
+                    placeholder="Sertifikat təqdim edilən təsərrüfat subyektinin adını daxil edin"
+                    label="Sertifikat təqdim edilən təsərrüfat subyektinin adı"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MyTextInput
+                    id="legalStatus"
+                    name="legalStatus"
+                    type="text"
+                    readOnly
+                    className="form-control"
+                    placeholder="Hüquqi statusunu daxil edin"
+                    label="Hüquqi statusu"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MyTextInput
+                    id="VOEN"
+                    name="VOEN"
+                    type="text"
+                    readOnly
+                    className="form-control"
+                    placeholder="VÖEN daxil edin"
+                    label="VÖEN"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MyTextInput
+                    id="economicEntityPhoneNumber"
+                    name="economicEntityPhoneNumber"
+                    type="text"
+                    readOnly
+                    className="form-control"
+                    placeholder="Təsərrüfat subyektinin rəhbərinin telefon nömrəsini daxil edin"
+                    label="Təsərrüfat subyektinin rəhbərinin telefon nömrəsi"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MyTextInput
+                    id="legalAddressOfTheBusinessEntity"
+                    name="legalAddressOfTheBusinessEntity"
+                    type="text"
+                    readOnly
+                    className="form-control"
+                    placeholder="Sertifikat təqdim edilən təsərrüfat subyektinin hüquqi ünvanını daxil edin"
+                    label="Sertifikat təqdim edilən təsərrüfat subyektinin hüquqi ünvanı"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MyTextInput
+                    id="actualAddressOfTheBusiness"
+                    name="actualAddressOfTheBusiness"
+                    type="text"
+                    readOnly
+                    className="form-control"
+                    placeholder="Sertifikat təqdim edilən təsərrüfat subyektinin faktiki ünvanını daxil edin"
+                    label="Sertifikat təqdim edilən təsərrüfat subyektinin faktiki ünvanı"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MyTextInput
+                    id="product_name"
+                    name="product_name"
+                    type="text"
+                    className="form-control"
+                    placeholder="Məhsulun(xidmətin) adını daxil edin"
+                    label="Məhsulun(xidmətin) adı"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MyTextInput
+                    id="product_code"
+                    name="product_code"
+                    type="text"
+                    className="form-control"
+                    placeholder="Məhsulun kodunu daxil edin"
+                    label="Məhsulun kodu"
+                  />
+                </div>
+
+                <div className="col-md-12 mb-4">
+                  <MySearchableSelect
+                    id="act_sign_id"
+                    name="act_sign_id"
+                    isMulti
+                    type="text"
+                    options={signOfLegalActOptions}
+                    defaultValue={
+                      controlSystem &&
+                      signOfLegalActOptions.filter((signOfLegalActOption) =>
+                        JSON.parse(controlSystem.act_sign_id).includes(
+                          parseInt(signOfLegalActOption.value)
+                        )
+                      )
+                    }
+                    // className="form-control"
+                    placeholder="Hüquqi normativ texniki aktın işarəsini daxil edin"
+                    label="Hüquqi normativ texniki aktın işarəsi"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MySearchableSelect
+                    id="test_id"
+                    name="test_id"
+                    type="text"
+                    options={recognitionProcessNoteOptions}
+                    defaultValue={
+                      controlSystem &&
+                      recognitionProcessNoteOptions.filter(
+                        (recognitionProcessNoteOption) =>
+                          parseInt(recognitionProcessNoteOption.value) ===
+                          parseInt(controlSystem.test_id)
+                      )
+                    }
+                    // className="form-control"
+                    placeholder="Tanınma prosesində auditin aparılması haqqında qeydi daxil edin"
+                    label="Tanınma prosesində auditin aparılması haqqında qeyd"
+                  />
+                </div>
+
+                <div className="col-md-12 mb-4">
+                  <MyTextInput
+                    id="test_number"
+                    name="test_number"
+                    type="text"
+                    className="form-control"
+                    placeholder="Aparılmış sınaqların miqdarını edin"
+                    label="Aparılmış sınaqların miqdarı"
+                  />
+                </div>
+                <div className="col-md-12">
+                  <MyTextInput
+                    id="product_batch_date"
+                    name="product_batch_date"
+                    type="date"
+                    className="form-control"
+                    placeholder="Məhsul partiyasının tarixini edin"
+                    label="Məhsul partiyasının tarixi"
+                  />
+                </div>
               </div>
 
-              <div className="col-md-12 mb-4">
-                <MySearchableSelect
-                  id="signOfLegalAct"
-                  name="signOfLegalAct"
-                  isMulti
-                  type="text"
-                  options={signOfLegalActOptions}
-                  // className="form-control"
-                  placeholder="Hüquqi normativ texniki aktın işarəsini daxil edin"
-                  label="Hüquqi normativ texniki aktın işarəsi"
-                />
-              </div>
-              <div className="col-md-12 mb-4">
-                <MySearchableSelect
-                  id="recognitionProcessNote"
-                  name="recognitionProcessNote"
-                  type="text"
-                  options={recognitionProcessNoteOptions}
-                  // className="form-control"
-                  placeholder="Tanınma prosesində auditin aparılması haqqında qeydi daxil edin"
-                  label="Tanınma prosesində auditin aparılması haqqında qeyd"
-                />
-              </div>
-
-              <div className="col-md-12 mb-4">
-                <MyTextInput
-                  id="testQuantity"
-                  name="testQuantity"
-                  type="text"
-                  className="form-control"
-                  placeholder="Aparılmış sınaqların miqdarını edin"
-                  label="Aparılmış sınaqların miqdarı"
-                />
-              </div>
-              <div className="col-md-12">
-                <MyTextInput
-                  id="productBatchHistory"
-                  name="productBatchHistory"
-                  type="text"
-                  className="form-control"
-                  placeholder="Məhsul partiyasının tarixini edin"
-                  label="Məhsul partiyasının tarixi"
-                />
-              </div>
-            </div>
-
-            <button
-              disabled={!isValid || !dirty || isSubmitting}
-              type="submit"
-              // name="time"
-              className="btn btn-primary float-right  btn-lg mt-3 "
-            >
-              {isSubmitting && (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width={24}
-                  height={24}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="feather feather-loader spin mr-2"
-                >
-                  <line x1={12} y1={2} x2={12} y2={6} />
-                  <line x1={12} y1={18} x2={12} y2={22} />
-                  <line x1="4.93" y1="4.93" x2="7.76" y2="7.76" />
-                  <line x1="16.24" y1="16.24" x2="19.07" y2="19.07" />
-                  <line x1={2} y1={12} x2={6} y2={12} />
-                  <line x1={18} y1={12} x2={22} y2={12} />
-                  <line x1="4.93" y1="19.07" x2="7.76" y2="16.24" />
-                  <line x1="16.24" y1="7.76" x2="19.07" y2="4.93" />
-                </svg>
-              )}
-              Yadda saxla
-            </button>
-            <button
-              id="closeModal"
-              onClick={() => {
-                dispatch(closeModal());
-              }}
-              className="btn btn-lg float-right mt-3 mr-2"
-              data-dismiss="modal"
-            >
-              <i className="flaticon-cancel-12" /> Ləğv et
-            </button>
-          </Form>
-        )}
-      </Formik>
+              <button
+                disabled={!isValid || !dirty || isSubmitting}
+                type="submit"
+                // name="time"
+                className="btn btn-primary float-right  btn-lg mt-3 "
+              >
+                {isSubmitting && (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width={24}
+                    height={24}
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="feather feather-loader spin mr-2"
+                  >
+                    <line x1={12} y1={2} x2={12} y2={6} />
+                    <line x1={12} y1={18} x2={12} y2={22} />
+                    <line x1="4.93" y1="4.93" x2="7.76" y2="7.76" />
+                    <line x1="16.24" y1="16.24" x2="19.07" y2="19.07" />
+                    <line x1={2} y1={12} x2={6} y2={12} />
+                    <line x1={18} y1={12} x2={22} y2={12} />
+                    <line x1="4.93" y1="19.07" x2="7.76" y2="16.24" />
+                    <line x1="16.24" y1="7.76" x2="19.07" y2="4.93" />
+                  </svg>
+                )}
+                Yadda saxla
+              </button>
+              <button
+                id="closeModal"
+                onClick={() => {
+                  dispatch(closeModal());
+                }}
+                className="btn btn-lg float-right mt-3 mr-2"
+                data-dismiss="modal"
+              >
+                <i className="flaticon-cancel-12" /> Ləğv et
+              </button>
+            </Form>
+          )}
+        </Formik>
+      )}
     </ModalWrapper>
   );
 }

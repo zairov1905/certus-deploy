@@ -120,7 +120,7 @@ export default function DocPage() {
       // selector: "document_type",
       sortable: true,
       cell: (doc) => (
-        <p>{doc.document_type_id.name}</p>
+        <p>{doc.document_type_id && doc.document_type_id.name}</p>
       )
     },
     {
