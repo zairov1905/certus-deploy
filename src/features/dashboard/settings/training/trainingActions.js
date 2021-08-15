@@ -63,7 +63,7 @@ export function createTraining(training) {
 export function updateTraining(training) {
   return async function (dispatch) {
     dispatch(asyncActionStart);
-
+console.log(training);
     const trainingUpdated = await axios.put(
       `/${url}/update`,
       training

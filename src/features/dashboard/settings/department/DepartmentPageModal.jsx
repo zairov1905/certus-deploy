@@ -21,24 +21,29 @@ export default function DepartmentPageModal({ department }) {
     }
   });
 
-  const initialValues = department ? department: {
-    id: "",
-    name: "",
-  };
+  const initialValues = department
+    ? {
+        name: department.number && department.number,
+      }
+    : {
+        name: "",
+      };
   const validationSchema = Yup.object({
     name: Yup.string().required("Mütləq doldurulmalıdır."),
-
   });
 
   return (
-    <ModalWrapper size="modal-lg" header={department ? "Redakte Et" : "Əlavə et"}>
+    <ModalWrapper
+      size="modal-lg"
+      header={department ? "Redakte Et" : "Əlavə et"}
+    >
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
             department
-              ? await dispatch(updateDepartment(values))
+              ? await dispatch(updateDepartment({...values, id:department.id}))
               : await dispatch(createDepartment({ ...values }));
             setSubmitting(false);
             setModal(true);
@@ -60,6 +65,8 @@ export default function DepartmentPageModal({ department }) {
                   type="text"
                   className="form-control"
                   placeholder="Sturuktur bölməsi"
+                  label={department && "Sturuktur bölməsi"}
+
                 />
               </div>
             </div>

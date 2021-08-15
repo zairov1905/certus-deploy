@@ -21,19 +21,22 @@ export default function SkillPageModal({ skill }) {
     }
   });
 
-  const initialValues = skill ? skill : {
-    id: "",
-    name: "",
-    about: "",
-    // skillNumber: "",
-    // skillCategory: "",
-  };
+  const initialValues = skill
+    ? {
+        name: skill.name && skill.name,
+        about: skill.about && skill.about
+      }
+    : {
+        name: "",
+        about: "",
+        // skillNumber: "",
+        // skillCategory: "",
+      };
   const validationSchema = Yup.object({
     name: Yup.string().required("Mütləq doldurulmalıdır."),
     about: Yup.string().required("Mütləq doldurulmalıdır."),
     // skillNumber: Yup.string().required("Mütləq doldurulmalıdır."),
     // skillCategory: Yup.string().required("Mütləq doldurulmalıdır."),
-
   });
 
   return (
@@ -44,8 +47,8 @@ export default function SkillPageModal({ skill }) {
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
             skill
-              ? await dispatch(updateSkill(values))
-              : await dispatch(createSkill({ ...values, id: cuid() }));
+              ? await dispatch(updateSkill({ ...values,id:skill.id}))
+              : await dispatch(createSkill({ ...values}));
             setSubmitting(false);
             setModal(true);
             dispatch(closeModal());

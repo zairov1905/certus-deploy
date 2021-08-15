@@ -13,6 +13,7 @@ import { createOrder, updateOrder } from "./orderActions";
 import { closeModal } from "../../../app/modal/modalReducer";
 import MySearchableSelect from "../../../app/common/form/MySearchableSelect";
 import MyTextArea from "../../../app/common/form/MyTextArea";
+import moment from "moment";
 
 export default function OrderPageModal({ order }) {
   const { serviceTypes } = useSelector((state) => state.serviceTypes);
@@ -20,7 +21,7 @@ export default function OrderPageModal({ order }) {
   const { references } = useSelector((state) => state.references);
   const { crms } = useSelector((state) => state.crms);
   const { docs } = useSelector((state) => state.docs);
-  console.log(docs);
+  // console.log(docs);
 
   let serviceTypeOptions = [];
   let orderSourceOptions = [];
@@ -78,7 +79,16 @@ export default function OrderPageModal({ order }) {
   });
 
   const initialValues = order
-    ? order
+  
+    ? {
+      number: order.number && order.number,
+      service_type_id: order.service_type_id && order.service_type_id.id,
+      customer_id: order.customer_id && order.customer_id.id,
+      order_source_id: order.order_source_id && order.order_source_id.id,
+      reference_id: order.reference_id && order.reference_id.id,
+      date: order.date && moment(order.date).format("YYYY-MM-DD"),
+      description: order.description && order.description,
+    }
     : {
         number: "",
         service_type_id: "",
@@ -111,8 +121,8 @@ export default function OrderPageModal({ order }) {
               ? await dispatch(
                   updateOrder({
                     ...values,
+                    id:order.id
                   }),
-                  console.log(values.service_type_id.id)
                 )
               : await dispatch(createOrder(values));
             setSubmitting(false);
@@ -127,7 +137,7 @@ export default function OrderPageModal({ order }) {
       >
         {({ isSubmitting, isValid, dirty, errors, values }) => (
           <Form id="emp">
-            <div className="row">
+            <div className={`row ${order && "mb-4"}`}>
               <div className="col-md-4">
                 <MySearchableSelect
                   id="number"
@@ -139,6 +149,8 @@ export default function OrderPageModal({ order }) {
                       value: parseInt(order.number),
                     }
                   }
+                  label={order && "Sifariş Nömrəsi"}
+
                   options={docOptions}
                   placeholder="Sifariş Nömrəsi"
                 />
@@ -149,6 +161,8 @@ export default function OrderPageModal({ order }) {
                   id="service_type_id"
                   name="service_type_id"
                   type="text"
+                  label={order && "Xidmət Növü"}
+
                   defaultValue={
                     order && {
                       label: order.service_type_id.name,
@@ -173,12 +187,14 @@ export default function OrderPageModal({ order }) {
                   id="customer_id"
                   name="customer_id"
                   options={customerOptions}
+                  label={order && "Müştəri"}
+
                   // className="form-control"
                   placeholder="Müştəri"
                 />
               </div>
             </div>
-            <div className="row">
+            <div className={`row ${order && "mb-4"}`}>
               <div className="col-md-4">
                 <MySearchableSelect
                   defaultValue={
@@ -190,6 +206,8 @@ export default function OrderPageModal({ order }) {
                   id="order_source_id"
                   name="order_source_id"
                   type="text"
+                  label={order && "Sifariş Mənbəyi"}
+
                   options={orderSourceOptions}
                   // className="form-control"
                   placeholder="Sifariş Mənbəyi"
@@ -209,6 +227,8 @@ export default function OrderPageModal({ order }) {
                   options={referenceOptions}
                   // className="form-control"
                   placeholder="Referans"
+                  label={order && "Referans"}
+
                 />
               </div>
               <div className="col-md-4">
@@ -218,6 +238,8 @@ export default function OrderPageModal({ order }) {
                   type="date"
                   className="form-control"
                   placeholder="Sifariş tarixi"
+                  label={order && "Sifariş tarixi"}
+                  
                 />
               </div>
             </div>
@@ -229,6 +251,8 @@ export default function OrderPageModal({ order }) {
                   type="text"
                   className="form-control"
                   placeholder="Sifariş Təyinatı"
+                  label={order && "Sifariş Təyinatı"}
+
                 />
               </div>
             </div>

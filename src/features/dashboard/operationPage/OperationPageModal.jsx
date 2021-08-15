@@ -252,7 +252,7 @@ export default function OperationPageModal({ operation }) {
         >
           {({ isSubmitting, isValid, dirty, errors, values }) => (
             <Form id="emp">
-              <div className="row">
+              <div className={`row ${operation && "mb-4"}`}>
                 <div className="col-md-4">
                   <MyTextInput
                     id="number"
@@ -260,6 +260,8 @@ export default function OperationPageModal({ operation }) {
                     type="text"
                     className="form-control"
                     placeholder="Sifariş Nömrəsi"
+                    label={operation && "Sifariş Nömrəsi"}
+
                   />
                 </div>
                 <div className="col-md-4">
@@ -283,6 +285,8 @@ export default function OperationPageModal({ operation }) {
                     options={customerOptions}
                     // className="form-control"
                     placeholder="Müştəri"
+                    label={operation && "Müştəri"}
+
                   />
                 </div>
                 <div className="col-md-4">
@@ -305,12 +309,14 @@ export default function OperationPageModal({ operation }) {
                     name="service_type_id"
                     type="text"
                     options={serviceTypeOptions}
+                    label={operation && "Xidmət Növü"}
+
                     // className="form-control"
                     placeholder="Xidmət Növü"
                   />
                 </div>
               </div>
-              <div className="row">
+              <div className={`row ${operation && "mb-4"}`}>
                 <div className="col-md-4">
                   <MySearchableSelect
                     // defaultValue={
@@ -333,6 +339,8 @@ export default function OperationPageModal({ operation }) {
                     options={orderSourceOptions}
                     // className="form-control"
                     placeholder="Sifariş Mənbəyi"
+                    label={operation && "Sifariş Mənbəyi"}
+
                   />
                 </div>
                 <div className="col-md-4">
@@ -356,6 +364,8 @@ export default function OperationPageModal({ operation }) {
                     options={referenceOptions}
                     // className="form-control"
                     placeholder="Referans"
+                    label={operation && "Referans"}
+
                   />
                 </div>
                 <div className="col-md-4">
@@ -366,10 +376,12 @@ export default function OperationPageModal({ operation }) {
                     // onFocus={(e) => (e.target.type = "date")}
                     className="form-control"
                     placeholder="Əməliyyat tarixi"
+                    label={operation && "Əməliyyat tarixi"}
+
                   />
                 </div>
               </div>
-              <div className="row">
+              <div className={`row ${operation && "mb-4"}`}>
                 <div className="col-md-12">
                   <MyTextArea
                     name="description"
@@ -377,11 +389,13 @@ export default function OperationPageModal({ operation }) {
                     type="text"
                     className="form-control"
                     placeholder="Sifariş Təyinatı"
+                    label={operation && "Sifariş Təyinatı"}
+
                   />
                 </div>
               </div>
 
-              <div className="row">
+              <div className={`row ${operation && "mb-4"}`}>
                 <div className="col-md-12">
                   <MySearchableSelect
                     // defaultValue={
@@ -402,11 +416,13 @@ export default function OperationPageModal({ operation }) {
                     type="text"
                     options={employeeOptions}
                     // className="form-control"
+                    label={operation && "İcraçı"}
+
                     placeholder="İcraçı"
                   />
                 </div>
               </div>
-              <div className="row">
+              <div className={`row ${operation && "mb-4"}`}>
                 <div className="col-md-4">
                   <MySearchableSelect
                     defaultValue={
@@ -423,6 +439,8 @@ export default function OperationPageModal({ operation }) {
                     options={docOptions}
                     // className="form-control"
                     placeholder="Müqavilə"
+                    label={operation && "Müqavilə"}
+
                   />
                 </div>
                 <div className="col-md-4">
@@ -439,6 +457,8 @@ export default function OperationPageModal({ operation }) {
                     options={docOptions}
                     // className="form-control"
                     placeholder="Hesab faktura"
+                    label={operation && "Hesab faktura"}
+
                   />
                 </div>
                 <div className="col-md-4">
@@ -448,11 +468,13 @@ export default function OperationPageModal({ operation }) {
                     type="text"
                     className="form-control"
                     placeholder="Məbləğ"
+                    label={operation && "Məbləğ"}
+
                   />
                 </div>
               </div>
 
-              <div className="row">
+              <div className={`row ${operation && "mb-4"}`}>
                 <div className="col-md-4">
                   <MySearchableSelect
                     defaultValue={
@@ -469,6 +491,8 @@ export default function OperationPageModal({ operation }) {
                     options={labOptions}
                     // className="form-control"
                     placeholder="Laboratoriya"
+                    label={operation && "Laboratoriya"}
+
                   />
                 </div>
                 <div className="col-md-4">
@@ -488,6 +512,8 @@ export default function OperationPageModal({ operation }) {
                     options={expenseGroupOptions}
                     // className="form-control"
                     placeholder="Xərc qrupu"
+                    label={operation && "Xərc qrupu"}
+
                   />
                 </div>
                 <div className="col-md-4">
@@ -507,10 +533,12 @@ export default function OperationPageModal({ operation }) {
                     options={expenseTypeOptions}
                     // className="form-control"
                     placeholder="Xərc tipi"
+                    label={operation && "Xərc tipi"}
+
                   />
                 </div>
               </div>
-              <div className="row">
+              <div className={`row ${operation && "mb-4"}`}>
                 <div className="col-md-6">
                   <MyTextInput
                     name="bonus"
@@ -518,6 +546,8 @@ export default function OperationPageModal({ operation }) {
                     type="text"
                     className="form-control"
                     placeholder="İcracı bonusu"
+                    label={operation && "İcracı bonusu"}
+
                   />
                 </div>
                 <div className="col-md-6">
@@ -527,6 +557,8 @@ export default function OperationPageModal({ operation }) {
                     type="text"
                     className="form-control"
                     placeholder="Performans"
+                    label={operation && "Performans"}
+
                   />
                 </div>
               </div>
@@ -581,7 +613,7 @@ export default function OperationPageModal({ operation }) {
                       </div>
                     </div>
                   </div>
-                  <div className="row">
+                  <div className={`row ${operation && "mb-4"}`}>
                     {mapAddedStudents &&
                       mapAddedStudents.map((mapAddedStudent, index) => (
                         <React.Fragment key={index}>

@@ -13,6 +13,7 @@ import { Form, Formik } from "formik";
 import { closeModal } from "../../../app/modal/modalReducer";
 import { createDoc, updateDoc } from "./docActions";
 import MySearchableSelect from "../../../app/common/form/MySearchableSelect";
+import moment from "moment";
 
 export default function DocPageModal({ doc }) {
   const dispatch = useDispatch();
@@ -34,7 +35,12 @@ export default function DocPageModal({ doc }) {
     { label: "Satış", value: 1 },
   ];
   const initialValues = doc
-    ? doc
+    ? {
+      document_type_id: doc.document_type_id && doc.document_type_id.id,
+      document_for: doc.document_for && doc.document_for,
+      date: doc.date && moment(doc.date).format("YYYY-MM-DD"),
+      about: doc.about && doc.about,
+    } 
     : {
         document_type_id: "",
         document_for: "",
@@ -59,7 +65,7 @@ export default function DocPageModal({ doc }) {
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
             doc
-              ? await dispatch(updateDoc(values))
+              ? await dispatch(updateDoc({...values, id:doc.id}))
               : await dispatch(createDoc({ ...values }));
             setSubmitting(false);
             setModal(true);
@@ -87,6 +93,8 @@ export default function DocPageModal({ doc }) {
                   }
                   // type="text"
                   // className="form-control"
+                  label={doc && "Sənəd növü"}
+
                   placeholder="Sənəd növü"
                 />
               </div>
@@ -104,6 +112,8 @@ export default function DocPageModal({ doc }) {
                   }
                   // type="text"
                   // className="form-control"
+                  label={doc && "Sənədin təyinatı"}
+
                   placeholder="Sənədin təyinatı"
                 />
               </div>
@@ -115,15 +125,19 @@ export default function DocPageModal({ doc }) {
                   type="date"
                   // className="form-control"
                   placeholder="Sənəd tarixi"
+                  label={doc && "Sənəd tarixi"}
+                  
                 />
               </div>
-              <div className="col-md-12">
+              <div className={`col-md-12 ${doc && "mt-4"}`}>
                 <MyTextArea
                   id="about"
                   name="about"
                   // type="text"
                   className="form-control"
                   placeholder="Sənəd predmeti"
+                  label={doc && "Sənəd predmeti"}
+
                 />
               </div>
             </div>

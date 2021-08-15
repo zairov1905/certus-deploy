@@ -25,9 +25,10 @@ export default function SignOfLegalActPageModal({ signOfLegalAct }) {
   });
 
   const initialValues = signOfLegalAct
-    ? signOfLegalAct
+    ? {
+        name: signOfLegalAct.name,
+      }
     : {
-        id: "",
         name: "",
       };
   const validationSchema = Yup.object({
@@ -45,8 +46,10 @@ export default function SignOfLegalActPageModal({ signOfLegalAct }) {
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
             signOfLegalAct
-              ? await dispatch(updateSignOfLegalAct(values))
-              : await dispatch(createSignOfLegalAct({ ...values, id: cuid() }));
+              ? await dispatch(
+                  updateSignOfLegalAct({ ...values, id: signOfLegalAct.id })
+                )
+              : await dispatch(createSignOfLegalAct({ ...values }));
             setSubmitting(false);
             setModal(true);
             dispatch(closeModal());
@@ -67,6 +70,9 @@ export default function SignOfLegalActPageModal({ signOfLegalAct }) {
                   type="text"
                   className="form-control"
                   placeholder="Hüquqi normativ texniki aktın işarəsi"
+                  label={
+                    signOfLegalAct && "Hüquqi normativ texniki aktın işarəsi"
+                  }
                 />
               </div>
             </div>

@@ -21,8 +21,7 @@ export default function DutyPageModal({ duty }) {
     }
   });
 
-  const initialValues = duty ? duty: {
-    id: "",
+  const initialValues = duty ? {name:duty.name}: {
     name: "",
   };
   const validationSchema = Yup.object({
@@ -38,7 +37,7 @@ export default function DutyPageModal({ duty }) {
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
             duty
-              ? await dispatch(updateDuty(values))
+              ? await dispatch(updateDuty({...values,id:duty.id}))
               : await dispatch(createDuty({ ...values, id: cuid() }));
             setSubmitting(false);
             setModal(true);
@@ -60,6 +59,8 @@ export default function DutyPageModal({ duty }) {
                   type="text"
                   className="form-control"
                   placeholder="Sturuktur bölməsi"
+                  label={duty && "Sturuktur bölməsi"}
+
                 />
               </div>
             </div>

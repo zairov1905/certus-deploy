@@ -13,6 +13,7 @@ import { createEmployees, updateEmployees } from "./employeesActions";
 import { closeModal } from "../../../app/modal/modalReducer";
 import { loadDuties } from "../settings/duty/dutyActions";
 import { loadDepartments } from "../settings/department/departmentActions";
+import moment from "moment";
 
 export default function EmployeesModal({ employee }) {
   const dispatch = useDispatch();
@@ -55,7 +56,32 @@ export default function EmployeesModal({ employee }) {
       ? { label: "Xidmət müqaviləsi", value: 1 }
       : { label: "Əmək müqaviləsi", value: 0 };
   const initialValues = employee
-    ? employee
+    ? {
+      fin: employee.fin && employee.fin,
+      name: employee.name && employee.name,
+      surname: employee.surname && employee.surname,
+      dadname: employee.dadname && employee.dadname,
+      birthday: employee.birthday && employee.birthday,
+      address: employee.address && employee.address,
+      phone: employee.phone && employee.phone,
+
+      whatsapp: employee.whatsapp && employee.whatsapp,
+      telegram: employee.telegram && employee.telegram,
+      facebook: employee.facebook && employee.facebook,
+      linkedin: employee.linkedin && employee.linkedin,
+      twitter: employee.twitter && employee.twitter,
+      instagram: employee.instagram && employee.instagram,
+      mail: employee.mail && employee.mail,
+
+      position_id: employee.position_id && employee.position_id.id,
+      structural_section_id: employee.structural_section_id && employee.structural_section_id.id,
+      date: employee.date && moment(employee.date).format("YYYY-MM-DD"),
+      turnover: employee.turnover && employee.turnover,
+      bonus: employee.bonus && employee.bonus,
+      customer_satisfaction: employee.customer_satisfaction && employee.customer_satisfaction,
+      performans: employee.performans && employee.performans,
+      agreement_type: employee.agreement_type && employee.agreement_type,
+    }
     : {
         fin: "",
         name: "",
@@ -117,7 +143,7 @@ export default function EmployeesModal({ employee }) {
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
             employee
-              ? await dispatch(updateEmployees(values))
+              ? await dispatch(updateEmployees({...values,id:employee.id}))
               : await dispatch(createEmployees({ ...values }));
             setSubmitting(false);
             setModal(true);
@@ -131,7 +157,7 @@ export default function EmployeesModal({ employee }) {
       >
         {({ isSubmitting, isValid, dirty, errors }) => (
           <Form id="emp">
-            <div className="row">
+            <div className={`row ${employee && "mb-4"}`}>
               <div className="col-md-4">
                 <MyTextInput
                   id="fim"
@@ -139,6 +165,8 @@ export default function EmployeesModal({ employee }) {
                   type="text"
                   className="form-control"
                   placeholder="FİN"
+                  label={employee && "FİN"}
+
                 />
               </div>
               <div className="col-md-4">
@@ -148,6 +176,8 @@ export default function EmployeesModal({ employee }) {
                   type="text"
                   className="form-control"
                   placeholder="Ad"
+                  label={employee && "Ad"}
+
                 />
               </div>
               <div className="col-md-4">
@@ -157,10 +187,13 @@ export default function EmployeesModal({ employee }) {
                   type="text"
                   className="form-control"
                   placeholder="Soyad"
+                  label={employee && "Soyad"}
+
+                  
                 />
               </div>
             </div>
-            <div className="row">
+            <div className={`row ${employee && "mb-4"}`}>
               <div className="col-md-4">
                 <MyTextInput
                   id="dadname"
@@ -168,6 +201,8 @@ export default function EmployeesModal({ employee }) {
                   type="text"
                   className="form-control"
                   placeholder="Ata adı"
+                  label={employee && "Ata adı"}
+                  
                 />
               </div>
               <div className="col-md-4">
@@ -177,6 +212,8 @@ export default function EmployeesModal({ employee }) {
                   type="date"
                   className="form-control"
                   placeholder="Doğum tarixi"
+                  label={employee && "Doğum tarixi"}
+
                 />
               </div>
               <div className="col-md-4">
@@ -186,10 +223,12 @@ export default function EmployeesModal({ employee }) {
                   type="text"
                   className="form-control"
                   placeholder="Ünvan"
+                  label={employee && "Ünvan"}
+
                 />
               </div>
             </div>
-            <div className="row">
+            <div className={`row ${employee && "mb-4"}`}>
               <div className="col-md-4">
                 <MyTextInput
                   name="phone"
@@ -197,6 +236,8 @@ export default function EmployeesModal({ employee }) {
                   type="text"
                   className="form-control"
                   placeholder="Telefon"
+                  label={employee && "Telefon"}
+
                 />
               </div>
               <div className="col-md-4">
@@ -206,6 +247,8 @@ export default function EmployeesModal({ employee }) {
                   type="text"
                   className="form-control"
                   placeholder="Whatsapp"
+                  label={employee && "Whatsapp"}
+
                 />
               </div>
               <div className="col-md-4">
@@ -215,35 +258,12 @@ export default function EmployeesModal({ employee }) {
                   type="text"
                   className="form-control"
                   placeholder="Telegram"
+                  label={employee && "Telegram"}
+
                 />
               </div>
-              <div className="col-md-4">
-                <MyTextInput
-                  name="facebook"
-                  id="facebook"
-                  type="text"
-                  className="form-control"
-                  placeholder="Facebook"
-                />
-              </div>
-              <div className="col-md-4">
-                <MyTextInput
-                  name="linkedin"
-                  id="linkedin"
-                  type="text"
-                  className="form-control"
-                  placeholder="Linkedin"
-                />
-              </div>{" "}
-              <div className="col-md-4">
-                <MyTextInput
-                  name="twitter"
-                  id="twitter"
-                  type="text"
-                  className="form-control"
-                  placeholder="Twitter"
-                />
-              </div>{" "}
+            </div>
+            <div className={`row ${employee && "mb-4"}`}>
               <div className="col-md-4">
                 <MyTextInput
                   name="instagram"
@@ -251,6 +271,8 @@ export default function EmployeesModal({ employee }) {
                   type="text"
                   className="form-control"
                   placeholder="Instagram"
+                  label={employee && "Instagram"}
+
                 />
               </div>{" "}
               <div className="col-md-8">
@@ -260,10 +282,12 @@ export default function EmployeesModal({ employee }) {
                   type="text"
                   className="form-control"
                   placeholder="Mail"
+                  label={employee && "Mail"}
+
                 />
               </div>
             </div>
-            <div className="row">
+            <div className={`row ${employee && "mb-4"}`}>
               <div className="col-md-4">
                 <MySearchableSelect
                   name="position_id"
@@ -272,6 +296,8 @@ export default function EmployeesModal({ employee }) {
                   // type="text"
                   // className="form-control"
                   placeholder="Vəzifəsi"
+                  label={employee && "Vəzifəsi"}
+
                   defaultValue={
                     employee && {
                       label: employee.position_id.name,
@@ -285,6 +311,7 @@ export default function EmployeesModal({ employee }) {
                   name="structural_section_id"
                   id="structural_section_id"
                   options={departmentOptions}
+
                   defaultValue={
                     employee && {
                       label: employee.structural_section_id.name,
@@ -294,8 +321,12 @@ export default function EmployeesModal({ employee }) {
                   // type="text"
                   // className="form-control"
                   placeholder="Struktur bölməsi"
+                  label={employee && "Struktur bölməsi"}
+
                 />
               </div>
+            </div>
+            <div className={`row ${employee && "mb-4"}`}>
               <div className="col-md-4">
                 <MyTextInput
                   name="date"
@@ -303,6 +334,8 @@ export default function EmployeesModal({ employee }) {
                   type="date"
                   className="form-control"
                   placeholder="İşə qəbul tarixi"
+                  label={employee && "İşə qəbul tarixi"}
+
                 />
               </div>
               <div className="col-md-4">
@@ -312,6 +345,8 @@ export default function EmployeesModal({ employee }) {
                   type="text"
                   className="form-control"
                   placeholder="Dövriyyə"
+                  label={employee && "Dövriyyə"}
+
                 />
               </div>
               <div className="col-md-4">
@@ -321,14 +356,20 @@ export default function EmployeesModal({ employee }) {
                   type="text"
                   className="form-control"
                   placeholder="Bonus"
+                  label={employee && "Bonus"}
+
                 />
               </div>
+            </div>
+            <div className="row">
               <div className="col-md-4">
                 <MyTextInput
                   name="customer_satisfaction"
                   id="customer_satisfaction"
                   type="text"
                   className="form-control"
+                  label={employee && "Müştəri məmnuniyyəti"}
+                  
                   placeholder="Müştəri məmnuniyyəti"
                 />
               </div>{" "}
@@ -339,6 +380,8 @@ export default function EmployeesModal({ employee }) {
                   type="text"
                   className="form-control"
                   placeholder="Performans"
+                  label={employee && "Performans"}
+
                 />
               </div>{" "}
               <div className="col-md-4">
@@ -350,6 +393,8 @@ export default function EmployeesModal({ employee }) {
                   // type="text"
                   // className="form-control"
                   placeholder="Müqavilə növü"
+                  label={employee && "Müqavilə növü"}
+
                 />
               </div>
             </div>

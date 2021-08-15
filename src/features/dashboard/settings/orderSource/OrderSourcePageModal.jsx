@@ -22,9 +22,10 @@ export default function OrderSourcePageModal({ orderSource }) {
   });
 
   const initialValues = orderSource
-    ? orderSource
+    ? {
+        name: orderSource.name && orderSource.name,
+      }
     : {
-        id: "",
         name: "",
       };
   const validationSchema = Yup.object({
@@ -42,8 +43,8 @@ export default function OrderSourcePageModal({ orderSource }) {
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
             orderSource
-              ? await dispatch(updateOrderSource(values))
-              : await dispatch(createOrderSource({ ...values}));
+              ? await dispatch(updateOrderSource({ ...values, id:orderSource.id}))
+              : await dispatch(createOrderSource({ ...values }));
             setSubmitting(false);
             setModal(true);
             dispatch(closeModal());
@@ -64,6 +65,8 @@ export default function OrderSourcePageModal({ orderSource }) {
                   type="text"
                   className="form-control"
                   placeholder="Sifariş mənbəyi"
+                  label={orderSource && "Sifariş mənbəyi"}
+
                 />
               </div>
             </div>

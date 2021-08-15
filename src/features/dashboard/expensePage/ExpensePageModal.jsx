@@ -12,6 +12,7 @@ import { Form, Formik } from "formik";
 import { createExpense, updateExpense } from "./expenseActions";
 import { closeModal } from "../../../app/modal/modalReducer";
 import MySearchableSelect from "../../../app/common/form/MySearchableSelect";
+import moment from "moment";
 
 export default function ExpensePageModal({ expense }) {
   const dispatch = useDispatch();
@@ -81,9 +82,21 @@ export default function ExpensePageModal({ expense }) {
       $("#closeModal").click();
     }
   });
+  
 
   const initialValues = expense
-    ? expense
+    ? {
+      income_expense_group_id: expense.income_expense_group_id && expense.income_expense_group_id.id,
+      expense_type_id: expense.expense_type_id && expense.expense_type_id.id,
+      date: expense.date && moment(expense.date).format("YYYY-MM-DD"),
+      contractor_id: expense.contractor_id && expense.contractor_id.id,
+      document_id: expense.document_id && expense.document_id.id,
+      // expenseInvoice: "",
+      operation_id: expense.operation_id && expense.operation_id,
+      payment_id: expense.payment_id && expense.payment_id,
+      payment_type_id: expense.payment_type_id && expense.payment_type_id,
+      faktura: expense.faktura && expense.faktura,
+    }
     : {
         income_expense_group_id: "",
         expense_type_id: "",
@@ -94,7 +107,7 @@ export default function ExpensePageModal({ expense }) {
         operation_id: "",
         payment_id: "",
         payment_type_id: "",
-        faktura:""
+        faktura: "",
       };
   const validationSchema = Yup.object({
     income_expense_group_id: Yup.string().required("Mütləq doldurulmalıdır."),
@@ -107,7 +120,6 @@ export default function ExpensePageModal({ expense }) {
     payment_id: Yup.string().required("Mütləq doldurulmalıdır."),
     payment_type_id: Yup.string().required("Mütləq doldurulmalıdır."),
     faktura: Yup.string().required("Mütləq doldurulmalıdır."),
-
   });
 
   return (
@@ -118,7 +130,7 @@ export default function ExpensePageModal({ expense }) {
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
             expense
-              ? await dispatch(updateExpense(values))
+              ? await dispatch(updateExpense({...values, id:expense.id}))
               : await dispatch(createExpense({ ...values }));
             setSubmitting(false);
             setModal(true);
@@ -132,12 +144,13 @@ export default function ExpensePageModal({ expense }) {
       >
         {({ isSubmitting, isValid, dirty, errors }) => (
           <Form id="emp">
-            <div className="row">
+            <div className={`row ${expense && "mb-4"}`}>
               <div className="col-md-6">
                 <MySearchableSelect
                   id="income_expense_group_id"
                   name="income_expense_group_id"
                   options={expenseGroupsOptions}
+                  label={expense && "Gəlir-Xərc qrupu"}
                   defaultValue={
                     expense && {
                       label: expense.income_expense_group_id.name,
@@ -161,18 +174,21 @@ export default function ExpensePageModal({ expense }) {
                     }
                   }
                   type="text"
+                  label={expense && "Gəlir-Xərc Növü"}
                   // className="form-control"
                   placeholder="Gəlir-Xərc Növü"
                 />
               </div>
             </div>
-            <div className="row">
+            <div className={`row ${expense && "mb-4"}`}>
               <div className="col-md-4">
                 <MyTextInput
                   id="date"
                   name="date"
                   type="date"
                   className="form-control"
+                  label={expense && "Tarix"}
+
                   placeholder="Tarix"
                 />
               </div>
@@ -189,6 +205,8 @@ export default function ExpensePageModal({ expense }) {
                   }
                   // type="text"
                   // className="form-control"
+                  label={expense && "Kontragent"}
+
                   placeholder="Kontragent"
                 />
               </div>
@@ -205,11 +223,13 @@ export default function ExpensePageModal({ expense }) {
                   }
                   options={docsOptions}
                   // className="form-control"
+                  label={expense && "Müqavilə"}
+
                   placeholder="Müqavilə"
                 />
               </div>
             </div>
-            <div className="row">
+            <div className={`row ${expense && "mb-4"}`}>
               <div className="col-md-4">
                 <MySearchableSelect
                   name="operation_id"
@@ -224,6 +244,8 @@ export default function ExpensePageModal({ expense }) {
                     )
                   }
                   // className="form-control"
+                  label={expense && "Əməliyyat növü"}
+
                   placeholder="Əməliyyat növü"
                 />
               </div>
@@ -242,6 +264,8 @@ export default function ExpensePageModal({ expense }) {
                   }
                   // className="form-control"
                   placeholder="Ödəniş"
+                  label={expense && "Ödəniş"}
+
                 />
               </div>
               <div className="col-md-4">
@@ -259,11 +283,13 @@ export default function ExpensePageModal({ expense }) {
                   }
                   // className="form-control"
                   placeholder="Ödəniş növü"
+                  label={expense && "Ödəniş növü"}
+
                 />
               </div>
             </div>
 
-            <div className="row">
+            <div className={`row ${expense && "mb-4"}`}>
               <div className="col-md-12">
                 <MyTextInput
                   name="faktura"
@@ -271,6 +297,8 @@ export default function ExpensePageModal({ expense }) {
                   // type="text"
                   className="form-control"
                   placeholder="Hesab faktura"
+                  label={expense && "Hesab faktura"}
+
                 />
               </div>
             </div>

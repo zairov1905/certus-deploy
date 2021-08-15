@@ -83,7 +83,7 @@ export default function OrderPage() {
         dispatch(loadReference());
         dispatch(loadOrderSource());
         dispatch(loadCrm());
-        dispatch(loadCrm());
+        dispatch(loadDocs());
 
 
       }}
@@ -192,7 +192,7 @@ export default function OrderPage() {
               dispatch(loadReference());
               dispatch(loadOrderSource());
               dispatch(loadCrm());
-              dispatch(loadCrm());
+              dispatch(loadDocs());
 
             }}
             data-name="edit"

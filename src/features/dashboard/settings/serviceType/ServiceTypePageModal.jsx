@@ -20,9 +20,10 @@ export default function ServiceTypePageModal({ serviceType }) {
   });
 
   const initialValues = serviceType
-    ? serviceType
+    ? {
+        name: serviceType.name,
+      }
     : {
-        id: "",
         name: "",
       };
   const validationSchema = Yup.object({
@@ -40,8 +41,8 @@ export default function ServiceTypePageModal({ serviceType }) {
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
             serviceType
-              ? await dispatch(updateServiceType(values))
-              : await dispatch(createServiceType({ ...values}));
+              ? await dispatch(updateServiceType({...values , id:serviceType.id}))
+              : await dispatch(createServiceType({ ...values }));
             setSubmitting(false);
             setModal(true);
             dispatch(closeModal());
@@ -62,6 +63,8 @@ export default function ServiceTypePageModal({ serviceType }) {
                   type="text"
                   className="form-control"
                   placeholder="Xidmət növü"
+                  label={serviceType && "Xidmət növü"}
+
                 />
               </div>
             </div>

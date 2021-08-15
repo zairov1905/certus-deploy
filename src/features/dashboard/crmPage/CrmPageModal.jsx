@@ -13,6 +13,7 @@ import { createCrm, updateCrm } from "./crmActions";
 import { closeModal } from "../../../app/modal/modalReducer";
 import MySearchableSelect from "../../../app/common/form/MySearchableSelect";
 import MyTextArea from "../../../app/common/form/MyTextArea";
+import moment from "moment";
 
 export default function CrmPageModal({ crm }) {
   const { employees } = useSelector((state) => state.employees);
@@ -37,7 +38,7 @@ export default function CrmPageModal({ crm }) {
     references &&
     references.map((reference) => {
       return {
-        value: `${reference.id} `,
+        value: parseInt( reference.id),
         label: `${reference.name}`,
       };
     });
@@ -45,7 +46,7 @@ export default function CrmPageModal({ crm }) {
     employees &&
     employees.map((employee) => {
       return {
-        value: `${employee.id}`,
+        value: parseInt(employee.id),
         label: `${employee.name} ${employee.surname}`,
       };
     });
@@ -97,7 +98,46 @@ export default function CrmPageModal({ crm }) {
   });
 
   const initialValues = crm
-    ? crm
+    ? {
+        contact_name: crm.contact_name && crm.contact_name,
+        contact_surname: crm.contact_surname && crm.contact_surname,
+        contact_dadname: crm.contact_dadname && crm.contact_dadname,
+        contact_phone: crm.contact_phone && crm.contact_phone,
+        contact_whatsapp: crm.contact_whatsapp && crm.contact_whatsapp,
+        contact_telegram: crm.contact_telegram && crm.contact_telegram,
+        contact_facebook: crm.contact_facebook && crm.contact_facebook,
+        contact_linkedin: crm.contact_linkedin && crm.contact_linkedin,
+        contact_twitter: crm.contact_twitter && crm.contact_twitter,
+        contact_instagram: crm.contact_instagram && crm.contact_instagram,
+        contact_mail: crm.contact_instagram && crm.contact_instagram,
+
+        employee_id: crm.employee_id && crm.employee_id.id,
+        legal_status_id: crm.legal_status_id && crm.legal_status_id,
+        customer_name: crm.customer_name && crm.customer_name,
+        voen: crm.voen && crm.voen,
+        date: crm.date && moment(crm.date).format("YYYY-MM-DD"),
+
+        // logo: "",
+        legal_adress: crm.legal_adress && crm.legal_adress,
+        actual_adress: crm.actual_adress && crm.actual_adress,
+        customer_phone: crm.customer_phone && crm.customer_phone,
+        customer_email: crm.customer_email && crm.customer_email,
+        customer_linkedin: crm.customer_linkedin && crm.customer_linkedin,
+        customer_twitter: crm.customer_twitter && crm.customer_twitter,
+        customer_instagram: crm.customer_instagram && crm.customer_instagram,
+        customer_website: crm.customer_website && crm.customer_website,
+        customer_whatsapp: crm.customer_whatsapp && crm.customer_whatsapp,
+        customer_telegram: crm.customer_telegram && crm.customer_telegram,
+        customer_facebook: crm.customer_facebook && crm.customer_facebook,
+
+        referans_id: crm.referans_id && crm.referans_id.id,
+        customer_category: crm.customer_category && crm.customer_category,
+        customer_satisfaction: crm.customer_satisfaction && crm.customer_satisfaction,
+        turnover: crm.turnover && crm.turnover,
+        circulationByYears: [{"year":2020, "turnover":1000}, {"year": 2021, "turnover": 1500}],
+        workersYears: [{"year":2020, "employees":10}, {"year": 2021, "employees": 15}],
+        note: crm.note && crm.note,
+      }
     : {
         contact_name: "",
         contact_surname: "",
@@ -139,9 +179,9 @@ export default function CrmPageModal({ crm }) {
         note: "",
       };
   const validationSchema = Yup.object({
-    // employee_id: Yup.string().required("Mutuel doldurulmalıdır."),
+    employee_id: Yup.string().required("Mutuel doldurulmalıdır."),
     // customerCode: Yup.string().required("Mütləq doldurulmalıdır."),
-    // customer_name: Yup.string().required("Mütləq doldurulmalıdır."),
+    customer_name: Yup.string().required("Mütləq doldurulmalıdır."),
     // voen: Yup.string().required("Mütləq doldurulmalıdır."),
     // date: Yup.string().required("Mütləq doldurulmalıdır."),
     // // logo: Yup.string().required("Mütləq doldurulmalıdır."),
@@ -174,8 +214,7 @@ export default function CrmPageModal({ crm }) {
               ? await dispatch(
                   updateCrm({
                     ...values,
-                    employee_id: values.employee_id.id,
-                    referans_id: values.referans_id.id,
+                    id:crm.id
                   })
                 )
               : await dispatch(createCrm({ ...values }));
@@ -363,7 +402,7 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Mail"
-                          label={crm && "Ad"}
+                          label={crm && "Mail"}
                         />
                       </div>
                     </div>
@@ -441,7 +480,7 @@ export default function CrmPageModal({ crm }) {
                             }
                           }
                           placeholder="Kurator"
-                          label={crm && "Ad"}
+                          label={crm && "Kurator"}
                         />
                       </div>
                       <div className="col-md-4">
@@ -454,7 +493,7 @@ export default function CrmPageModal({ crm }) {
                           defaultValue={crm && selectedLegalStatus[0]}
                           // className="form-control"
                           placeholder="Hüquqi status"
-                          label={crm && "Ad"}
+                          label={crm && "Hüquqi status"}
                         />
                       </div>
                       <div className="col-md-4">
@@ -464,7 +503,7 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Müştəri adı"
-                          label={crm && "Ad"}
+                          label={crm && "Müştəri adı"}
                         />
                       </div>
                     </div>
@@ -476,7 +515,7 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="VÖEN"
-                          label={crm && "Ad"}
+                          label={crm && "VÖEN"}
                         />
                       </div>
                       <div className="col-md-6">
@@ -486,7 +525,7 @@ export default function CrmPageModal({ crm }) {
                           type="date"
                           className="form-control"
                           placeholder="Tarix"
-                          label={crm && "Ad"}
+                          label={crm && "Tarix"}
                         />
                       </div>
                     </div>
@@ -498,7 +537,7 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Hüquqi ünvan"
-                          label={crm && "Ad"}
+                          label={crm && "Hüquqi ünvan"}
                         />
                       </div>
                       <div className="col-md-6">
@@ -507,7 +546,7 @@ export default function CrmPageModal({ crm }) {
                           id="actual_adress"
                           type="text"
                           className="form-control"
-                          label={crm && "Ad"}
+                          label={crm && "Faktiki ünvans"}
                           placeholder="Faktiki ünvan"
                         />
                       </div>
@@ -519,7 +558,7 @@ export default function CrmPageModal({ crm }) {
                           id="customer_phone"
                           type="text"
                           className="form-control"
-                          label={crm && "Ad"}
+                          label={crm && "Nömrə"}
                           placeholder="Nömrə"
                         />
                       </div>
@@ -530,7 +569,7 @@ export default function CrmPageModal({ crm }) {
                           type="email"
                           className="form-control"
                           placeholder="Email"
-                          label={crm && "Ad"}
+                          label={crm && "Email"}
                         />
                       </div>
                     </div>
@@ -542,7 +581,7 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Linkedin"
-                          label={crm && "Ad"}
+                          label={crm && "Linkedin"}
                         />
                       </div>
                       <div className="col-md-4">
@@ -552,7 +591,7 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Twitter"
-                          label={crm && "Ad"}
+                          label={crm && "Twitter"}
                         />
                       </div>
                       <div className="col-md-4">
@@ -562,7 +601,7 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Instagram"
-                          label={crm && "Ad"}
+                          label={crm && "Instagram"}
                         />
                       </div>
                     </div>
@@ -573,7 +612,7 @@ export default function CrmPageModal({ crm }) {
                           id="customer_website"
                           type="text"
                           className="form-control"
-                          label={crm && "Ad"}
+                          label={crm && "Vebsayt"}
                           placeholder="Vebsayt"
                         />
                       </div>
@@ -584,7 +623,7 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Whatsapp"
-                          label={crm && "Ad"}
+                          label={crm && "Whatsapp"}
                         />
                       </div>
                       <div className="col-md-3">
@@ -594,7 +633,7 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Telegram"
-                          label={crm && "Ad"}
+                          label={crm && "Telegram"}
                         />
                       </div>
                       <div className="col-md-3">
@@ -604,7 +643,7 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Facebook"
-                          label={crm && "Ad"}
+                          label={crm && "Facebook"}
                         />
                       </div>
                     </div>
@@ -623,7 +662,7 @@ export default function CrmPageModal({ crm }) {
                           options={referenceOptions}
                           // className="form-control"
                           placeholder="Referans"
-                          label={crm && "Ad"}
+                          label={crm && "Referans"}
                         />
                       </div>
                       <div className="col-md-3">
@@ -633,7 +672,7 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Müştəri kateqoriyası"
-                          label={crm && "Ad"}
+                          label={crm && "Müştəri kateqoriyası"}
                         />
                       </div>
                       <div className="col-md-3">
@@ -643,7 +682,7 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Müştəri məmnuniyyəti"
-                          label={crm && "Ad"}
+                          label={crm && "Müştəri məmnuniyyəti"}
                         />
                       </div>
                       <div className="col-md-3">
@@ -653,7 +692,7 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           className="form-control"
                           placeholder="Dövriyyə"
-                          label={crm && "Ad"}
+                          label={crm && "Dövriyyə"}
                         />
                       </div>
                     </div>
@@ -665,7 +704,7 @@ export default function CrmPageModal({ crm }) {
                           type="email"
                           className="form-control"
                           placeholder="Qeyd"
-                          label={crm && "Ad"}
+                          label={crm && "Qeyd"}
                         />
                       </div>
                     </div>

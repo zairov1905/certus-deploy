@@ -22,9 +22,10 @@ export default function ReferencePageModal({ reference }) {
   });
 
   const initialValues = reference
-    ? reference
+    ? {
+        name: reference.name && reference.name,
+      }
     : {
-        id: "",
         name: "",
       };
   const validationSchema = Yup.object({
@@ -42,8 +43,8 @@ export default function ReferencePageModal({ reference }) {
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
             reference
-              ? await dispatch(updateReference(values))
-              : await dispatch(createReference({ ...values, id: cuid() }));
+              ? await dispatch(updateReference({...values, id:reference.id}))
+              : await dispatch(createReference({ ...values}));
             setSubmitting(false);
             setModal(true);
             dispatch(closeModal());
@@ -64,6 +65,8 @@ export default function ReferencePageModal({ reference }) {
                   type="text"
                   className="form-control"
                   placeholder="Referans"
+                  label={reference && "Referans"}
+
                 />
               </div>
             </div>

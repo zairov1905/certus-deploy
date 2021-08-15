@@ -21,12 +21,16 @@ export default function CounterpartyPageModal({ counterparty }) {
     }
   });
 
-  const initialValues = counterparty ? counterparty: {
-    id: "",
+  const initialValues = counterparty ? {
+    name: counterparty.name && counterparty.name,
+    about: counterparty.name && counterparty.name,
+    contact: counterparty.name && counterparty.name,
+    // counterpartyCategory: "",lab.name && lab.name,
+  }: {
     name: "",
     about: "",
     contact: "",
-    // counterpartyCategory: "",
+    // counterpartyCategory: "",lab.name && lab.name,
   };
   const validationSchema = Yup.object({
     name: Yup.string().required("Mütləq doldurulmalıdır."),
@@ -42,8 +46,8 @@ export default function CounterpartyPageModal({ counterparty }) {
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
             counterparty
-              ? await dispatch(updateCounterparty(values))
-              : await dispatch(createCounterparty({ ...values, id: cuid() }));
+              ? await dispatch(updateCounterparty({...values,id:counterparty.id}))
+              : await dispatch(createCounterparty({ ...values}));
             setSubmitting(false);
             setModal(true);
             dispatch(closeModal());
@@ -57,31 +61,37 @@ export default function CounterpartyPageModal({ counterparty }) {
         {({ isSubmitting, isValid, dirty, errors }) => (
           <Form id="emp">
             <div className="row">
-              <div className="col-md-12">
+              <div className={`col-md-12 ${counterparty && "mb-4"}`}>
                 <MyTextInput
                   id="name"
                   name="name"
                   type="text"
                   className="form-control"
+                  label={counterparty && "Kontragent adı"}
+
                   placeholder="Kontragent adı"
                 />
               </div>
-              <div className="col-md-12">
+              <div className={`col-md-12 ${counterparty && "mb-4"}`}>
                 <MyTextInput
                   id="about"
                   name="about"
                   type="text"
                   className="form-control"
                   placeholder="Kontragent haqqında"
+                  label={counterparty && "Kontragent haqqında"}
+
                 />
               </div>
-              <div className="col-md-12">
+              <div className={`col-md-12 ${counterparty && "mb-4"}`}>
                 <MyTextInput
                   id="contact"
                   name="contact"
                   type="text"
                   className="form-control"
                   placeholder="Kontragent əlaqə nömrəsi"
+                  label={counterparty && "Kontragent əlaqə nömrəsi"}
+
                 />
               </div>
               {/* <div className="col-md-12">

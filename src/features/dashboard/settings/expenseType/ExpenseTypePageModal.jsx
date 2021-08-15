@@ -32,9 +32,11 @@ export default function ExpenseTypePageModal({ expenseType }) {
   });
 
   const initialValues = expenseType
-    ? expenseType
+    ? {
+      name: expenseType.name && expenseType.name,
+      group_id: expenseType.group_id && expenseType.group_id.id ,
+    }
     : {
-        id: "",
         name: "",
         group_id: "",
       };
@@ -55,8 +57,8 @@ export default function ExpenseTypePageModal({ expenseType }) {
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
             expenseType
-              ? await dispatch(updateExpenseType(values))
-              : await dispatch(createExpenseType({ ...values, id: cuid() }));
+              ? await dispatch(updateExpenseType({ ...values,id:expenseType.id}))
+              : await dispatch(createExpenseType({ ...values}));
             setSubmitting(false);
             setModal(true);
             dispatch(closeModal());
@@ -71,7 +73,7 @@ export default function ExpenseTypePageModal({ expenseType }) {
           <Form id="emp">
             <div className="row">
               {" "}
-              <div className="col-md-12">
+              <div className={`col-md-12 ${expenseType && "mb-4"}`}>
                 <MySearchableSelect
                   defaultValue={
                     expenseType && {
@@ -83,6 +85,8 @@ export default function ExpenseTypePageModal({ expenseType }) {
                   name="group_id"
                   type="text"
                   options={expenseGroupOptions}
+                  label={expenseType && "Gəlir-Xərc qrupu"}
+
                   // className="form-control"
                   placeholder="Gəlir-Xərc qrupu"
                 />
@@ -93,6 +97,8 @@ export default function ExpenseTypePageModal({ expenseType }) {
                   name="name"
                   type="text"
                   className="form-control"
+                  label={expenseType && "Gəlir-Xərc növü"}
+
                   placeholder="Gəlir-Xərc növü"
                 />
               </div>

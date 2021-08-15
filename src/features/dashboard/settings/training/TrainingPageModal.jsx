@@ -25,7 +25,7 @@ export default function TrainingPageModal({ training }) {
 
   const [modal, setModal] = useState(false);
   const { skills } = useSelector((state) => state.skills);
-  const skillIds = training && training.skill_id.map(skillIds => skillIds.id);
+  const skillIds = training && training.skill_id.map((skillIds) => skillIds.id);
   // console.log(skillIds,'safasd');
   const skillOptions =
     skills &&
@@ -44,7 +44,6 @@ export default function TrainingPageModal({ training }) {
   const initialValues = training
     ? training
     : {
-        id: "",
         name: "",
         about: "",
         skill_id: [],
@@ -53,7 +52,7 @@ export default function TrainingPageModal({ training }) {
   const validationSchema = Yup.object({
     name: Yup.string().required("Mütləq doldurulmalıdır."),
     about: Yup.string().required("Mütləq doldurulmalıdır."),
-    // trainingSkills: Yup.required("Mütləq doldurulmalıdır."),
+    // skill_id: Yup.array().required("Mütləq doldurulmalıdır."),
     // trainingCategory: Yup.string().required("Mütləq doldurulmalıdır."),
   });
 
@@ -73,7 +72,7 @@ export default function TrainingPageModal({ training }) {
           onSubmit={async (values, { setSubmitting, setErrors }) => {
             try {
               training
-                ? await dispatch(updateTraining(values))
+                ? await dispatch(updateTraining({ ...values, id: training.id }))
                 : await dispatch(createTraining({ ...values }));
               setSubmitting(false);
               setModal(true);
@@ -88,22 +87,24 @@ export default function TrainingPageModal({ training }) {
           {({ isSubmitting, isValid, dirty, errors, values }) => (
             <Form id="emp">
               <div className="row">
-                <div className="col-md-12">
+                <div className={`col-md-12 ${training && "mb-4"}`}>
                   <MyTextInput
                     id="name"
                     name="name"
                     type="text"
                     className="form-control"
                     placeholder="Təlim adı"
+                    label={training && "Təlim adı"}
                   />
                 </div>
-                <div className="col-md-12">
+                <div className={`col-md-12 ${training && "mb-4"}`}>
                   <MyTextInput
                     id="about"
                     name="about"
                     type="text"
                     className="form-control"
                     placeholder="Təlim haqqında"
+                    label={training && "Təlim haqqında"}
                   />
                 </div>
                 <div className="col-md-12">
@@ -122,13 +123,12 @@ export default function TrainingPageModal({ training }) {
                     defaultValue={
                       training &&
                       skillOptions.filter((skillOption) =>
-                      skillIds.includes(
-                          parseInt(skillOption.value)
-                        )
+                        skillIds.includes(parseInt(skillOption.value))
                       )
                     }
                     isMulti
                     placeholder="Təlimin səriştələri"
+                    label={training && "Təlimin səriştələri"}
                   />
                 </div>
               </div>

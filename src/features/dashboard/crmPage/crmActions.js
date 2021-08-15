@@ -59,7 +59,7 @@ export function createCrm(crm) {
 export function updateCrm(crm) {
   return async function (dispatch) {
     dispatch(asyncActionStart);
-    console.log(crm);
+    console.log(crm,'sadasdad');
     const crmUpdated = await axios.put(`/${url}/update`, crm);
     if (crmUpdated.status === 200) {
       toast.success("Dəyişiklik uğurlar yerinə yetirildi");

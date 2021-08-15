@@ -140,7 +140,7 @@ export default function ExpensePage() {
       name: "Kontragent",
       sortable: true,
       cell:expense=>(
-        <p>{expense.contractor_id.name}</p>
+        <p>{expense.contractor_id && expense.contractor_id.name}</p>
       )
       
     },

@@ -47,7 +47,14 @@ export default function LabPageModal({ lab }) {
   });
 
   const initialValues = lab
-    ? lab
+    ? {
+        name: lab.name && lab.name,
+        document_id: lab.document_id && lab.document_id.id,
+        certificate_number: lab.certificate_number && lab.certificate_number,
+        turnover: lab.turnover && lab.turnover,
+        operations: lab.operations && lab.operations,
+        note: lab.note && lab.note,
+      }
     : {
         name: "",
         document_id: "",
@@ -74,12 +81,11 @@ export default function LabPageModal({ lab }) {
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
             lab
-              ? await dispatch(updateLab(values))
+              ? await dispatch(updateLab({...values,id:lab.id}))
               : await dispatch(
                   createLab({
                     ...values,
                   })
-                 
                 );
             setSubmitting(false);
             setModal(true);
@@ -93,7 +99,7 @@ export default function LabPageModal({ lab }) {
       >
         {({ isSubmitting, isValid, dirty, errors }) => (
           <Form id="emp">
-            <div className="row">
+            <div className={`row ${lab && "mb-4"}`}>
               <div className="col-md-4">
                 <MyTextInput
                   id="name"
@@ -101,6 +107,7 @@ export default function LabPageModal({ lab }) {
                   type="text"
                   className="form-control"
                   placeholder="Laboratoriya adı"
+                  label={lab && "Laboratoriya adı"}
                 />
               </div>
               <div className="col-md-4">
@@ -117,6 +124,7 @@ export default function LabPageModal({ lab }) {
                   options={docsOptions}
                   // className="form-control"
                   placeholder="Müqavilə Nömrəsi"
+                  label={lab && "Müqavilə Nömrəsi"}
                 />
               </div>
               <div className="col-md-4">
@@ -126,10 +134,11 @@ export default function LabPageModal({ lab }) {
                   type="text"
                   className="form-control"
                   placeholder="Atestat Nömrəsi"
+                  label={lab && "Atestat Nömrəsi"}
                 />
               </div>
             </div>
-            <div className="row">
+            <div className={`row ${lab && "mb-4"}`}>
               <div className="col-md-4">
                 <MyTextInput
                   id="turnover"
@@ -137,6 +146,7 @@ export default function LabPageModal({ lab }) {
                   type="text"
                   className="form-control"
                   placeholder="Dövriyyə"
+                  label={lab && "Dövriyyə"}
                 />
               </div>
               <div className="col-md-4">
@@ -146,6 +156,7 @@ export default function LabPageModal({ lab }) {
                   type="text"
                   className="form-control"
                   placeholder="Əməliyyatlar"
+                  label={lab && "Əməliyyatlar"}
                 />
               </div>
               <div className="col-md-4">
@@ -155,6 +166,7 @@ export default function LabPageModal({ lab }) {
                   type="text"
                   className="form-control"
                   placeholder="Qeyd"
+                  label={lab && "Qeyd"}
                 />
               </div>
             </div>

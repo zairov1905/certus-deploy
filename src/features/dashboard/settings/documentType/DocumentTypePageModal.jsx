@@ -22,9 +22,10 @@ export default function DocumentTypePageModal({ documentType }) {
   });
 
   const initialValues = documentType
-    ? documentType
+    ? {
+      name: documentType.name && documentType.name,
+    }
     : {
-        id: "",
         name: "",
       };
   const validationSchema = Yup.object({
@@ -42,7 +43,7 @@ export default function DocumentTypePageModal({ documentType }) {
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
             documentType
-              ? await dispatch(updateDocumentType({id:values.id,name:values.name}))
+              ? await dispatch(updateDocumentType({...values,id:documentType.id}))
               : await dispatch(createDocumentType({ ...values }));
             setSubmitting(false);
             setModal(true);
@@ -64,6 +65,8 @@ export default function DocumentTypePageModal({ documentType }) {
                   type="text"
                   className="form-control"
                   placeholder="Sənəd növü"
+                  label={documentType && "Sənəd növü"}
+
                 />
               </div>
             </div>

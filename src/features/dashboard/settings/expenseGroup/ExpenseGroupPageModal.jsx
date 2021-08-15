@@ -21,24 +21,28 @@ export default function ExpenseGroupPageModal({ expenseGroup }) {
     }
   });
 
-  const initialValues = expenseGroup ?expenseGroup: {
-    id: "",
-    name: "",
-  };
+  const initialValues = expenseGroup
+    ? { name: expenseGroup.name }
+    : {
+        name: "",
+      };
   const validationSchema = Yup.object({
     name: Yup.string().required("Mütləq doldurulmalıdır."),
   });
 
   return (
-    <ModalWrapper size="modal-lg" header={expenseGroup ? "Redakte Et" : "Əlavə et"}>
+    <ModalWrapper
+      size="modal-lg"
+      header={expenseGroup ? "Redakte Et" : "Əlavə et"}
+    >
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
             expenseGroup
-              ? await dispatch(updateExpenseGroup(values))
-              : await dispatch(createExpenseGroup({ ...values}));
+              ? await dispatch(updateExpenseGroup({ ...values, id:expenseGroup.id }))
+              : await dispatch(createExpenseGroup({ ...values }));
             setSubmitting(false);
             setModal(true);
             dispatch(closeModal());
@@ -59,8 +63,10 @@ export default function ExpenseGroupPageModal({ expenseGroup }) {
                   type="text"
                   className="form-control"
                   placeholder="Gəlir-Xərc qrupu adı"
+                  label={expenseGroup && "Gəlir-Xərc qrupu adı"}
+
                 />
-              </div>    
+              </div>
             </div>
 
             <button
