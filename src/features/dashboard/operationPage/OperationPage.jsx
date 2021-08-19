@@ -125,12 +125,12 @@ export default function OperationPage() {
     },
     {
       name: "Xidmət növü",
-      cell: (operation) => <p>{operation.service_type_id.name}</p>,
+      cell: (operation) => <p>{operation.service_type_id && operation.service_type_id.name}</p>,
       sortable: true,
     },
     {
       name: "Müştəri",
-      cell: (operation) => <p>{operation.customer_id.customer_name}</p>,
+      cell: (operation) => <p>{operation.customer_id && operation.customer_id.customer_name}</p>,
       sortable: true,
     },
     {
@@ -140,7 +140,7 @@ export default function OperationPage() {
     },
     {
       name: "Referans",
-      cell: (operation) => <p>{operation.reference_id.name}</p>,
+      cell: (operation) => <p>{operation.reference_id && operation.reference_id.name}</p>,
       sortable: true,
     },
     {

@@ -179,10 +179,12 @@ export default function CrmPageModal({ crm }) {
         note: "",
       };
   const validationSchema = Yup.object({
+    contact_name: Yup.string().required("Mutuel doldurulmalıdır."),
+    contact_surname: Yup.string().required("Mutuel doldurulmalıdır."),
     employee_id: Yup.string().required("Mutuel doldurulmalıdır."),
     // customerCode: Yup.string().required("Mütləq doldurulmalıdır."),
     customer_name: Yup.string().required("Mütləq doldurulmalıdır."),
-    // voen: Yup.string().required("Mütləq doldurulmalıdır."),
+    voen: Yup.string().required("Mütləq doldurulmalıdır."),
     // date: Yup.string().required("Mütləq doldurulmalıdır."),
     // // logo: Yup.string().required("Mütləq doldurulmalıdır."),
     // legal_adress: Yup.string().required("Mütləq doldurulmalıdır."),
@@ -711,7 +713,7 @@ export default function CrmPageModal({ crm }) {
                   </div>
                 </div>
               </div>
-              {/* <div className="card">
+              <div className="card">
                 <div className="card-header" id="headingTwo3">
                   <section className="mb-0 mt-0">
                     <div
@@ -984,7 +986,7 @@ export default function CrmPageModal({ crm }) {
                   </div>
                 </div>
               </div>
-             */}
+            
             </div>
 
             <button

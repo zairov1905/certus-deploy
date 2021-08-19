@@ -111,15 +111,15 @@ export default function ExpensePageModal({ expense }) {
       };
   const validationSchema = Yup.object({
     income_expense_group_id: Yup.string().required("Mütləq doldurulmalıdır."),
-    expense_type_id: Yup.string().required("Mütləq doldurulmalıdır."),
-    date: Yup.string().required("Mütləq doldurulmalıdır."),
-    contractor_id: Yup.string().required("Mütləq doldurulmalıdır."),
-    document_id: Yup.string().required("Mütləq doldurulmalıdır."),
-    // expenseInvoice: Yup.string().required("Mütləq doldurulmalıdır."),
-    operation_id: Yup.string().required("Mütləq doldurulmalıdır."),
-    payment_id: Yup.string().required("Mütləq doldurulmalıdır."),
-    payment_type_id: Yup.string().required("Mütləq doldurulmalıdır."),
-    faktura: Yup.string().required("Mütləq doldurulmalıdır."),
+    // expense_type_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    // date: Yup.string().required("Mütləq doldurulmalıdır."),
+    // contractor_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    // document_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    // // expenseInvoice: Yup.string().required("Mütləq doldurulmalıdır."),
+    // operation_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    // payment_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    // payment_type_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    // faktura: Yup.string().required("Mütləq doldurulmalıdır."),
   });
 
   return (

@@ -66,11 +66,11 @@ export default function LabPageModal({ lab }) {
   const validationSchema = Yup.object({
     // id:"",
     name: Yup.string().required("Mütləq doldurulmalıdır."),
-    document_id: Yup.string().required("Mütləq doldurulmalıdır."),
-    certificate_number: Yup.string().required("Mütləq doldurulmalıdır."),
-    turnover: Yup.string().required("Mütləq doldurulmalıdır."),
-    operations: Yup.string().required("Mütləq doldurulmalıdır."),
-    note: Yup.string().required("Mütləq doldurulmalıdır."),
+    // document_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    // certificate_number: Yup.string().required("Mütləq doldurulmalıdır."),
+    // turnover: Yup.string().required("Mütləq doldurulmalıdır."),
+    // operations: Yup.string().required("Mütləq doldurulmalıdır."),
+    // note: Yup.string().required("Mütləq doldurulmalıdır."),
   });
 
   return (

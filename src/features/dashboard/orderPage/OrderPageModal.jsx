@@ -101,12 +101,12 @@ export default function OrderPageModal({ order }) {
         /////
       };
   const validationSchema = Yup.object({
-    number: Yup.string().required("Mütləq doldurulmalıdır."),
-    service_type_id: Yup.number().required(),
-    customer_id: Yup.number(),
-    order_source_id: Yup.number(),
-    reference_id: Yup.number(),
-    date: Yup.string(),
+    // number: Yup.string().required("Mütləq doldurulmalıdır."),
+    service_type_id: Yup.number().required("Mütləq doldurulmalıdır."),
+    // customer_id: Yup.number(),
+    // order_source_id: Yup.number(),
+    // reference_id: Yup.number(),
+    // date: Yup.string(),
     // description: "",
   });
 
