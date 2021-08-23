@@ -478,7 +478,9 @@ export default function ProductServicePageModal({ productService }) {
           onSubmit={async (values, { setSubmitting, setErrors }) => {
             try {
               productService
-                ? await dispatch(updateProductService({...values, id:productService.id}))
+                ? await dispatch(
+                    updateProductService({ ...values, id: productService.id })
+                  )
                 : await dispatch(
                     createProductService({
                       ...values,
@@ -581,61 +583,66 @@ export default function ProductServicePageModal({ productService }) {
                     label="Sertifikat təqdim edilən təsərrüfat subyektinin adı"
                   />
                 </div>
-                <div className="col-md-12 mb-4">
-                  <MyTextInput
-                    id="legalStatus"
-                    name="legalStatus"
-                    type="text"
-                    readOnly
-                    className="form-control"
-                    placeholder="Hüquqi statusunu daxil edin"
-                    label="Hüquqi statusu"
-                  />
-                </div>
-                <div className="col-md-12 mb-4">
-                  <MyTextInput
-                    id="VOEN"
-                    name="VOEN"
-                    type="text"
-                    readOnly
-                    className="form-control"
-                    placeholder="VÖEN daxil edin"
-                    label="VÖEN"
-                  />
-                </div>
-                <div className="col-md-12 mb-4">
-                  <MyTextInput
-                    id="economicEntityPhoneNumber"
-                    name="economicEntityPhoneNumber"
-                    type="text"
-                    readOnly
-                    className="form-control"
-                    placeholder="Təsərrüfat subyektinin rəhbərinin telefon nömrəsini daxil edin"
-                    label="Təsərrüfat subyektinin rəhbərinin telefon nömrəsi"
-                  />
-                </div>
-                <div className="col-md-12 mb-4">
-                  <MyTextInput
-                    id="legalAddressOfTheBusinessEntity"
-                    name="legalAddressOfTheBusinessEntity"
-                    type="text"
-                    readOnly
-                    className="form-control"
-                    placeholder="Sertifikat təqdim edilən təsərrüfat subyektinin hüquqi ünvanını daxil edin"
-                    label="Sertifikat təqdim edilən təsərrüfat subyektinin hüquqi ünvanı"
-                  />
-                </div>
-                <div className="col-md-12 mb-4">
-                  <MyTextInput
-                    id="actualAddressOfTheBusiness"
-                    name="actualAddressOfTheBusiness"
-                    type="text"
-                    readOnly
-                    className="form-control"
-                    placeholder="Sertifikat təqdim edilən təsərrüfat subyektinin faktiki ünvanını daxil edin"
-                    label="Sertifikat təqdim edilən təsərrüfat subyektinin faktiki ünvanı"
-                  />
-                </div>
+                {productService && (
+                  <React.Fragment>
+                    <div className="col-md-12 mb-4">
+                      <MyTextInput
+                        id="legalStatus"
+                        name="legalStatus"
+                        type="text"
+                        readOnly
+                        className="form-control"
+                        placeholder="Hüquqi statusunu daxil edin"
+                        label="Hüquqi statusu"
+                      />
+                    </div>
+                    <div className="col-md-12 mb-4">
+                      <MyTextInput
+                        id="VOEN"
+                        name="VOEN"
+                        type="text"
+                        readOnly
+                        className="form-control"
+                        placeholder="VÖEN daxil edin"
+                        label="VÖEN"
+                      />
+                    </div>
+                    <div className="col-md-12 mb-4">
+                      <MyTextInput
+                        id="economicEntityPhoneNumber"
+                        name="economicEntityPhoneNumber"
+                        type="text"
+                        readOnly
+                        className="form-control"
+                        placeholder="Təsərrüfat subyektinin rəhbərinin telefon nömrəsini daxil edin"
+                        label="Təsərrüfat subyektinin rəhbərinin telefon nömrəsi"
+                      />
+                    </div>
+                    <div className="col-md-12 mb-4">
+                      <MyTextInput
+                        id="legalAddressOfTheBusinessEntity"
+                        name="legalAddressOfTheBusinessEntity"
+                        type="text"
+                        readOnly
+                        className="form-control"
+                        placeholder="Sertifikat təqdim edilən təsərrüfat subyektinin hüquqi ünvanını daxil edin"
+                        label="Sertifikat təqdim edilən təsərrüfat subyektinin hüquqi ünvanı"
+                      />
+                    </div>
+                    <div className="col-md-12 mb-4">
+                      <MyTextInput
+                        id="actualAddressOfTheBusiness"
+                        name="actualAddressOfTheBusiness"
+                        type="text"
+                        readOnly
+                        className="form-control"
+                        placeholder="Sertifikat təqdim edilən təsərrüfat subyektinin faktiki ünvanını daxil edin"
+                        label="Sertifikat təqdim edilən təsərrüfat subyektinin faktiki ünvanı"
+                      />
+                    </div>
+                  </React.Fragment>
+                )}
+
                 <div className="col-md-12 mb-4">
                   <MyTextInput
                     id="product_name"
@@ -775,17 +782,19 @@ export default function ProductServicePageModal({ productService }) {
                     label="Akkreditasiya olunmuş sınaq laboratoriyasının adı"
                   />
                 </div>
-                <div className="col-md-12 mb-4">
-                  <MyTextInput
-                    id="accreditedLaboratoryNumber"
-                    name="accreditedLaboratoryNumber"
-                    type="text"
-                    readOnly
-                    className="form-control"
-                    placeholder="Akkreditasiya olunmuş laboratoriyanın attestat nömrəsini daxil edin"
-                    label="Akkreditasiya olunmuş laboratoriyanın attestat nömrəsi"
-                  />
-                </div>
+                {productService && (
+                  <div className="col-md-12 mb-4">
+                    <MyTextInput
+                      id="accreditedLaboratoryNumber"
+                      name="accreditedLaboratoryNumber"
+                      type="text"
+                      readOnly
+                      className="form-control"
+                      placeholder="Akkreditasiya olunmuş laboratoriyanın attestat nömrəsini daxil edin"
+                      label="Akkreditasiya olunmuş laboratoriyanın attestat nömrəsi"
+                    />
+                  </div>
+                )}
                 <div className="col-md-12 mb-4">
                   <MyTextInput
                     id="test_number"

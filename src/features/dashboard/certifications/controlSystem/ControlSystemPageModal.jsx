@@ -533,8 +533,8 @@ export default function ControlSystemPageModal({ controlSystem }) {
                     options={customerOptions}
                     defaultValue={
                       controlSystem && {
-                        label: `${controlSystem.customer_id.customer_name}`,
-                        value: parseInt(controlSystem.customer_id.id),
+                        label: `${controlSystem.customer_id ? controlSystem.customer_id.customer_name : 'Təyin edilməyib'}`,
+                        value: parseInt(controlSystem.customer_id && controlSystem.customer_id.id),
                       }
                     }
                     // className="form-control"
@@ -542,7 +542,8 @@ export default function ControlSystemPageModal({ controlSystem }) {
                     label="Sertifikat təqdim edilən təsərrüfat subyektinin adı"
                   />
                 </div>
-                <div className="col-md-12 mb-4">
+                {controlSystem  && (<React.Fragment>
+                  <div className="col-md-12 mb-4">
                   <MyTextInput
                     id="legalStatus"
                     name="legalStatus"
@@ -597,6 +598,9 @@ export default function ControlSystemPageModal({ controlSystem }) {
                     label="Sertifikat təqdim edilən təsərrüfat subyektinin faktiki ünvanı"
                   />
                 </div>
+                
+                </React.Fragment>)}
+
                 <div className="col-md-12 mb-4">
                   <MyTextInput
                     id="product_name"

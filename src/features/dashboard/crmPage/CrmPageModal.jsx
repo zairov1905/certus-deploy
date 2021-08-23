@@ -38,7 +38,7 @@ export default function CrmPageModal({ crm }) {
     references &&
     references.map((reference) => {
       return {
-        value: parseInt( reference.id),
+        value: parseInt(reference.id),
         label: `${reference.name}`,
       };
     });
@@ -54,12 +54,13 @@ export default function CrmPageModal({ crm }) {
   const dispatch = useDispatch();
   const [modal, setModal] = useState(false);
   // dovriyye il uzre
-  const [circulationWithYears, setCirculationWithYears] = useState([
-    { circulationYear: "", circulation: "" },
-  ]);
-  let mapCirculations = crm
+  const [circulationWithYears, setCirculationWithYears] = useState(crm
     ? JSON.parse(crm.circulationByYears)
-    : circulationWithYears;
+    :
+    { circulationYear: "", circulation: "" },
+  );
+  let mapCirculations =  circulationWithYears;
+  console.log(mapCirculations);
   const handleAddCirculationByYear = () => {
     setCirculationWithYears([
       ...circulationWithYears,
@@ -76,10 +77,10 @@ export default function CrmPageModal({ crm }) {
   };
   /// isciler il uzre
 
-  const [workersYears, setWorkersYears] = useState([
-    { workerYear: "", worker: "" },
-  ]);
-  let mapWorkersYears = crm ? JSON.parse(crm.workersYears) : workersYears;
+  const [workersYears, setWorkersYears] = useState(
+    crm ? JSON.parse(crm.workersYears) : { workerYear: "", worker: "" }
+  );
+  let mapWorkersYears = workersYears;
   const handleAddWorkersYear = () => {
     setWorkersYears([...workersYears, { workerYear: "", worker: "" }]);
   };
@@ -132,10 +133,12 @@ export default function CrmPageModal({ crm }) {
 
         referans_id: crm.referans_id && crm.referans_id.id,
         customer_category: crm.customer_category && crm.customer_category,
-        customer_satisfaction: crm.customer_satisfaction && crm.customer_satisfaction,
+        customer_satisfaction:
+          crm.customer_satisfaction && crm.customer_satisfaction,
         turnover: crm.turnover && crm.turnover,
-        circulationByYears: [{"year":2020, "turnover":1000}, {"year": 2021, "turnover": 1500}],
-        workersYears: [{"year":2020, "employees":10}, {"year": 2021, "employees": 15}],
+        circulationByYears:
+          crm.circulationByYears && JSON.parse(crm.circulationByYears),
+        workersYears: crm.workersYears && JSON.parse(crm.workersYears),
         note: crm.note && crm.note,
       }
     : {
@@ -216,7 +219,7 @@ export default function CrmPageModal({ crm }) {
               ? await dispatch(
                   updateCrm({
                     ...values,
-                    id:crm.id
+                    id: crm.id,
                   })
                 )
               : await dispatch(createCrm({ ...values }));
@@ -827,7 +830,10 @@ export default function CrmPageModal({ crm }) {
                                 id="circulationYear"
                                 name={`circulationByYears[${index}].circulationYear`}
                                 type="text"
-                                defaultValue={ mapCirculations && mapCirculation.circulationYear}
+                                defaultValue={
+                                  mapCirculations &&
+                                  mapCirculation.circulationYear
+                                }
                                 className="form-control"
                                 placeholder="İl"
                               />
@@ -835,7 +841,9 @@ export default function CrmPageModal({ crm }) {
                             <div className="col-md-6">
                               <MyTextInput
                                 name={`circulationByYears[${index}].circulation`}
-                                defaultValue={ mapCirculations && mapCirculation.circulation}
+                                defaultValue={
+                                  mapCirculations && mapCirculation.circulation
+                                }
                                 id="circulation"
                                 type="text"
                                 className="form-control"
@@ -962,8 +970,9 @@ export default function CrmPageModal({ crm }) {
                               <MyTextInput
                                 id={`workersYears[${index}].workerYear`}
                                 name={`workersYears[${index}]workerYear`}
-                                defaultValue={ mapWorkersYears && mapWorkersYears.workerYear}
-                                
+                                defaultValue={
+                                  mapWorkersYears && mapWorkersYears.workerYear
+                                }
                                 type="text"
                                 className="form-control"
                                 placeholder="İl"
@@ -973,8 +982,9 @@ export default function CrmPageModal({ crm }) {
                               <MyTextInput
                                 name={`workersYears[${index}]worker`}
                                 id={`workersYears[${index}].worker`}
-                                defaultValue={ mapWorkersYears && mapWorkersYears.worker}
-
+                                defaultValue={
+                                  mapWorkersYears && mapWorkersYears.worker
+                                }
                                 type="text"
                                 className="form-control"
                                 placeholder="İşçilər"
@@ -986,7 +996,6 @@ export default function CrmPageModal({ crm }) {
                   </div>
                 </div>
               </div>
-            
             </div>
 
             <button
