@@ -1,6 +1,5 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-import { fetchSampleDataTraining } from "../../../../app/api/mockApi";
 
 import {
   APP_LOADED,
@@ -8,7 +7,6 @@ import {
   asyncActionFinish,
   asyncActionStart,
 } from "../../../../app/async/asyncReducer";
-import { delay } from "../../../../app/util/util";
 import {
   CREATE_TRAINING,
   DELETE_TRAINING,
@@ -19,21 +17,22 @@ const url = "training";
 export function loadTraining(data) {
   return async function (dispatch) {
     dispatch(asyncActionStart());
-
-    const trainings = await axios.get(`/${url}`, {
-      params: { ...data },
-    });
-    console.log(trainings);
-    if (trainings.status === 200) {
-      dispatch({
-        type: FETCH_TRAINING,
-        payload: trainings.data.data,
-        totalCount: trainings.data.message,
+    await axios
+      .get(`/${url}`, {
+        params: { ...data },
+      })
+      .then((datas) => {
+        dispatch({
+          type: FETCH_TRAINING,
+          payload: datas.data.data,
+          totalCount: datas.data.message,
+        });
+        dispatch(asyncActionFinish());
+      })
+      .catch((err) => {
+        dispatch(asyncActionError(err.message));
+        toast.info("Xəta baş verdi");
       });
-      dispatch(asyncActionFinish());
-    } else {
-      dispatch(asyncActionError());
-    }
   };
 }
 export function listenToTraining(trainings) {
@@ -46,52 +45,54 @@ export function listenToTraining(trainings) {
 export function createTraining(training) {
   return async function (dispatch) {
     dispatch(asyncActionStart());
-    const data = await axios.post(`${url}/create`, training, {
-      withCredentials: true,
-    });
-    console.log(data)
-    if (data.status === 201) {
-      toast.success("Uğurla əlavə edildi");
-      dispatch({ type: CREATE_TRAINING, payload: data.data.data });
-      dispatch(asyncActionFinish());
-    } else {
-      toast.danger("Xəta baş verdi, yenidən cəht edin.");
-    }
+    await axios
+      .post(`${url}/create`, training, {
+        withCredentials: true,
+      })
+      .then((data) => {
+        dispatch({ type: CREATE_TRAINING, payload: data.data.data });
+        dispatch(asyncActionFinish());
+        toast.success("Uğurla əlavə edildi");
+      })
+      .catch((err) => {
+        dispatch(asyncActionError(err.message));
+        toast.info("Xəta baş verdi, yenidən cəht edin.");
+      });
   };
 }
 
 export function updateTraining(training) {
   return async function (dispatch) {
     dispatch(asyncActionStart);
-console.log(training);
-    const trainingUpdated = await axios.put(
-      `/${url}/update`,
-      training
-    );
-    if (trainingUpdated.status === 200) {
-      toast.success("Dəyişiklik uğurlar yerinə yetirildi");
-      dispatch({
-        type: UPDATE_TRAINING,
-        payload: trainingUpdated.data.data,
+    await axios
+      .put(`/${url}/update`, training)
+      .then((data) => {
+        dispatch({
+          type: UPDATE_TRAINING,
+          payload: data.data.data,
+        });
+        dispatch(asyncActionFinish());
+        toast.success("Dəyişiklik uğurlar yerinə yetirildi");
+      })
+      .catch((err) => {
+        dispatch(asyncActionError(err.message));
+        toast.info("Xəta baş verdi, yenidən cəht edin.");
       });
-      dispatch(asyncActionFinish());
-    } else {
-      asyncActionError();
-    }
   };
 }
 
 export function deleteTraining(trainingId) {
   return async function (dispatch) {
-    const documentDeleted = await axios.delete(
-      `/${url}/delete?id=${trainingId}`
-    );
-    if (documentDeleted.status === 200) {
-      dispatch({ type: DELETE_TRAINING, payload: trainingId });
-      // dispatch(asyncActionFinish())
-      toast.info("Uğurla silindi");
-    } else {
-      dispatch(asyncActionError());
-    }
+    await axios
+      .delete(`/${url}/delete?id=${trainingId}`)
+      .then((data) => {
+        dispatch({ type: DELETE_TRAINING, payload: trainingId });
+        dispatch(asyncActionFinish());
+        toast.info("Uğurla silindi");
+      })
+      .catch((err) => {
+        dispatch(asyncActionError(err.message));
+        toast.info("Xəta baş verdi, yenidən cəht edin.");
+      });
   };
 }
