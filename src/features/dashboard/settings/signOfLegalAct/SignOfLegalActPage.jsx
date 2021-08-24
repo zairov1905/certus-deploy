@@ -235,7 +235,6 @@ export default function SignOfLegalActPage() {
                 // className="dataTables_wrapper container-fluid dt-bootstrap4 table-responsive"
                 // selectableRows
                 title="Hüquqi normativ texniki aktın işarələri"
-                title="Xidmət Növləri"
                 columns={columns}
                 data={data}
                 pagination
