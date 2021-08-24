@@ -15,24 +15,26 @@ import {
   FETCH_SERVICE_TYPE,
   UPDATE_SERVICE_TYPE,
 } from "./serviceTypeConstants";
-
+const url = "service_type";
 export function loadServiceType(data) {
   return async function (dispatch) {
     dispatch(asyncActionStart());
-
-    const serviceTypes = await axios.get("/service_type", {
-      params: { ...data },
-    });
-    if (serviceTypes.status === 200) {
-      dispatch({
-        type: FETCH_SERVICE_TYPE,
-        payload: serviceTypes.data.data,
-        totalCount: serviceTypes.data.message,
+    await axios
+      .get(`/${url}`, {
+        params: { ...data },
+      })
+      .then((datas) => {
+        dispatch({
+          type: FETCH_SERVICE_TYPE,
+          payload: datas.data.data,
+          totalCount: datas.data.message,
+        });
+        dispatch(asyncActionFinish());
+      })
+      .catch((err) => {
+        dispatch(asyncActionError(err.message));
+        toast.info("Xəta baş verdi");
       });
-      dispatch(asyncActionFinish());
-    } else {
-      dispatch(asyncActionError());
-    }
   };
 }
 export function listenToServiceType(serviceTypes) {
@@ -45,54 +47,54 @@ export function listenToServiceType(serviceTypes) {
 export function createServiceType(serviceType) {
   return async function (dispatch) {
     dispatch(asyncActionStart());
-    const data = await axios.post("service_type/create", serviceType, {
-      withCredentials: true,
-    });
-
-    if (data.status === 201) {
-      toast.success("Uğurla əlavə edildi");
-      dispatch({ type: CREATE_SERVICE_TYPE, payload: data.data.data });
-      dispatch(asyncActionFinish());
-    } else {
-      toast.danger("Xəta baş verdi, yenidən cəht edin.");
-    }
+    await axios
+      .post(`${url}/create`, serviceType, {
+        withCredentials: true,
+      })
+      .then((data) => {
+        dispatch({ type: CREATE_SERVICE_TYPE, payload: data.data.data });
+        dispatch(asyncActionFinish());
+        toast.success("Uğurla əlavə edildi");
+      })
+      .catch((err) => {
+        dispatch(asyncActionError(err.message));
+        toast.info("Xəta baş verdi, yenidən cəht edin.");
+      });
   };
 }
 
 export function updateServiceType(serviceType) {
   return async function (dispatch) {
     dispatch(asyncActionStart);
-
-    const serviceTypeUpdated = await axios.put(
-      "/service_type/update",
-      serviceType
-    );
-    console.log(serviceTypeUpdated.data.data)
-    if (serviceTypeUpdated.status === 200) {
-      toast.success("Dəyişiklik uğurlar yerinə yetirildi");
-      dispatch({
-        type: UPDATE_SERVICE_TYPE,
-        payload: serviceTypeUpdated.data.data,
+    await axios
+      .put(`/${url}/update`, serviceType)
+      .then((data) => {
+        dispatch({
+          type: UPDATE_SERVICE_TYPE,
+          payload: data.data.data,
+        });
+        dispatch(asyncActionFinish());
+        toast.success("Dəyişiklik uğurlar yerinə yetirildi");
+      })
+      .catch((err) => {
+        dispatch(asyncActionError(err.message));
+        toast.info("Xəta baş verdi, yenidən cəht edin.");
       });
-      dispatch(asyncActionFinish());
-    } else {
-      asyncActionError();
-    }
   };
 }
 
 export function deleteServiceType(serviceTypeId) {
   return async function (dispatch) {
-    const serviceTypeDeleted = await axios.delete(
-      `/service_type/delete?id=${serviceTypeId}`
-    );
-    
-    if (serviceTypeDeleted.status === 200) {
-      dispatch({ type: DELETE_SERVICE_TYPE, payload: serviceTypeId });
-      // dispatch(asyncActionFinish())
-      toast.info("Uğurla silindi");
-    } else {
-      dispatch(asyncActionError());
-    }
+    await axios
+      .delete(`/${url}/delete?id=${serviceTypeId}`)
+      .then((data) => {
+        dispatch({ type: DELETE_SERVICE_TYPE, payload: serviceTypeId });
+        dispatch(asyncActionFinish());
+        toast.info("Uğurla silindi");
+      })
+      .catch((err) => {
+        dispatch(asyncActionError(err.message));
+        toast.info("Xəta baş verdi, yenidən cəht edin.");
+      });
   };
 }

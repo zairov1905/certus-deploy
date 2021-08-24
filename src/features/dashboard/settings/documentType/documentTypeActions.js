@@ -1,6 +1,5 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-import { fetchSampleDataDocumentTypes } from "../../../../app/api/mockApi";
 
 import {
   APP_LOADED,
@@ -8,31 +7,32 @@ import {
   asyncActionFinish,
   asyncActionStart,
 } from "../../../../app/async/asyncReducer";
-import { delay } from "../../../../app/util/util";
 import {
   CREATE_DOCUMENTTYPE,
   DELETE_DOCUMENTTYPE,
   FETCH_DOCUMENTTYPE,
   UPDATE_DOCUMENTTYPE,
 } from "./documentTypeConstants";
-
+const url = "document_type"
 export function loadDocumentTypes(data) {
   return async function (dispatch) {
     dispatch(asyncActionStart());
-
-    const document_types = await axios.get("/document_type", {
-      params: { ...data },
-    });
-    if (document_types.status === 200) {
-      dispatch({
-        type: FETCH_DOCUMENTTYPE,
-        payload: document_types.data.data,
-        totalCount: document_types.data.message,
+    await axios
+      .get(`/${url}`, {
+        params: { ...data },
+      })
+      .then((datas) => {
+        dispatch({
+          type: FETCH_DOCUMENTTYPE,
+          payload: datas.data.data,
+          totalCount: datas.data.message,
+        });
+        dispatch(asyncActionFinish());
+      })
+      .catch((err) => {
+        dispatch(asyncActionError(err.message));
+        toast.info("Xəta baş verdi");
       });
-      dispatch(asyncActionFinish());
-    } else {
-      dispatch(asyncActionError());
-    }
   };
 }
 export function listenToDocumentType(documentTypes) {
@@ -45,54 +45,54 @@ export function listenToDocumentType(documentTypes) {
 export function createDocumentType(documentType) {
   return async function (dispatch) {
     dispatch(asyncActionStart());
-    const data = await axios.post("document_type/create", documentType, {
-      withCredentials: true,
-    });
-
-    if (data.status === 201) {
-      toast.success("Uğurla əlavə edildi");
-      dispatch({ type: CREATE_DOCUMENTTYPE, payload: data.data.data });
-      dispatch(asyncActionFinish());
-    } else {
-      toast.danger("Xəta baş verdi, yenidən cəht edin.");
-    }
+    await axios
+      .post(`${url}/create`, documentType, {
+        withCredentials: true,
+      })
+      .then((data) => {
+        dispatch({ type: CREATE_DOCUMENTTYPE, payload: data.data.data });
+        dispatch(asyncActionFinish());
+        toast.success("Uğurla əlavə edildi");
+      })
+      .catch((err) => {
+        dispatch(asyncActionError(err.message));
+        toast.info("Xəta baş verdi, yenidən cəht edin.");
+      });
   };
 }
 
 export function updateDocumentType(documentType) {
   return async function (dispatch) {
     dispatch(asyncActionStart);
-
-    const documentUpdated = await axios.put(
-      "/document_type/update",
-      documentType
-    );
-    console.log(documentUpdated.data.data)
-    if (documentUpdated.status === 200) {
-      toast.success("Dəyişiklik uğurlar yerinə yetirildi");
-      dispatch({
-        type: UPDATE_DOCUMENTTYPE,
-        payload: documentUpdated.data.data,
+    await axios
+      .put(`/${url}/update`, documentType)
+      .then((data) => {
+        dispatch({
+          type: UPDATE_DOCUMENTTYPE,
+          payload: data.data.data,
+        });
+        dispatch(asyncActionFinish());
+        toast.success("Dəyişiklik uğurlar yerinə yetirildi");
+      })
+      .catch((err) => {
+        dispatch(asyncActionError(err.message));
+        toast.info("Xəta baş verdi, yenidən cəht edin.");
       });
-      dispatch(asyncActionFinish());
-    } else {
-      asyncActionError();
-    }
   };
 }
 
 export function deleteDocumentType(documentTypeId) {
   return async function (dispatch) {
-    const documentDeleted = await axios.delete(
-      `/document_type/delete?id=${documentTypeId}`
-    );
-    console.log(documentDeleted);
-    if (documentDeleted.status === 200) {
-      dispatch({ type: DELETE_DOCUMENTTYPE, payload: documentTypeId });
-      // dispatch(asyncActionFinish())
-      toast.info("Uğurla silindi");
-    } else {
-      dispatch(asyncActionError());
-    }
+    await axios
+      .delete(`/${url}/delete?id=${documentTypeId}`)
+      .then((data) => {
+        dispatch({ type: DELETE_DOCUMENTTYPE, payload: documentTypeId });
+        dispatch(asyncActionFinish());
+        toast.info("Uğurla silindi");
+      })
+      .catch((err) => {
+        dispatch(asyncActionError(err.message));
+        toast.info("Xəta baş verdi, yenidən cəht edin.");
+      });
   };
 }

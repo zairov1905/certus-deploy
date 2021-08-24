@@ -1,38 +1,37 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-import { fetchSampleDataCounterParty } from "../../../../app/api/mockApi";
-
 import {
   APP_LOADED,
   asyncActionError,
   asyncActionFinish,
   asyncActionStart,
 } from "../../../../app/async/asyncReducer";
-import { delay } from "../../../../app/util/util";
 import {
   CREATE_COUNTERPARTY,
   DELETE_COUNTERPARTY,
   FETCH_COUNTERPARTY,
   UPDATE_COUNTERPARTY,
 } from "./counterpartyConstants";
-
+const url = "contractor";
 export function loadCounterparty(data) {
   return async function (dispatch) {
     dispatch(asyncActionStart());
-    const counterparties = await axios.get("/contractor", {
-      params: { ...data },
-    });
-    console.log(counterparties)
-    if (counterparties.status === 200) {
-      dispatch({
-        type: FETCH_COUNTERPARTY,
-        payload: counterparties.data.data,
-        totalCount: counterparties.data.message,
+    await axios
+      .get(`/${url}`, {
+        params: { ...data },
+      })
+      .then((datas) => {
+        dispatch({
+          type: FETCH_COUNTERPARTY,
+          payload: datas.data.data,
+          totalCount: datas.data.message,
+        });
+        dispatch(asyncActionFinish());
+      })
+      .catch((err) => {
+        dispatch(asyncActionError(err.message));
+        toast.info("Xəta baş verdi");
       });
-      dispatch(asyncActionFinish());
-    } else {
-      dispatch(asyncActionError());
-    }
   };
 }
 export function listenToCounterparty(counterparties) {
@@ -45,52 +44,55 @@ export function listenToCounterparty(counterparties) {
 export function createCounterparty(counterparty) {
   return async function (dispatch) {
     dispatch(asyncActionStart());
-    const data = await axios.post("contractor/create", counterparty, {
-      withCredentials: true,
-    });
-    if (data.status === 201) {
-      toast.success(" Kontragent uğurla əlavə edildi");
-      dispatch({ type: CREATE_COUNTERPARTY, payload: data.data.data });
-      dispatch(asyncActionFinish());
-    } else {
-      toast.danger("Xəta baş verdi, yenidən cəht edin.");
-    }
+    await axios
+      .post(`${url}/create`, counterparty, {
+        withCredentials: true,
+      })
+      .then((data) => {
+        dispatch({ type: CREATE_COUNTERPARTY, payload: data.data.data });
+        dispatch(asyncActionFinish());
+        toast.success("Uğurla əlavə edildi");
+      })
+      .catch((err) => {
+        dispatch(asyncActionError(err.message));
+        toast.info("Xəta baş verdi, yenidən cəht edin.");
+      });
   };
 }
 
 export function updateCounterparty(counterparty) {
   return async function (dispatch) {
     dispatch(asyncActionStart);
-
-    const counterpartyUptaded = await axios.put(
-      "/contractor/update",
-      counterparty
-    );
-    
-    if (counterpartyUptaded.status === 200) {
-      toast.success("Dəyişiklik uğurlar yerinə yetirildi");
-      dispatch({
-        type: UPDATE_COUNTERPARTY,
-        payload: counterpartyUptaded.data.data,
+    await axios
+      .put(`/${url}/update`, counterparty)
+      .then((data) => {
+        dispatch({
+          type: UPDATE_COUNTERPARTY,
+          payload: data.data.data,
+        });
+        dispatch(asyncActionFinish());
+        toast.success("Dəyişiklik uğurlar yerinə yetirildi");
+      })
+      .catch((err) => {
+        dispatch(asyncActionError(err.message));
+        toast.info("Xəta baş verdi, yenidən cəht edin.");
       });
-      dispatch(asyncActionFinish());
-    } else {
-      asyncActionError();
-    }
   };
+
 }
 
 export function deleteCounterparty(counterpartyId) {
   return async function (dispatch) {
-    const counterpartyDeleted = await axios.delete(
-      `/contractor/delete?id=${counterpartyId}`
-    );
-    if (counterpartyDeleted.status === 200) {
-      dispatch({ type: DELETE_COUNTERPARTY, payload: counterpartyId });
-      // dispatch(asyncActionFinish())
-      toast.info("Uğurla silindi");
-    } else {
-      dispatch(asyncActionError());
-    }
+    await axios
+      .delete(`/${url}/delete?id=${counterpartyId}`)
+      .then((data) => {
+        dispatch({ type: DELETE_COUNTERPARTY, payload: counterpartyId });
+        dispatch(asyncActionFinish());
+        toast.info("Uğurla silindi");
+      })
+      .catch((err) => {
+        dispatch(asyncActionError(err.message));
+        toast.info("Xəta baş verdi, yenidən cəht edin.");
+      });
   };
 }

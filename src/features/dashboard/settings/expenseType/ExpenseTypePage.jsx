@@ -235,7 +235,6 @@ export default function ExpenseTypePage() {
                 // className="dataTables_wrapper container-fluid dt-bootstrap4 table-responsive"
                 // selectableRows
                 title="Gəlir-Xərc növləri"
-                title="Sənəd növləri"
                 columns={columns}
                 data={data}
                 pagination

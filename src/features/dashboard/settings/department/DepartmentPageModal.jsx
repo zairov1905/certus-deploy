@@ -23,7 +23,7 @@ export default function DepartmentPageModal({ department }) {
 
   const initialValues = department
     ? {
-        name: department.number && department.number,
+        name: department.name && department.name,
       }
     : {
         name: "",
