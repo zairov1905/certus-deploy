@@ -14,11 +14,11 @@ export function loadCrm(data) {
       .get(`/${url}`, {
         params: { ...data },
       })
-      .then((crms) => {
+      .then((datas) => {
         dispatch({
           type: FETCH_CRM,
-          payload: crms.data.data,
-          totalCount: crms.data.message,
+          payload: datas.data.data,
+          totalCount: datas.data.message,
         });
         dispatch(asyncActionFinish());
       })

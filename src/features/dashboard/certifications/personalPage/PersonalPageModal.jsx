@@ -62,7 +62,7 @@ export default function PersonalPageModal({ personal }) {
         training_id: personal.training_id && personal.training_id.id,
         // skill: [],
         product_code: personal.product_code && personal.product_code,
-        normative_document_sign_id: personal.normative_document_sign_id && personal.normative_document_sign_id.id,
+        // normative_document_sign_id: personal.normative_document_sign_id && personal.normative_document_sign_id.id,
         note:personal.note && personal.note,
       }
     : {
@@ -77,7 +77,7 @@ export default function PersonalPageModal({ personal }) {
         training_id: "",
         // skill: [],
         product_code: "",
-        normative_document_sign_id: "",
+        // normative_document_sign_id: "",
         note: "",
       };
   const validationSchema = Yup.object({
@@ -92,9 +92,9 @@ export default function PersonalPageModal({ personal }) {
     trainer_name: Yup.string().required("Mütləq doldurulmalıdır."),
     training_id: Yup.string().required("Mütləq doldurulmalıdır."),
     product_code: Yup.string().required("Mütləq doldurulmalıdır."),
-    normative_document_sign_id: Yup.string().required(
-      "Mütləq doldurulmalıdır."
-    ),
+    // normative_document_sign_id: Yup.string().required(
+    //   "Mütləq doldurulmalıdır."
+    // ),
   });
 
   return (
@@ -249,7 +249,7 @@ export default function PersonalPageModal({ personal }) {
                   label="Məhsulun kodu"
                 />
               </div>
-              <div className="col-md-12 mb-4">
+              {/* <div className="col-md-12 mb-4">
                 <MyTextInput
                   id="normative_document_sign_id"
                   name="normative_document_sign_id"
@@ -258,7 +258,7 @@ export default function PersonalPageModal({ personal }) {
                   placeholder="Normativ sənədin işarəsini daxil edin"
                   label="Normativ sənədin işarəsi"
                 />
-              </div>
+              </div> */}
               <div className="col-md-12 mb-4">
                 <MyTextInput
                   id="note"

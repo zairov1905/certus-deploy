@@ -20,23 +20,24 @@ const url = "product_certificate";
 export function loadProductService(data) {
   return async function (dispatch) {
     dispatch(asyncActionStart());
-
-    const productService = await axios.get(`/${url}`, {
-      params: { ...data },
-    });
-
-    console.log(productService);
-    if (productService.status === 200) {
-      dispatch({
-        type: FETCH_PRODUCT_SERVICE,
-        payload: productService.data.data,
-        totalCount: productService.data.message,
+    await axios
+      .get(`/${url}`, {
+        params: { ...data },
+      })
+      .then((datas) => {
+        dispatch({
+          type: FETCH_PRODUCT_SERVICE,
+          payload: datas.data.data,
+          totalCount: datas.data.message,
+        });
+        dispatch(asyncActionFinish());
+      })
+      .catch((err) => {
+        dispatch(asyncActionError(err.message));
+        toast.info("Xəta baş verdi");
       });
-      dispatch(asyncActionFinish());
-    } else {
-      dispatch(asyncActionError());
-    }
   };
+
 }
 export function listenToProductService(productServices) {
   return {
@@ -48,54 +49,55 @@ export function listenToProductService(productServices) {
 export function createProductService(productService) {
   return async function (dispatch) {
     dispatch(asyncActionStart());
-    console.log(productService);
-
-    const data = await axios.post(`${url}/create`, productService, {
-      withCredentials: true,
-    });
-
-    if (data.status === 201) {
-      toast.success("Uğurla əlavə edildi");
-      dispatch({ type: CREATE_PRODUCT_SERVICE, payload: data.data.data });
-      dispatch(asyncActionFinish());
-    } else {
-      toast.danger("Xəta baş verdi, yenidən cəht edin.");
-    }
+    await axios
+      .post(`${url}/create`, productService, {
+        withCredentials: true,
+      })
+      .then((data) => {
+        dispatch({ type: CREATE_PRODUCT_SERVICE, payload: data.data.data });
+        dispatch(asyncActionFinish());
+        toast.success("Uğurla əlavə edildi");
+      })
+      .catch((err) => {
+        dispatch(asyncActionError(err.message));
+        toast.info("Xəta baş verdi, yenidən cəht edin.");
+      });
   };
 }
 
 export function updateProductService(productService) {
   return async function (dispatch) {
     dispatch(asyncActionStart);
-
-    const productServiceUpdated = await axios.put(
-      `/${url}/update`,
-      productService
-    );
-    if (productServiceUpdated.status === 200) {
-      toast.success("Dəyişiklik uğurlar yerinə yetirildi");
-      dispatch({
-        type: UPDATE_PRODUCT_SERVICE,
-        payload: productServiceUpdated.data.data,
+    await axios
+      .put(`/${url}/update`, productService)
+      .then((data) => {
+        dispatch({
+          type: UPDATE_PRODUCT_SERVICE,
+          payload: data.data.data,
+        });
+        dispatch(asyncActionFinish());
+        toast.success("Dəyişiklik uğurlar yerinə yetirildi");
+      })
+      .catch((err) => {
+        dispatch(asyncActionError(err.message));
+        toast.info("Xəta baş verdi, yenidən cəht edin.");
       });
-      dispatch(asyncActionFinish());
-    } else {
-      asyncActionError();
-    }
   };
+
 }
 
 export function deleteProductService(productServiceId) {
   return async function (dispatch) {
-    const productServiceDeleted = await axios.delete(
-      `/${url}/delete?id=${productServiceId}`
-    );
-    if (productServiceDeleted.status === 200) {
-      dispatch({ type: DELETE_PRODUCT_SERVICE, payload: productServiceId });
-      // dispatch(asyncActionFinish())
-      toast.info("Uğurla silindi");
-    } else {
-      dispatch(asyncActionError());
-    }
+    await axios
+      .delete(`/${url}/delete?id=${productServiceId}`)
+      .then((data) => {
+        dispatch({ type: DELETE_PRODUCT_SERVICE, payload: productServiceId });
+        dispatch(asyncActionFinish());
+        toast.info("Uğurla silindi");
+      })
+      .catch((err) => {
+        dispatch(asyncActionError(err.message));
+        toast.info("Xəta baş verdi, yenidən cəht edin.");
+      });
   };
 }

@@ -8,85 +8,93 @@ import {
   asyncActionStart,
 } from "../../../app/async/asyncReducer";
 import { delay } from "../../../app/util/util";
-import { CREATE_EXPENSE, DELETE_EXPENSE, FETCH_EXPENSE, UPDATE_EXPENSE } from "./expenseConstants";
-const url = 'expense';
+import {
+  CREATE_EXPENSE,
+  DELETE_EXPENSE,
+  FETCH_EXPENSE,
+  UPDATE_EXPENSE,
+} from "./expenseConstants";
+const url = "expense";
 
 export function loadExpense(data) {
-    return async function (dispatch) {
-        dispatch(asyncActionStart());
-    
-        const expenses = await axios.get(`/${url}`, {
-          params: { ...data },
+  return async function (dispatch) {
+    dispatch(asyncActionStart());
+    await axios
+      .get(`/${url}`, {
+        params: { ...data },
+      })
+      .then((datas) => {
+        dispatch({
+          type: FETCH_EXPENSE,
+          payload: datas.data.data,
+          totalCount: datas.data.message,
         });
-        console.log(expenses);
-        if (expenses.status === 200) {
-          dispatch({
-            type: FETCH_EXPENSE,
-            payload: expenses.data.data,
-            totalCount: expenses.data.message,
-          });
-          dispatch(asyncActionFinish());
-        } else {
-          dispatch(asyncActionError());
-        }
-      };
+        dispatch(asyncActionFinish());
+      })
+      .catch((err) => {
+        dispatch(asyncActionError(err.message));
+        toast.info("Xəta baş verdi");
+      });
+  };
 }
-export function listenToExpense(expenses){
-    return {
-        type:FETCH_EXPENSE,
-        payload:expenses
-    }
+export function listenToExpense(expenses) {
+  return {
+    type: FETCH_EXPENSE,
+    payload: expenses,
+  };
 }
 
-export function createExpense(expense){
-    return async function (dispatch) {
-        dispatch(asyncActionStart());
-        const data = await axios.post(`${url}/create`, expense, {
-          withCredentials: true,
+export function createExpense(expense) {
+  return async function (dispatch) {
+    dispatch(asyncActionStart());
+    await axios
+      .post(`${url}/create`, expense, {
+        withCredentials: true,
+      })
+      .then((data) => {
+        dispatch({ type: CREATE_EXPENSE, payload: data.data.data });
+        dispatch(asyncActionFinish());
+        toast.success("Uğurla əlavə edildi");
+      })
+      .catch((err) => {
+        dispatch(asyncActionError(err.message));
+        toast.info("Xəta baş verdi, yenidən cəht edin.");
+      });
+  };
+}
+
+export function updateExpense(expense) {
+  return async function (dispatch) {
+    dispatch(asyncActionStart);
+    await axios
+      .put(`/${url}/update`, expense)
+      .then((data) => {
+        dispatch({
+          type: UPDATE_EXPENSE,
+          payload: data.data.data,
         });
-        console.log(expense);
-        if (data.status === 201) {
-          toast.success("Uğurla əlavə edildi");
-          dispatch({ type: CREATE_EXPENSE, payload: data.data.data });
-          dispatch(asyncActionFinish());
-        } else {
-          toast.danger("Xəta baş verdi, yenidən cəht edin.");
-        }
-      };
+        dispatch(asyncActionFinish());
+        toast.success("Dəyişiklik uğurlar yerinə yetirildi");
+      })
+      .catch((err) => {
+        dispatch(asyncActionError(err.message));
+        toast.info("Xəta baş verdi, yenidən cəht edin.");
+      });
+  };
 }
 
-export function updateExpense(expense){
-    return async function (dispatch) {
-        dispatch(asyncActionStart);
-    
-        const expenseUpdated = await axios.put(
-          `/${url}/update`,
-          expense
-        );
-        if (expenseUpdated.status === 200) {
-          toast.success("Dəyişiklik uğurlar yerinə yetirildi");
-          dispatch({
-            type: UPDATE_EXPENSE,
-            payload: expenseUpdated.data.data,
-          });
-          dispatch(asyncActionFinish());
-        } else {
-          asyncActionError();
-        }
-      };
-}
-
-export function deleteExpense(expenseId){
-    return async function (dispatch) {
-        const expenseDeleted = await axios.delete(
-          `/${url}/delete?id=${expenseId}`
-        );
-        if (expenseDeleted.status === 200) {
-          dispatch({ type: DELETE_EXPENSE, payload: expenseId });
-          // dispatch(asyncActionFinish())
-          toast.info("Uğurla silindi");
-        } else {
-          dispatch(asyncActionError());
-        }
-      };
+export function deleteExpense(expenseId) {
+  return async function (dispatch) {
+    await axios
+      .delete(`/${url}/delete?id=${expenseId}`)
+      .then((data) => {
+        dispatch({ type: DELETE_EXPENSE, payload: expenseId });
+        dispatch(asyncActionFinish());
+        toast.info("Uğurla silindi");
+      })
+      .catch((err) => {
+        dispatch(asyncActionError(err.message));
+        toast.info("Xəta baş verdi, yenidən cəht edin.");
+      });
+  };
 }

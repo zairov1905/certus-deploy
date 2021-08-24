@@ -20,22 +20,22 @@ const url = "personal_certificate";
 export function loadPersonal(data) {
   return async function (dispatch) {
     dispatch(asyncActionStart());
-
-    const personal = await axios.get(`/${url}`, {
-      params: { ...data },
-    });
-
-    console.log(personal);
-    if (personal.status === 200) {
-      dispatch({
-        type: FETCH_PERSONAL,
-        payload: personal.data.data,
-        totalCount: personal.data.message,
+    await axios
+      .get(`/${url}`, {
+        params: { ...data },
+      })
+      .then((datas) => {
+        dispatch({
+          type: FETCH_PERSONAL,
+          payload: datas.data.data,
+          totalCount: datas.data.message,
+        });
+        dispatch(asyncActionFinish());
+      })
+      .catch((err) => {
+        dispatch(asyncActionError(err.message));
+        toast.info("Xəta baş verdi");
       });
-      dispatch(asyncActionFinish());
-    } else {
-      dispatch(asyncActionError());
-    }
   };
 }
 export function listenToPersonal(personals) {
@@ -48,51 +48,55 @@ export function listenToPersonal(personals) {
 export function createPersonal(personal) {
   return async function (dispatch) {
     dispatch(asyncActionStart());
-    console.log(personal);
-
-    const data = await axios.post(`${url}/create`, personal, {
-      withCredentials: true,
-    });
-
-    if (data.status === 201) {
-      toast.success("Uğurla əlavə edildi");
-      dispatch({ type: CREATE_PERSONAL, payload: data.data.data });
-      dispatch(asyncActionFinish());
-    } else {
-      toast.danger("Xəta baş verdi, yenidən cəht edin.");
-    }
+    await axios
+      .post(`${url}/create`, personal, {
+        withCredentials: true,
+      })
+      .then((data) => {
+        dispatch({ type: CREATE_PERSONAL, payload: data.data.data });
+        dispatch(asyncActionFinish());
+        toast.success("Uğurla əlavə edildi");
+      })
+      .catch((err) => {
+        dispatch(asyncActionError(err.message));
+        toast.info("Xəta baş verdi, yenidən cəht edin.");
+      });
   };
+
 }
 
 export function updatePersonal(personal) {
   return async function (dispatch) {
     dispatch(asyncActionStart);
-
-    const personalUpdated = await axios.put(`/${url}/update`, personal);
-    if (personalUpdated.status === 200) {
-      toast.success("Dəyişiklik uğurlar yerinə yetirildi");
-      dispatch({
-        type: UPDATE_PERSONAL,
-        payload: personalUpdated.data.data,
+    await axios
+      .put(`/${url}/update`, personal)
+      .then((data) => {
+        dispatch({
+          type: UPDATE_PERSONAL,
+          payload: data.data.data,
+        });
+        dispatch(asyncActionFinish());
+        toast.success("Dəyişiklik uğurlar yerinə yetirildi");
+      })
+      .catch((err) => {
+        dispatch(asyncActionError(err.message));
+        toast.info("Xəta baş verdi, yenidən cəht edin.");
       });
-      dispatch(asyncActionFinish());
-    } else {
-      asyncActionError();
-    }
   };
 }
 
 export function deletePersonal(personalId) {
   return async function (dispatch) {
-    const personalDeleted = await axios.delete(
-      `/${url}/delete?id=${personalId}`
-    );
-    if (personalDeleted.status === 200) {
-      dispatch({ type: DELETE_PERSONAL, payload: personalId });
-      // dispatch(asyncActionFinish())
-      toast.info("Uğurla silindi");
-    } else {
-      dispatch(asyncActionError());
-    }
+    await axios
+      .delete(`/${url}/delete?id=${personalId}`)
+      .then((data) => {
+        dispatch({ type: DELETE_PERSONAL, payload: personalId });
+        dispatch(asyncActionFinish());
+        toast.info("Uğurla silindi");
+      })
+      .catch((err) => {
+        dispatch(asyncActionError(err.message));
+        toast.info("Xəta baş verdi, yenidən cəht edin.");
+      });
   };
 }
