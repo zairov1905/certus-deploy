@@ -1,24 +1,30 @@
 import axios from "axios";
 import { Redirect } from "react-router";
-import { asyncActionError, asyncActionFinish, asyncActionStart } from "../../app/async/asyncReducer";
+import { toast } from "react-toastify";
+import {
+  asyncActionError,
+  asyncActionFinish,
+  asyncActionStart,
+} from "../../app/async/asyncReducer";
 import { SIGN_IN_USER, SIGN_OUT_USER } from "./authConstants";
-
-export function signInUser(history,user) {
+const url = 'login'
+export function signInUser(history, user) {
   return async function (dispatch) {
-    dispatch(asyncActionStart);
-    const data = await axios.post("login", user, {
-      withCredentials: true,
-    });
-    if (data.status === 200) {
-      console.log(data.data.data);
-      dispatch({ type: SIGN_IN_USER, payload: data.data.data });
-      dispatch(asyncActionFinish());
-      history.push("/dashboard");
-    } else {
-      dispatch(asyncActionError(data.data.Message));
-    }
+    dispatch(asyncActionStart());
+    await axios
+      .post(url, user, {
+        withCredentials: true,
+      })
+      .then((data) => {
+        dispatch({ type: SIGN_IN_USER, payload: data.data.data });
+        dispatch(asyncActionFinish());
+        history.push("/dashboard");
+      })
+      .catch((err) => {
+        dispatch(asyncActionError(err.message));
+        toast.info("İstifadəçi adı və yaxud şifrə yanlışdır");
+      });
   };
-
 }
 
 export function signOutUser(paylaod) {

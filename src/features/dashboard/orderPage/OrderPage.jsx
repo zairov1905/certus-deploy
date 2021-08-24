@@ -84,8 +84,6 @@ export default function OrderPage() {
         dispatch(loadOrderSource());
         dispatch(loadCrm());
         dispatch(loadDocs());
-
-
       }}
       style={{
         ...buttonStyle,
@@ -129,12 +127,16 @@ export default function OrderPage() {
     },
     {
       name: "Xidmət növü",
-      cell: (order) => <p>{order.service_type_id.name}</p>,
+      cell: (order) => (
+        <p>{order.service_type_id && order.service_type_id.name}</p>
+      ),
       sortable: true,
     },
     {
       name: "Müştəri",
-      cell: (order) => <p>{order.customer_id.customer_name}</p>,
+      cell: (order) => (
+        <p>{order.customer_id && order.customer_id.customer_name}</p>
+      ),
       sortable: true,
     },
 
@@ -145,7 +147,7 @@ export default function OrderPage() {
     },
     {
       name: "Referans",
-      cell: (order) => <p>{order.reference_id.name}</p>,
+      cell: (order) => <p>{order.reference_id && order.reference_id.name}</p>,
       sortable: true,
     },
     {
@@ -193,7 +195,6 @@ export default function OrderPage() {
               dispatch(loadOrderSource());
               dispatch(loadCrm());
               dispatch(loadDocs());
-
             }}
             data-name="edit"
             id={order.id}

@@ -57,7 +57,7 @@ export default function CrmPageModal({ crm }) {
   const [circulationWithYears, setCirculationWithYears] = useState(crm
     ? JSON.parse(crm.circulationByYears)
     :
-    { circulationYear: "", circulation: "" },
+    [{ circulationYear: "", circulation: "" }],
   );
   let mapCirculations =  circulationWithYears;
   console.log(mapCirculations);
@@ -78,7 +78,7 @@ export default function CrmPageModal({ crm }) {
   /// isciler il uzre
 
   const [workersYears, setWorkersYears] = useState(
-    crm ? JSON.parse(crm.workersYears) : { workerYear: "", worker: "" }
+    crm ? JSON.parse(crm.workersYears) : [{ workerYear: "", worker: "" }]
   );
   let mapWorkersYears = workersYears;
   const handleAddWorkersYear = () => {
