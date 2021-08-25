@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
@@ -6,9 +7,9 @@ export default function Footer() {
       <div className="footer-section f-section-1">
         <p>
           Copyright © 2021{" "}
-          <a target="_blank" href="https://designreset.com">
+          <Link  to="/">
             Certus
-          </a>
+          </Link>
         </p>
       </div>
       <div className="footer-section f-section-2">

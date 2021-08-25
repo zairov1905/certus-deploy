@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import DataTable, { defaultThemes } from "react-data-table-component";
+import DataTable from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
 import { openModal } from "../../../../app/modal/modalReducer";
 
@@ -10,10 +10,7 @@ export default function ControlSystemPage() {
 
   useEffect(() => {
     dispatch(loadControlSystem());
-    //   // return () => {
-    //   //   // dispatch(loadOrder())
-    //   // }
-  }, []);
+  },[]);
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);
   const { controlSystems, totalCount } = useSelector((state) => state.controlSystems);
@@ -182,7 +179,6 @@ export default function ControlSystemPage() {
                 buttonHover),
             }}
             type="button"
-            className="icon-hover btn btn-rounded btn-primary mb-2 mr-4"
             data-toggle="modal"
             data-target="#exampleModal"
             xmlns="http://www.w3.org/2000/svg"

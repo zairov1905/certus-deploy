@@ -1,13 +1,85 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export default function SubHeader() {
+  const location = useLocation();
+  console.log(location);
+  let currentLocation;
+  switch (location.pathname) {
+    case "/crm":
+      currentLocation = "Müştərilər";
+      break;
+    case "/employees":
+      currentLocation = "İşçilər";
+      break;
+    case "/orders":
+      currentLocation = "Sifarişlər";
+      break;
+    case "/operation":
+      currentLocation = "Əməliyyatlər";
+      break;
+    case "/labs":
+      currentLocation = "Laboratoriyalər";
+      break;
+    case "/documents":
+      currentLocation = "Sənədlər";
+      break;
+    case "/expense":
+      currentLocation = "Gəlir-Xərclər";
+      break;
+    case "/settings/documentTypes":
+      currentLocation = "Tənzimləmələr / Sənəd Növləri";
+      break;
+    case "/settings/departments":
+      currentLocation = "Tənzimləmələr / Struktur Bölmələr";
+      break;
+    case "/settings/counterparties":
+      currentLocation = "Tənzimləmələr / Kontragenlər";
+      break;
+    case "/settings/expenseGroups":
+      currentLocation = "Tənzimləmələr / Gəlir Xərc Qrupları";
+      break;
+    case "/settings/expenseTypes":
+      currentLocation = "Tənzimləmələr / Gəlir Xərc Növləri";
+      break;
+    case "/settings/serviceTypes":
+      currentLocation = "Tənzimləmələr / Xidmət Növləri";
+      break;
+    case "/settings/orderSources":
+      currentLocation = "Tənzimləmələr / Sifariş Mənbəyi";
+      break;
+    case "/settings/references":
+      currentLocation = "Tənzimləmələr / Referanslar";
+      break;
+    case "/settings/signOfLegalAct":
+      currentLocation = "Tənzimləmələr / Texniki Aktlar";
+      break;
+    case "/settings/trainings":
+      currentLocation = "Tənzimləmələr / Təlimlər";
+      break;
+    case "/settings/skills":
+      currentLocation = "Tənzimləmələr / Sərtiştələr";
+      break;
+    case "/certificates/productService":
+      currentLocation = "Sertifikatlar / Məhsul Xidmət Sertifikatları";
+      break;
+    case "/certificates/personal":
+      currentLocation = "Sertifikatlar / Personal Sertifikatları";
+      break;
+    case "/certificates/controlSystem":
+      currentLocation = "Sertifikatlar / İdarəetmə Sistemləri Sertifikatı";
+      break;
+ 
+
+    default:
+      break;
+  }
   return (
     <div className="sub-header-container">
       <header className="header navbar navbar-expand-sm">
         <a
           href="#"
-          onClick={e => e.preventDefault()}
+          onClick={(e) => e.preventDefault()}
           className="sidebarCollapse"
           data-placement="bottom"
         >
@@ -34,17 +106,17 @@ export default function SubHeader() {
               <nav className="breadcrumb-one" aria-label="breadcrumb">
                 <ol className="breadcrumb">
                   <li className="breadcrumb-item">
-                    <a  onClick={e => e.preventDefault()}>Ana səhifə</a>
+                    <Link to="/">Ana Səhifə</Link>
                   </li>
                   <li className="breadcrumb-item active" aria-current="page">
-                    <span></span>
+                    <span>{currentLocation}</span>
                   </li>
                 </ol>
               </nav>
             </div>
           </li>
         </ul>
-        <ul className="navbar-nav flex-row ml-auto ">
+        {/* <ul className="navbar-nav flex-row ml-auto ">
           <li className="nav-item more-dropdown">
             <div className="dropdown  custom-dropdown-icon">
               <a
@@ -80,7 +152,7 @@ export default function SubHeader() {
                   className="dropdown-item"
                   data-value="Settings"
                   href="#"
-                  onClick={e => e.preventDefault()}
+                  onClick={(e) => e.preventDefault()}
                 >
                   Settings
                 </a>
@@ -88,7 +160,7 @@ export default function SubHeader() {
                   className="dropdown-item"
                   data-value="Mail"
                   href="#"
-                  onClick={e => e.preventDefault()}
+                  onClick={(e) => e.preventDefault()}
                 >
                   Mail
                 </a>
@@ -96,7 +168,7 @@ export default function SubHeader() {
                   className="dropdown-item"
                   data-value="Print"
                   href="#"
-                  onClick={e => e.preventDefault()}
+                  onClick={(e) => e.preventDefault()}
                 >
                   Print
                 </a>
@@ -104,7 +176,7 @@ export default function SubHeader() {
                   className="dropdown-item"
                   data-value="Download"
                   href="#"
-                  onClick={e => e.preventDefault()}
+                  onClick={(e) => e.preventDefault()}
                 >
                   Download
                 </a>
@@ -112,7 +184,7 @@ export default function SubHeader() {
                   className="dropdown-item"
                   data-value="Share"
                   href="#"
-                  onClick={e => e.preventDefault()}
+                  onClick={(e) => e.preventDefault()}
                 >
                   Share
                 </a>
@@ -120,6 +192,7 @@ export default function SubHeader() {
             </div>
           </li>
         </ul>
+       */}
       </header>
     </div>
   );

@@ -16,8 +16,6 @@ const getAuthState = () => {
       complete: true,
     });
     const expiresAt = decodedToken.exp;
-    var now = new Date();
-    let expiryDate = expiresAt * 1000 - now.getTime();
 
     if (new Date(expiresAt * 1000) > new Date()) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${jwToken}`;

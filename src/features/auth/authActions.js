@@ -1,5 +1,4 @@
 import axios from "axios";
-import { Redirect } from "react-router";
 import { toast } from "react-toastify";
 import {
   asyncActionError,
@@ -7,7 +6,7 @@ import {
   asyncActionStart,
 } from "../../app/async/asyncReducer";
 import { SIGN_IN_USER, SIGN_OUT_USER } from "./authConstants";
-const url = 'login'
+const url = "login";
 export function signInUser(history, user) {
   return async function (dispatch) {
     dispatch(asyncActionStart());
@@ -19,6 +18,9 @@ export function signInUser(history, user) {
         dispatch({ type: SIGN_IN_USER, payload: data.data.data });
         dispatch(asyncActionFinish());
         history.push("/dashboard");
+
+        window.location.reload()
+
       })
       .catch((err) => {
         dispatch(asyncActionError(err.message));

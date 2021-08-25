@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router";
 import { Link } from "react-router-dom";
@@ -73,7 +73,7 @@ export default function Header() {
           </li>
         </ul>
         <ul className="navbar-item flex-row ml-md-auto">
-          <li className="nav-item dropdown language-dropdown">
+          {/* <li className="nav-item dropdown language-dropdown">
             <a
               href="#"
               onClick={(e) => e.preventDefault()}
@@ -338,6 +338,7 @@ export default function Header() {
               </div>
             </div>
           </li>
+          */}
           <li className="nav-item dropdown user-profile-dropdown">
             <a
               href="#"
@@ -348,7 +349,7 @@ export default function Header() {
               aria-haspopup="true"
               aria-expanded="false"
             >
-              <img src="https://zairov1905.github.io/certus-deploy/assets/img/90x90.jpg" alt="avatar" />
+              <img src="/assets/img/apple-touch-icon.png" alt="avatar" />
             </a>
             <div
               className="dropdown-menu position-absolute"
@@ -372,10 +373,10 @@ export default function Header() {
                       <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                       <circle cx={12} cy={7} r={4} />
                     </svg>{" "}
-                    {auth.currentUser ? auth.currentUser.username : ""}
+                    Admin
                   </a>
                 </div>
-                <div className="dropdown-item">
+                {/* <div className="dropdown-item">
                   <a href="apps_mailbox.html">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -415,6 +416,7 @@ export default function Header() {
                     Lock Screen
                   </a>
                 </div>
+                */}
                 <div className="dropdown-item">
                   <Link to="#" onClick={() => dispatch(signOutUser())}>
                     <svg
@@ -433,7 +435,7 @@ export default function Header() {
                       <polyline points="16 17 21 12 16 7" />
                       <line x1={21} y1={12} x2={9} y2={12} />
                     </svg>{" "}
-                    Sign Out
+                    Çıxış
                   </Link>
                 </div>
               </div>

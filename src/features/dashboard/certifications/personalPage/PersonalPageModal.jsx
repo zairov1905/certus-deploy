@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import MyTextInput from "../../../../app/common/form/MyTextInput";
 import MySearchableSelect from "../../../../app/common/form/MySearchableSelect";
-import { toast } from "react-toastify";
 import { Form, Formik } from "formik";
 import { closeModal } from "../../../../app/modal/modalReducer";
 import { createPersonal, updatePersonal } from "./personalActions";

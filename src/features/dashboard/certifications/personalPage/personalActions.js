@@ -1,14 +1,11 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-import { fetchSampleDataPersonal } from "../../../../app/api/mockApi";
 
 import {
-  APP_LOADED,
   asyncActionError,
   asyncActionFinish,
   asyncActionStart,
 } from "../../../../app/async/asyncReducer";
-import { delay } from "../../../../app/util/util";
 import {
   CREATE_PERSONAL,
   DELETE_PERSONAL,

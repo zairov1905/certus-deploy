@@ -7,7 +7,6 @@ import SubHeader from "../../features/dashboard/commonPage/SubHeader";
 import HomePage from "../../features/dashboard/homePage/HomePage";
 import Employees from "../../features/dashboard/employees/Employees";
 import Footer from "../../features/dashboard/commonPage/Footer";
-import { useSelector } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import ModalManager from "../modal/ModalManager";
 import OrderPage from "../../features/dashboard/orderPage/OrderPage";
@@ -23,7 +22,6 @@ import ExpenseTypePage from "../../features/dashboard/settings/expenseType/Expen
 import ServiceTypePage from "../../features/dashboard/settings/serviceType/ServiceTypePage";
 import OrderSourcePage from "../../features/dashboard/settings/orderSource/OrderSourcePage";
 import ReferencePage from "../../features/dashboard/settings/reference/ReferencePage";
-import useScript from "../common/loadJs/loadJs";
 import CrmPage from "../../features/dashboard/crmPage/CrmPage";
 import OperationPage from "../../features/dashboard/operationPage/OperationPage";
 import ProductServicePage from "../../features/dashboard/certifications/productServicePage/ProductServicePage";
@@ -119,10 +117,10 @@ function App() {
                   path="/settings/signOfLegalAct"
                   component={SignOfLegalActPage}
                 />
-                <Route exact path="/settings/Skills" component={SkillPage} />
+                <Route exact path="/settings/skills" component={SkillPage} />
                 <Route
                   exact
-                  path="/settings/Trainings"
+                  path="/settings/trainings"
                   component={TrainingPage}
                 />
                 <Route

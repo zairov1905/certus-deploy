@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import DataTable, { defaultThemes } from "react-data-table-component";
+import DataTable from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
 import { openModal } from "../../../../app/modal/modalReducer";
 

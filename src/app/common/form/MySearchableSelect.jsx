@@ -2,7 +2,7 @@ import React from "react";
 import { useField } from "formik";
 import Select from "react-select";
 export default function MySearchableSelect({ label, ...props }) {
-  const [field, meta, helpers, state] = useField(props);
+  const [field, meta, helpers] = useField(props);
   const { options } = props;
 
   const { setValue, setTouched } = helpers;
@@ -12,7 +12,7 @@ export default function MySearchableSelect({ label, ...props }) {
   const customStyles1 = {
     control: (provided, state) => ({
       ...provided,
-      height: "auto",
+      // height: "auto",
       border: "1px solid #bfc9d4",
       color: "#3b3f5c",
       fontSize: "15px",

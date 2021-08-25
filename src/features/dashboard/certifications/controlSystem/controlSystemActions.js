@@ -1,14 +1,11 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-import { fetchSampleDataControlSystem } from "../../../../app/api/mockApi";
 
 import {
-  APP_LOADED,
   asyncActionError,
   asyncActionFinish,
   asyncActionStart,
 } from "../../../../app/async/asyncReducer";
-import { delay } from "../../../../app/util/util";
 import {
   CREATE_CONTROL_SYSTEM,
   DELETE_CONTROL_SYSTEM,

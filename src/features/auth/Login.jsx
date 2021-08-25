@@ -8,12 +8,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { signInUser } from "./authActions";
 import MyTextInput from "../../app/common/form/MyTextInput";
 import { Redirect, useHistory } from "react-router";
-import Sidebar from "../dashboard/commonPage/Sidebar";
 export default function Login() {
   const history = useHistory();
   const dispatch = useDispatch();
   const { authenticated } = useSelector((state) => state.auth);
-  const { error, loading } = useSelector((state) => state.async);
+  const { loading } = useSelector((state) => state.async);
 
   useEffect(() => {
     var togglePassword = document.getElementById("toggle-password");
@@ -43,7 +42,6 @@ export default function Login() {
               <div className="form-content">
                 <h1>
                   <span className="brand-name">Certus</span> Hesabat Sistemi{" "}
-                  <a href="index.html"></a>
                 </h1>
                 <Formik
                   initialValues={{ username: "", password: "" }}
@@ -141,7 +139,7 @@ export default function Login() {
                                 width: "35px",
                                 height: "18px",
                               }}
-                              className="switch s-primary"
+                              className="switchLogin s-primary"
                             >
                               <input
                                 type="checkbox"
