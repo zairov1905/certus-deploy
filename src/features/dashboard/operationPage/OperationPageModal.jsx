@@ -375,8 +375,8 @@ export default function OperationPageModal({ operation }) {
                     type="date"
                     // onFocus={(e) => (e.target.type = "date")}
                     className="form-control"
-                    placeholder="Əməliyyat tarixi"
-                    label={operation && "Əməliyyat tarixi"}
+                    placeholder="Sifariş tarixi"
+                    label={operation && "Sifariş tarixi"}
 
                   />
                 </div>
@@ -408,7 +408,7 @@ export default function OperationPageModal({ operation }) {
                     defaultValue={
                       operation && {
                         value: parseInt(operation.employee_id.id),
-                        label: operation.employee_id.name,
+                        label: `${operation.employee_id.name} ${operation.employee_id.surname}`,
                       }
                     }
                     name="employee_id"

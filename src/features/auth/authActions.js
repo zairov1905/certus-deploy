@@ -18,7 +18,6 @@ export function signInUser(history, user) {
         dispatch({ type: SIGN_IN_USER, payload: data.data.data });
         dispatch(asyncActionFinish());
         history.push("/dashboard");
-
         window.location.reload()
 
       })

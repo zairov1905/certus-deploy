@@ -443,7 +443,7 @@ export default function CrmPageModal({ crm }) {
                           <line x1={12} y1="22.08" x2={12} y2={12} />
                         </svg>
                       </div>
-                      Crm haqqında məlumatlar
+                      Müştəri haqqında məlumatlar
                       <div className="icons">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -471,6 +471,16 @@ export default function CrmPageModal({ crm }) {
                 >
                   <div className="card-body">
                     <div className={`row ${crm && "mb-4"}`}>
+                    <div className="col-md-4">
+                        <MyTextInput
+                          id="customer_name"
+                          name="customer_name"
+                          type="text"
+                          className="form-control"
+                          placeholder="Müştəri adı"
+                          label={crm && "Müştəri adı"}
+                        />
+                      </div>
                       <div className="col-md-4">
                         <MySearchableSelect
                           name="employee_id"
@@ -501,16 +511,7 @@ export default function CrmPageModal({ crm }) {
                           label={crm && "Hüquqi status"}
                         />
                       </div>
-                      <div className="col-md-4">
-                        <MyTextInput
-                          id="customer_name"
-                          name="customer_name"
-                          type="text"
-                          className="form-control"
-                          placeholder="Müştəri adı"
-                          label={crm && "Müştəri adı"}
-                        />
-                      </div>
+
                     </div>
                     <div className={`row ${crm && "mb-4"}`}>
                       <div className="col-md-6">
@@ -563,8 +564,8 @@ export default function CrmPageModal({ crm }) {
                           id="customer_phone"
                           type="text"
                           className="form-control"
-                          label={crm && "Nömrə"}
-                          placeholder="Nömrə"
+                          label={crm && "Əlaqə nömrəsi"}
+                          placeholder="Əlaqə nömrəsi"
                         />
                       </div>
                       <div className="col-md-6">

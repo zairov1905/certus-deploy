@@ -15,6 +15,7 @@ export function loadCrm(data) {
         params: { ...data },
       })
       .then((datas) => {
+        console.log(datas)
         dispatch({
           type: FETCH_CRM,
           payload: datas.data.data,
