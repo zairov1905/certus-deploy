@@ -154,7 +154,7 @@ export default function OperationPageModal({ operation }) {
   };
   const initialValues = operation
     ? {
-        number: operation.number && operation.number,
+        number: operation.id && `OR${operation.id}`,
         service_type_id:
           operation.service_type_id && operation.service_type_id.id,
 
@@ -163,7 +163,11 @@ export default function OperationPageModal({ operation }) {
           operation.order_source_id && operation.order_source_id.id,
         reference_id: operation.reference_id && operation.reference_id.id,
         date: operation.date && operation.date,
+        endDate: operation.endDate && operation.endDate,
+
         description: operation.description && operation.description,
+        note: operation.note && operation.note,
+
         employee_id: operation.employee_id && operation.employee_id.id,
         document_id: operation.document_id && operation.document_id.id,
         faktura_id: operation.faktura_id && operation.faktura_id.id,
@@ -185,7 +189,9 @@ export default function OperationPageModal({ operation }) {
         order_source_id: "",
         reference_id: "",
         date: "",
+        endDate: "",
         description: "",
+        note:"",
         employee_id: "",
         document_id: "",
         faktura_id: "",
@@ -194,7 +200,7 @@ export default function OperationPageModal({ operation }) {
         income_expense_group_id: "",
         expense_type_id: "",
         bonus: "",
-
+        edv: "",
         performans: "",
       };
   const validationSchema = Yup.object({
@@ -205,15 +211,15 @@ export default function OperationPageModal({ operation }) {
     reference_id: Yup.string().required("Mütləq doldurulmalıdır."),
     date: Yup.string().required("Mütləq doldurulmalıdır."),
     description: Yup.string().required("Mütləq doldurulmalıdır."),
-    employee_id: Yup.string().required("Mütləq doldurulmalıdır."),
-    document_id: Yup.string().required("Mütləq doldurulmalıdır."),
-    faktura_id: Yup.string().required("Mütləq doldurulmalıdır."),
-    amount:"",
-    lab_id: Yup.string().required("Mütləq doldurulmalıdır."),
-    income_expense_group_id: Yup.string().required("Mütləq doldurulmalıdır."),
-    expense_type_id: Yup.string().required("Mütləq doldurulmalıdır."),
-    bonus: Yup.string().required("Mütləq doldurulmalıdır."),
-    performans: Yup.string().required("Mütləq doldurulmalıdır."),
+    // employee_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    // document_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    // faktura_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    // amount: "",
+    // lab_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    // income_expense_group_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    // expense_type_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    // bonus: Yup.string().required("Mütləq doldurulmalıdır."),
+    // performans: Yup.string().required("Mütləq doldurulmalıdır."),
   });
 
   return (
@@ -235,8 +241,10 @@ export default function OperationPageModal({ operation }) {
           onSubmit={async (values, { setSubmitting, setErrors }) => {
             try {
               operation
-                ? await dispatch(updateOperation({...values,id:operation.id}))
-                : await dispatch(createOperation({ ...values}));
+                ? await dispatch(
+                    updateOperation({ ...values, id: operation.id })
+                  )
+                : await dispatch(createOperation({ ...values }));
               setSubmitting(false);
               // operation
               //   ? toast.success("Dəyişiklik uğurlar yerinə yetirildi")
@@ -252,316 +260,527 @@ export default function OperationPageModal({ operation }) {
         >
           {({ isSubmitting, isValid, dirty, errors, values }) => (
             <Form id="emp">
-              <div className={`row ${operation && "mb-4"}`}>
-                <div className="col-md-4">
-                  <MyTextInput
-                    id="number"
-                    name="number"
-                    type="text"
-                    className="form-control"
-                    placeholder="Sifariş Nömrəsi"
-                    label={operation && "Sifariş Nömrəsi"}
+              <div id="iconsAccordion" className="accordion-icons">
+                <div className="card">
+                  <div className="card-header" id="headingOne3">
+                    <section className="mb-0 mt-0">
+                      <div
+                        role="menu"
+                        className="collapsed"
+                        data-toggle="collapse"
+                        data-target="#iconAccordionOne"
+                        aria-expanded="false"
+                        aria-controls="iconAccordionOne"
+                      >
+                        <div className="accordion-icon">
+                          <svg
+                            viewBox="0 0 24 24"
+                            width={24}
+                            height={24}
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            fill="none"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="css-i6dzq1"
+                          >
+                            <polyline points="21 8 21 21 3 21 3 8" />
+                            <rect x={1} y={3} width={22} height={5} />
+                            <line x1={10} y1={12} x2={14} y2={12} />
+                          </svg>
+                        </div>
+                        Sifariş haqqında məlumatlar
+                        <div className="icons">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width={24}
+                            height={24}
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="feather feather-chevron-down"
+                          >
+                            <polyline points="6 9 12 15 18 9" />
+                          </svg>
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                  <div
+                    id="iconAccordionOne"
+                    className="collapse"
+                    aria-labelledby="headingOne3"
+                    data-parent="#iconsAccordion"
+                    style={{}}
+                  >
+                    <div className="card-body">
+                      <div className={`row ${operation && "mb-4"}`}>
+                        <div className="col-md-4">
+                          <MyTextInput
+                            id="number"
+                            name="number"
+                            type="text"
+                            className="form-control"
+                            readOnly
+                            placeholder="Sifariş Nömrəsi"
+                            label={operation && "Sifariş Nömrəsi"}
+                          />
+                        </div>
+                        <div className="col-md-4">
+                          <MySearchableSelect
+                            // defaultValue={
+                            //   operation &&
+                            //   customerOptions.filter(
+                            //     (customerOption) =>
+                            //       customerOption.value === operation.customer_id.id
+                            //   )
+                            // }
+                            defaultValue={
+                              operation && {
+                                value: parseInt(operation.customer_id.id),
+                                label: operation.customer_id.customer_name,
+                              }
+                            }
+                            isDisabled
+                            id="customer_id"
+                            name="customer_id"
+                            type="text"
+                            options={customerOptions}
+                            // className="form-control"
+                            readOnly
 
-                  />
+                            placeholder="Müştəri"
+                            label={operation && "Müştəri"}
+                          />
+                        </div>
+                        <div className="col-md-4">
+                          <MySearchableSelect
+                            // defaultValue={
+                            //   operation &&
+                            //   serviceTypeOptions.filter(
+                            //     (serviceTypeOption) =>
+                            //       serviceTypeOption.value ===
+                            //       operation.service_type_id.id
+                            //   )
+                            // }
+                            isDisabled
+                            defaultValue={
+                              operation && {
+                                value: parseInt(operation.service_type_id.id),
+                                label: operation.service_type_id.name,
+                              }
+                            }
+                            id="service_type_id"
+                            name="service_type_id"
+                            type="text"
+                            options={serviceTypeOptions}
+                            label={operation && "Xidmət Növü"}
+                            // className="form-control"
+                            placeholder="Xidmət Növü"
+                          />
+                        </div>
+                      </div>
+                      <div className={`row ${operation && "mb-4"}`}>
+                        <div className="col-md-6">
+                          <MySearchableSelect
+                            // defaultValue={
+                            //   operation &&
+                            //   orderSourceOptions.filter(
+                            //     (orderSourceOption) =>
+                            //       orderSourceOption.value ===
+                            //       operation.order_source_id.id
+                            //   )
+                            // }
+                            isDisabled
+                            defaultValue={
+                              operation && {
+                                value: parseInt(operation.order_source_id.id),
+                                label: operation.order_source_id.name,
+                              }
+                            }
+                            id="order_source_id"
+                            name="order_source_id"
+                            type="text"
+                            options={orderSourceOptions}
+                            // className="form-control"
+                            placeholder="Sifariş Mənbəyi"
+                            label={operation && "Sifariş Mənbəyi"}
+                          />
+                        </div>
+                        <div className="col-md-6">
+                          <MySearchableSelect
+                            // defaultValue={
+                            //   operation &&
+                            //   referenceOptions.filter(
+                            //     (referenceOption) =>
+                            //       referenceOption.value === operation.reference_id.id
+                            //   )
+                            // }
+                            defaultValue={
+                              operation && {
+                                value: parseInt(operation.reference_id.id),
+                                label: operation.reference_id.name,
+                              }
+                            }
+                            name="reference_id"
+                            isDisabled
+                            id="reference_id"
+                            type="text"
+                            options={referenceOptions}
+                            // className="form-control"
+                            placeholder="Referans"
+                            label={operation && "Referans"}
+                          />
+                        </div>
+                      </div>
+                      <div className={`row ${operation && "mb-4"}`}>
+                        <div className="col-md-6">
+                          <MyTextInput
+                            name="date"
+                            id="date"
+                            type="date"
+                            readOnly
+                            // onFocus={(e) => (e.target.type = "date")}
+                            className="form-control"
+                            placeholder="Sifariş tarixi"
+                            label={operation && "Sifariş tarixi"}
+                          />
+                        </div>
+                        <div className="col-md-6">
+                          <MyTextInput
+                            name="endDate"
+                            id="endDate"
+                            type="date"
+                            // onFocus={(e) => (e.target.type = "date")}
+                            className="form-control"
+                            placeholder="Əməliyyat tarixi"
+                            label={operation && "Əməliyyat tarixi"}
+                          />
+                        </div>
+                      </div>
+                      <div className={`row ${operation && "mb-4"}`}>
+                        <div className="col-md-12">
+                          <MyTextArea
+                            name="description"
+                            id="description"
+                            type="text"
+                            className="form-control"
+                            placeholder="Sifariş Təyinatı"
+                            readOnly
+                            label={operation && "Sifariş Təyinatı"}
+                          />
+                        </div>
+                      </div>
+                      <div className={`row ${operation && "mb-4"}`}>
+                        <div className="col-md-12">
+                          <MyTextArea
+                            name="note"
+                            id="note"
+                            type="text"
+                            className="form-control"
+                            placeholder="Qeyd"
+                            label={operation && "Qeyd"}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="col-md-4">
-                  <MySearchableSelect
-                    // defaultValue={
-                    //   operation &&
-                    //   customerOptions.filter(
-                    //     (customerOption) =>
-                    //       customerOption.value === operation.customer_id.id
-                    //   )
-                    // }
-                    defaultValue={
-                      operation && {
-                        value: parseInt(operation.customer_id.id),
-                        label: operation.customer_id.customer_name,
-                      }
-                    }
-                    id="customer_id"
-                    name="customer_id"
-                    type="text"
-                    options={customerOptions}
-                    // className="form-control"
-                    placeholder="Müştəri"
-                    label={operation && "Müştəri"}
-
-                  />
+                <div className="card">
+                  <div className="card-header" id="headingOne3">
+                    <section className="mb-0 mt-0">
+                      <div
+                        role="menu"
+                        className="collapsed"
+                        data-toggle="collapse"
+                        data-target="#iconAccordionTwo"
+                        aria-expanded="false"
+                        aria-controls="iconAccordionTwo"
+                      >
+                        <div className="accordion-icon">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width={24}
+                            height={24}
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="feather feather-user"
+                          >
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx={12} cy={7} r={4} />
+                          </svg>
+                        </div>
+                        İcraçı haqqında məlumatlar
+                        <div className="icons">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width={24}
+                            height={24}
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="feather feather-chevron-down"
+                          >
+                            <polyline points="6 9 12 15 18 9" />
+                          </svg>
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                  <div
+                    id="iconAccordionTwo"
+                    className="collapse"
+                    aria-labelledby="headingOne3"
+                    data-parent="#iconsAccordion"
+                    style={{}}
+                  >
+                    <div className="card-body">
+                      <div className={`row ${operation && "mb-4"}`}>
+                        <div className="col-md-12">
+                          <MySearchableSelect
+                            // defaultValue={
+                            //   operation &&
+                            //   employeeOptions.filter(
+                            //     (employeeOption) =>
+                            //       employeeOption.value === operation.employee_id.id
+                            //   )
+                            // }
+                            defaultValue={
+                              operation && {
+                                value: parseInt(operation.employee_id.id),
+                                label: `${operation.employee_id.name} ${operation.employee_id.surname}`,
+                              }
+                            }
+                            name="employee_id"
+                            id="employee_id"
+                            type="text"
+                            options={employeeOptions}
+                            // className="form-control"
+                            label={operation && "İcraçı*"}
+                            placeholder="İcraçı*"
+                          />
+                        </div>
+                      </div>
+                      <div className={`row ${operation && "mb-4"}`}>
+                        <div className="col-md-6">
+                          <MyTextInput
+                            name="bonus"
+                            id="bonus"
+                            type="text"
+                            className="form-control"
+                            placeholder="İcracı bonusu"
+                            label={operation && "İcracı bonusu"}
+                          />
+                        </div>
+                        <div className="col-md-6">
+                          <MyTextInput
+                            name="performans"
+                            id="performans"
+                            type="text"
+                            className="form-control"
+                            placeholder="Performans"
+                            label={operation && "Performans"}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="col-md-4">
-                  <MySearchableSelect
-                    // defaultValue={
-                    //   operation &&
-                    //   serviceTypeOptions.filter(
-                    //     (serviceTypeOption) =>
-                    //       serviceTypeOption.value ===
-                    //       operation.service_type_id.id
-                    //   )
-                    // }
-                    defaultValue={
-                      operation && {
-                        value: parseInt(operation.service_type_id.id),
-                        label: operation.service_type_id.name,
-                      }
-                    }
-                    id="service_type_id"
-                    name="service_type_id"
-                    type="text"
-                    options={serviceTypeOptions}
-                    label={operation && "Xidmət Növü"}
-
-                    // className="form-control"
-                    placeholder="Xidmət Növü"
-                  />
+                <div className="card">
+                  <div className="card-header" id="headingOne3">
+                    <section className="mb-0 mt-0">
+                      <div
+                        role="menu"
+                        className="collapsed"
+                        data-toggle="collapse"
+                        data-target="#iconAccordionThree"
+                        aria-expanded="false"
+                        aria-controls="iconAccordionThree"
+                      >
+                        <div className="accordion-icon">
+                          <svg
+                            viewBox="0 0 24 24"
+                            width={24}
+                            height={24}
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            fill="none"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="css-i6dzq1"
+                          >
+                            <line x1={12} y1={1} x2={12} y2={23} />
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                          </svg>
+                        </div>
+                        Xərclər haqqında məlumatlar
+                        <div className="icons">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width={24}
+                            height={24}
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="feather feather-chevron-down"
+                          >
+                            <polyline points="6 9 12 15 18 9" />
+                          </svg>
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                  <div
+                    id="iconAccordionThree"
+                    className="collapse"
+                    aria-labelledby="headingOne3"
+                    data-parent="#iconsAccordion"
+                    style={{}}
+                  >
+                    <div className="card-body">
+                      <div className={`row ${operation && "mb-4"}`}>
+                        <div className="col-md-6">
+                          <MySearchableSelect
+                            defaultValue={
+                              operation &&
+                              docOptions.filter(
+                                (docOption) =>
+                                  docOption.value ===
+                                  (operation.document_id &&
+                                    operation.document_id.id)
+                              )
+                            }
+                            name="document_id"
+                            id="document_id"
+                            type="text"
+                            options={docOptions}
+                            // className="form-control"
+                            placeholder="Müqavilə"
+                            label={operation && "Müqavilə"}
+                          />
+                        </div>
+                        <div className="col-md-6">
+                          <MySearchableSelect
+                            defaultValue={docOptions.filter(
+                              (docOption) =>
+                                docOption.value ===
+                                (operation.document_id &&
+                                  operation.document_id.id)
+                            )}
+                            // }
+                            name="faktura_id"
+                            id="faktura_id"
+                            type="text"
+                            options={docOptions}
+                            // className="form-control"
+                            placeholder="Hesab faktura"
+                            label={operation && "Hesab faktura"}
+                          />
+                        </div>
+                      </div>
+                      <div className={`row ${operation && "mb-4"}`}>
+                        <div className="col-md-6">
+                          <MyTextInput
+                            name="amount"
+                            id="amount"
+                            type="text"
+                            className="form-control"
+                            placeholder="Məbləğ"
+                            label={operation && "Məbləğ"}
+                          />
+                        </div>
+                        <div className="col-md-6">
+                          <MyTextInput
+                            name="edv"
+                            id="edv"
+                            type="text"
+                            className="form-control"
+                            placeholder="ƏDV"
+                            value={(parseInt(values.amount) * 18) / 100}
+                            label={operation && "ƏDV"}
+                            readOnly
+                          />
+                        </div>
+                      </div>
+                      <div className={`row ${operation && "mb-4"}`}>
+                        <div className="col-md-4">
+                          <MySearchableSelect
+                            defaultValue={
+                              operation &&
+                              labOptions.filter(
+                                (labOption) =>
+                                  labOption.value ===
+                                  (operation.lab_id && operation.lab_id.id)
+                              )
+                            }
+                            name="lab_id"
+                            id="lab_id"
+                            type="text"
+                            options={labOptions}
+                            // className="form-control"
+                            placeholder="Laboratoriya"
+                            label={operation && "Laboratoriya"}
+                          />
+                        </div>
+                        <div className="col-md-4">
+                          <MySearchableSelect
+                            defaultValue={
+                              operation &&
+                              expenseGroupOptions.filter(
+                                (expenseGroupOption) =>
+                                  expenseGroupOption.value ===
+                                  (operation.income_expense_group_id &&
+                                    operation.income_expense_group_id.id)
+                              )
+                            }
+                            name="income_expense_group_id"
+                            id="income_expense_group_id"
+                            type="text"
+                            options={expenseGroupOptions}
+                            // className="form-control"
+                            placeholder="Xərc qrupu"
+                            label={operation && "Xərc qrupu"}
+                          />
+                        </div>
+                        <div className="col-md-4">
+                          <MySearchableSelect
+                            defaultValue={
+                              operation &&
+                              expenseTypeOptions.filter(
+                                (expenseTypeOption) =>
+                                  expenseTypeOption.value ===
+                                  (operation.expense_type_id &&
+                                    operation.expense_type_id.id)
+                              )
+                            }
+                            name="expense_type_id"
+                            id="expense_type_id"
+                            type="text"
+                            options={expenseTypeOptions}
+                            // className="form-control"
+                            placeholder="Xərc tipi"
+                            label={operation && "Xərc tipi"}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div className={`row ${operation && "mb-4"}`}>
-                <div className="col-md-4">
-                  <MySearchableSelect
-                    // defaultValue={
-                    //   operation &&
-                    //   orderSourceOptions.filter(
-                    //     (orderSourceOption) =>
-                    //       orderSourceOption.value ===
-                    //       operation.order_source_id.id
-                    //   )
-                    // }
-                    defaultValue={
-                      operation && {
-                        value: parseInt(operation.order_source_id.id),
-                        label: operation.order_source_id.name,
-                      }
-                    }
-                    id="order_source_id"
-                    name="order_source_id"
-                    type="text"
-                    options={orderSourceOptions}
-                    // className="form-control"
-                    placeholder="Sifariş Mənbəyi"
-                    label={operation && "Sifariş Mənbəyi"}
 
-                  />
-                </div>
-                <div className="col-md-4">
-                  <MySearchableSelect
-                    // defaultValue={
-                    //   operation &&
-                    //   referenceOptions.filter(
-                    //     (referenceOption) =>
-                    //       referenceOption.value === operation.reference_id.id
-                    //   )
-                    // }
-                    defaultValue={
-                      operation && {
-                        value: parseInt(operation.reference_id.id),
-                        label: operation.reference_id.name,
-                      }
-                    }
-                    name="reference_id"
-                    id="reference_id"
-                    type="text"
-                    options={referenceOptions}
-                    // className="form-control"
-                    placeholder="Referans"
-                    label={operation && "Referans"}
-
-                  />
-                </div>
-                <div className="col-md-4">
-                  <MyTextInput
-                    name="date"
-                    id="date"
-                    type="date"
-                    // onFocus={(e) => (e.target.type = "date")}
-                    className="form-control"
-                    placeholder="Sifariş tarixi"
-                    label={operation && "Sifariş tarixi"}
-
-                  />
-                </div>
-              </div>
-              <div className={`row ${operation && "mb-4"}`}>
-                <div className="col-md-12">
-                  <MyTextArea
-                    name="description"
-                    id="description"
-                    type="text"
-                    className="form-control"
-                    placeholder="Sifariş Təyinatı"
-                    label={operation && "Sifariş Təyinatı"}
-
-                  />
-                </div>
-              </div>
-
-              <div className={`row ${operation && "mb-4"}`}>
-                <div className="col-md-12">
-                  <MySearchableSelect
-                    // defaultValue={
-                    //   operation &&
-                    //   employeeOptions.filter(
-                    //     (employeeOption) =>
-                    //       employeeOption.value === operation.employee_id.id
-                    //   )
-                    // }
-                    defaultValue={
-                      operation && {
-                        value: parseInt(operation.employee_id.id),
-                        label: `${operation.employee_id.name} ${operation.employee_id.surname}`,
-                      }
-                    }
-                    name="employee_id"
-                    id="employee_id"
-                    type="text"
-                    options={employeeOptions}
-                    // className="form-control"
-                    label={operation && "İcraçı"}
-
-                    placeholder="İcraçı"
-                  />
-                </div>
-              </div>
-              <div className={`row ${operation && "mb-4"}`}>
-                <div className="col-md-4">
-                  <MySearchableSelect
-                    defaultValue={
-                      operation &&
-                      docOptions.filter(
-                        (docOption) =>
-                          docOption.value ===
-                          (operation.document_id && operation.document_id.id)
-                      )
-                    }
-                    name="document_id"
-                    id="document_id"
-                    type="text"
-                    options={docOptions}
-                    // className="form-control"
-                    placeholder="Müqavilə"
-                    label={operation && "Müqavilə"}
-
-                  />
-                </div>
-                <div className="col-md-4">
-                  <MySearchableSelect
-                    defaultValue={docOptions.filter(
-                      (docOption) =>
-                        docOption.value ===
-                        (operation.document_id && operation.document_id.id)
-                    )}
-                    // }
-                    name="faktura_id"
-                    id="faktura_id"
-                    type="text"
-                    options={docOptions}
-                    // className="form-control"
-                    placeholder="Hesab faktura"
-                    label={operation && "Hesab faktura"}
-
-                  />
-                </div>
-                <div className="col-md-4">
-                  <MyTextInput
-                    name="amount"
-                    id="amount"
-                    type="text"
-                    className="form-control"
-                    placeholder="Məbləğ"
-                    label={operation && "Məbləğ"}
-
-                  />
-                </div>
-              </div>
-
-              <div className={`row ${operation && "mb-4"}`}>
-                <div className="col-md-4">
-                  <MySearchableSelect
-                    defaultValue={
-                      operation &&
-                      labOptions.filter(
-                        (labOption) =>
-                          labOption.value ===
-                          (operation.lab_id && operation.lab_id.id)
-                      )
-                    }
-                    name="lab_id"
-                    id="lab_id"
-                    type="text"
-                    options={labOptions}
-                    // className="form-control"
-                    placeholder="Laboratoriya"
-                    label={operation && "Laboratoriya"}
-
-                  />
-                </div>
-                <div className="col-md-4">
-                  <MySearchableSelect
-                    defaultValue={
-                      operation &&
-                      expenseGroupOptions.filter(
-                        (expenseGroupOption) =>
-                          expenseGroupOption.value ===
-                          (operation.income_expense_group_id &&
-                            operation.income_expense_group_id.id)
-                      )
-                    }
-                    name="income_expense_group_id"
-                    id="income_expense_group_id"
-                    type="text"
-                    options={expenseGroupOptions}
-                    // className="form-control"
-                    placeholder="Xərc qrupu"
-                    label={operation && "Xərc qrupu"}
-
-                  />
-                </div>
-                <div className="col-md-4">
-                  <MySearchableSelect
-                    defaultValue={
-                      operation &&
-                      expenseTypeOptions.filter(
-                        (expenseTypeOption) =>
-                          expenseTypeOption.value ===
-                          (operation.expense_type_id &&
-                            operation.expense_type_id.id)
-                      )
-                    }
-                    name="expense_type_id"
-                    id="expense_type_id"
-                    type="text"
-                    options={expenseTypeOptions}
-                    // className="form-control"
-                    placeholder="Xərc tipi"
-                    label={operation && "Xərc tipi"}
-
-                  />
-                </div>
-              </div>
-              <div className={`row ${operation && "mb-4"}`}>
-                <div className="col-md-6">
-                  <MyTextInput
-                    name="bonus"
-                    id="bonus"
-                    type="text"
-                    className="form-control"
-                    placeholder="İcracı bonusu"
-                    label={operation && "İcracı bonusu"}
-
-                  />
-                </div>
-                <div className="col-md-6">
-                  <MyTextInput
-                    name="performans"
-                    id="performans"
-                    type="text"
-                    className="form-control"
-                    placeholder="Performans"
-                    label={operation && "Performans"}
-
-                  />
-                </div>
-              </div>
               {values.serviceType === "0" && (
                 <div className="student mt-5">
                   <div className="row">

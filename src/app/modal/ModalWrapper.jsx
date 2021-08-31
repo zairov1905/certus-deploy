@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { closeModal } from "./modalReducer";
 
-export default function ModalWrapper({ children, size, header, footer }) {
+export default function ModalWrapper({ children, size, header,data, footer }) {
   const dispatch = useDispatch();
 
   return (
@@ -29,9 +29,11 @@ export default function ModalWrapper({ children, size, header, footer }) {
           <div className="modal-header">
             {header && (
               <h5 className="modal-title" id="exampleModalLabel">
-                {header}
+                {header} 
               </h5>
             )}
+            
+            {data &&  <span class="badge ml-4 badge-danger">  {data}</span> }
             <button
               onClick={() => {
                 dispatch(closeModal());

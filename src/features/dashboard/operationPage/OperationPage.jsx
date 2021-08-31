@@ -120,7 +120,7 @@ export default function OperationPage() {
   const columns = [
     {
       name: "№",
-      selector: "number",
+      cell: (operation) => <p>{operation.id && `OR${operation.id}`}</p>,
       sortable: true,
     },
     {

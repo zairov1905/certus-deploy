@@ -54,12 +54,12 @@ export default function CrmPageModal({ crm }) {
   const dispatch = useDispatch();
   const [modal, setModal] = useState(false);
   // dovriyye il uzre
-  const [circulationWithYears, setCirculationWithYears] = useState(crm
-    ? JSON.parse(crm.circulationByYears)
-    :
-    [{ circulationYear: "", circulation: "" }],
+  const [circulationWithYears, setCirculationWithYears] = useState(
+    crm
+      ? JSON.parse(crm.circulationByYears)
+      : [{ circulationYear: "", circulation: "" }]
   );
-  let mapCirculations =  circulationWithYears;
+  let mapCirculations = circulationWithYears;
   console.log(mapCirculations);
   const handleAddCirculationByYear = () => {
     setCirculationWithYears([
@@ -90,6 +90,24 @@ export default function CrmPageModal({ crm }) {
       let values = [...workersYears];
       values.splice(lastIndex, 1);
       setWorkersYears(values);
+    }
+  };
+
+  /// Tedbirler  uzre
+
+  const [measures, setMeasures] = useState(
+    crm ? JSON.parse(crm.measures) : [{ measureYear: "", measure: "" }]
+  );
+  let mapMeasures = measures;
+  const handleAddMeasures = () => {
+    setMeasures([...measures, { measureYear: "", measure: "" }]);
+  };
+  const handleRemoveMeasures = () => {
+    if (measures.length > 1) {
+      let lastIndex = measures.length - 1;
+      let values = [...measures];
+      values.splice(lastIndex, 1);
+      setMeasures(values);
     }
   };
   useEffect(() => {
@@ -139,6 +157,8 @@ export default function CrmPageModal({ crm }) {
         circulationByYears:
           crm.circulationByYears && JSON.parse(crm.circulationByYears),
         workersYears: crm.workersYears && JSON.parse(crm.workersYears),
+        measures: crm.measures && JSON.parse(crm.measures),
+
         note: crm.note && crm.note,
       }
     : {
@@ -179,6 +199,7 @@ export default function CrmPageModal({ crm }) {
         turnover: "",
         circulationByYears: circulationWithYears,
         workersYears: workersYears,
+        measures:measures,
         note: "",
       };
   const validationSchema = Yup.object({
@@ -201,7 +222,7 @@ export default function CrmPageModal({ crm }) {
     // twitter: Yup.string().required("Mütləq doldurulmalıdır."),
     // instagram: Yup.string().required("Mütləq doldurulmalıdır."),
     // customer_email: Yup.string().required("Mütləq doldurulmalıdır."),
-    // referans_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    referans_id: Yup.string().required("Mütləq doldurulmalıdır."),
     // circulation: Yup.string().required("Mütləq doldurulmalıdır."),
     // customer_category: Yup.string().required("Mütləq doldurulmalıdır."),
     // customer_satisfaction: Yup.string().required("Mütləq doldurulmalıdır."),
@@ -209,7 +230,11 @@ export default function CrmPageModal({ crm }) {
   });
 
   return (
-    <ModalWrapper size="modal-xl" header={crm ? "Redakte Et" : "Əlavə et"}>
+    <ModalWrapper
+      data={crm && `Müştəri - CS${crm.id}`}
+      size="modal-xl"
+      header={crm ? "Redakte Et" : "Əlavə et"}
+    >
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -297,11 +322,11 @@ export default function CrmPageModal({ crm }) {
                         <MyTextInput
                           id="contact_name"
                           //  label={crm ? 'Ad' : ''}
-                          label={crm && "Ad"}
+                          label={crm && "Ad*"}
                           name="contact_name"
                           type="text"
                           className="form-control"
-                          placeholder="Ad"
+                          placeholder="Ad*"
                         />
                       </div>
                       <div className="col-md-4">
@@ -309,9 +334,9 @@ export default function CrmPageModal({ crm }) {
                           id="contact_surname"
                           name="contact_surname"
                           type="text"
-                          label={crm && "Soyad"}
+                          label={crm && "Soyad*"}
                           className="form-control"
-                          placeholder="Soyad"
+                          placeholder="Soyad*"
                         />
                       </div>
                       <div className="col-md-4">
@@ -471,14 +496,14 @@ export default function CrmPageModal({ crm }) {
                 >
                   <div className="card-body">
                     <div className={`row ${crm && "mb-4"}`}>
-                    <div className="col-md-4">
+                      <div className="col-md-4">
                         <MyTextInput
                           id="customer_name"
                           name="customer_name"
                           type="text"
                           className="form-control"
-                          placeholder="Müştəri adı"
-                          label={crm && "Müştəri adı"}
+                          placeholder="Müştəri adı*"
+                          label={crm && "Müştəri adı*"}
                         />
                       </div>
                       <div className="col-md-4">
@@ -494,8 +519,8 @@ export default function CrmPageModal({ crm }) {
                               value: parseInt(crm.employee_id.id),
                             }
                           }
-                          placeholder="Kurator"
-                          label={crm && "Kurator"}
+                          placeholder="Kurator*"
+                          label={crm && "Kurator*"}
                         />
                       </div>
                       <div className="col-md-4">
@@ -511,7 +536,6 @@ export default function CrmPageModal({ crm }) {
                           label={crm && "Hüquqi status"}
                         />
                       </div>
-
                     </div>
                     <div className={`row ${crm && "mb-4"}`}>
                       <div className="col-md-6">
@@ -520,8 +544,8 @@ export default function CrmPageModal({ crm }) {
                           name="voen"
                           type="text"
                           className="form-control"
-                          placeholder="VÖEN"
-                          label={crm && "VÖEN"}
+                          placeholder="VÖEN*"
+                          label={crm && "VÖEN*"}
                         />
                       </div>
                       <div className="col-md-6">
@@ -667,8 +691,8 @@ export default function CrmPageModal({ crm }) {
                           }
                           options={referenceOptions}
                           // className="form-control"
-                          placeholder="Referans"
-                          label={crm && "Referans"}
+                          placeholder="Referans*"
+                          label={crm && "Referans*"}
                         />
                       </div>
                       <div className="col-md-3">
@@ -730,20 +754,18 @@ export default function CrmPageModal({ crm }) {
                     >
                       <div className="accordion-icon">
                         <svg
-                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
                           width={24}
                           height={24}
-                          viewBox="0 0 24 24"
-                          fill="none"
                           stroke="currentColor"
                           strokeWidth={2}
+                          fill="none"
                           strokeLinecap="round"
                           strokeLinejoin="round"
-                          className="feather feather-layers"
+                          className="css-i6dzq1"
                         >
-                          <polygon points="12 2 2 7 12 12 22 7 12 2" />
-                          <polyline points="2 17 12 22 22 17" />
-                          <polyline points="2 12 12 17 22 12" />
+                          <line x1={12} y1={1} x2={12} y2={23} />
+                          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
                         </svg>
                       </div>
                       Son illərdəki dövriyyəsi
@@ -989,6 +1011,154 @@ export default function CrmPageModal({ crm }) {
                                 type="text"
                                 className="form-control"
                                 placeholder="İşçilər"
+                              />
+                            </div>
+                          </React.Fragment>
+                        ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="card">
+                <div className="card-header" id="headingTwo3">
+                  <section className="mb-0 mt-0">
+                    <div
+                      role="menu"
+                      className="collapsed"
+                      data-toggle="collapse"
+                      data-target="#iconAccordionFive"
+                      aria-expanded="false"
+                      aria-controls="iconAccordionFive"
+                    >
+                      <div className="accordion-icon">
+                        <svg
+                          viewBox="0 0 24 24"
+                          width={24}
+                          height={24}
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          fill="none"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="css-i6dzq1"
+                        >
+                          <rect
+                            x={3}
+                            y={4}
+                            width={18}
+                            height={18}
+                            rx={2}
+                            ry={2}
+                          />
+                          <line x1={16} y1={2} x2={16} y2={6} />
+                          <line x1={8} y1={2} x2={8} y2={6} />
+                          <line x1={3} y1={10} x2={21} y2={10} />
+                        </svg>
+                      </div>
+                      Müştəri tədbirləri
+                      <div className="icons">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width={24}
+                          height={24}
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="feather feather-chevron-down"
+                        >
+                          <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+                <div
+                  id="iconAccordionFive"
+                  className="collapse"
+                  aria-labelledby="headingTwo3"
+                  data-parent="#iconsAccordion"
+                >
+                  <div className="card-body">
+                    <div className="row">
+                      <div className="col-md-2 offset-10 text-right">
+                        <div className="icon-container">
+                          <button
+                            type="button"
+                            className="close"
+                            onClick={() => handleAddMeasures()}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width={24}
+                              height={24}
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth={2}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              className="feather feather-plus-circle"
+                            >
+                              <circle cx={12} cy={12} r={10} />
+                              <line x1={12} y1={8} x2={12} y2={16} />
+                              <line x1={8} y1={12} x2={16} y2={12} />
+                            </svg>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveMeasures()}
+                            className="close"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width={24}
+                              height={24}
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth={2}
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              className="feather feather-minus-circle"
+                            >
+                              <circle cx={12} cy={12} r={10} />
+                              <line x1={8} y1={12} x2={16} y2={12} />
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="row">
+                      {mapMeasures &&
+                        mapMeasures.map((mapMeasure, index) => (
+                          <React.Fragment key={index}>
+                            <div className="col-md-6">
+                              <MyTextInput
+                                id={`measures[${index}].measureYear`}
+                                name={`measures[${index}]measureYear`}
+                                defaultValue={
+                                  mapMeasures && mapMeasure.measureYear
+                                }
+                                type="text"
+                                className="form-control"
+                                placeholder="İl"
+                                // onFocus="(this.type='date')"
+                                onFocus={(e) => {
+                                  e.currentTarget.type = "date";
+                                }}
+                              />
+                            </div>
+                            <div className="col-md-6">
+                              <MyTextInput
+                                name={`measures[${index}]measure`}
+                                id={`measures[${index}].measure`}
+                                defaultValue={mapMeasures && mapMeasure.measure}
+                                type="text"
+                                className="form-control"
+                                placeholder="Tədbir"
                               />
                             </div>
                           </React.Fragment>

@@ -122,7 +122,10 @@ export default function OrderPage() {
   const columns = [
     {
       name: "Sifariş nömrəsi",
-      selector: "number",
+      selector: "id",
+      cell: (order) => (
+        <p>{order.id && `OR${order.id}`}</p>
+      ),
       sortable: true,
     },
     {

@@ -81,7 +81,7 @@ export default function OrderPageModal({ order }) {
   const initialValues = order
   
     ? {
-      number: order.number && order.number,
+      // number: order.number && order.number,
       service_type_id: order.service_type_id && order.service_type_id.id,
       customer_id: order.customer_id && order.customer_id.id,
       order_source_id: order.order_source_id && order.order_source_id.id,
@@ -111,7 +111,7 @@ export default function OrderPageModal({ order }) {
   });
 
   return (
-    <ModalWrapper size="modal-lg" header={order ? "Redakte Et" : "Əlavə et"}>
+    <ModalWrapper data={order && `Sifariş - OR${order.id}`} size="modal-lg" header={order ? "Redakte Et" : "Əlavə et"}>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -138,7 +138,7 @@ export default function OrderPageModal({ order }) {
         {({ isSubmitting, isValid, dirty, errors, values }) => (
           <Form id="emp">
             <div className={`row ${order && "mb-4"}`}>
-              <div className="col-md-4">
+              {/* <div className="col-md-4">
                 <MySearchableSelect
                   id="number"
                   name="number"
@@ -154,14 +154,13 @@ export default function OrderPageModal({ order }) {
                   options={docOptions}
                   placeholder="Sifariş Nömrəsi"
                 />
-                {/* {console.log(values.service_type_id)} */}
-              </div>
-              <div className="col-md-4">
+              </div> */}
+              <div className="col-md-6">
                 <MySearchableSelect
                   id="service_type_id"
                   name="service_type_id"
                   type="text"
-                  label={order && "Xidmət Növü"}
+                  label={order && "Xidmət Növü*"}
 
                   defaultValue={
                     order && {
@@ -173,10 +172,10 @@ export default function OrderPageModal({ order }) {
                   // getOptionLabel={ x => x.label}
                   // getOptionValue={ x => x.value}
                   // className="form-control"
-                  placeholder="Xidmət Növü"
+                  placeholder="Xidmət Növü*"
                 />
               </div>
-              <div className="col-md-4">
+              <div className="col-md-6">
                 <MySearchableSelect
                   defaultValue={
                     order && {
