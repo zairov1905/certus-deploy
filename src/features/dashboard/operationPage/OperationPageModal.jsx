@@ -475,6 +475,69 @@ export default function OperationPageModal({ operation }) {
                         </div>
                       </div>
                       <div className={`row ${operation && "mb-4"}`}>
+                        <div className="col-md-6">
+                          <MySearchableSelect
+                            defaultValue={
+                              operation &&
+                              docOptions.filter(
+                                (docOption) =>
+                                  docOption.value ===
+                                  (operation.document_id &&
+                                    operation.document_id.id)
+                              )
+                            }
+                            name="document_id"
+                            id="document_id"
+                            type="text"
+                            options={docOptions}
+                            // className="form-control"
+                            placeholder="Müqavilə"
+                            label={operation && "Müqavilə"}
+                          />
+                        </div>
+                        <div className="col-md-6">
+                          <MySearchableSelect
+                            defaultValue={docOptions.filter(
+                              (docOption) =>
+                                docOption.value ===
+                                (operation.document_id &&
+                                  operation.document_id.id)
+                            )}
+                            // }
+                            name="faktura_id"
+                            id="faktura_id"
+                            type="text"
+                            options={docOptions}
+                            // className="form-control"
+                            placeholder="Hesab faktura"
+                            label={operation && "Hesab faktura"}
+                          />
+                        </div>
+
+                      </div>
+                      <div className={`row ${operation && "mb-4"}`}>
+                        
+                        <div className="col-md-12">
+                          <MySearchableSelect
+                            defaultValue={
+                              operation &&
+                              labOptions.filter(
+                                (labOption) =>
+                                  labOption.value ===
+                                  (operation.lab_id && operation.lab_id.id)
+                              )
+                            }
+                            name="lab_id"
+                            id="lab_id"
+                            type="text"
+                            options={labOptions}
+                            // className="form-control"
+                            placeholder="Laboratoriya"
+                            label={operation && "Laboratoriya"}
+                          />
+                        </div>
+                      </div>
+                      <div className={`row ${operation && "mb-4"}`}>
                         <div className="col-md-12">
                           <MyTextArea
                             name="note"
@@ -489,6 +552,7 @@ export default function OperationPageModal({ operation }) {
                     </div>
                   </div>
                 </div>
+                
                 <div className="card">
                   <div className="card-header" id="headingOne3">
                     <section className="mb-0 mt-0">
@@ -651,46 +715,7 @@ export default function OperationPageModal({ operation }) {
                     style={{}}
                   >
                     <div className="card-body">
-                      <div className={`row ${operation && "mb-4"}`}>
-                        <div className="col-md-6">
-                          <MySearchableSelect
-                            defaultValue={
-                              operation &&
-                              docOptions.filter(
-                                (docOption) =>
-                                  docOption.value ===
-                                  (operation.document_id &&
-                                    operation.document_id.id)
-                              )
-                            }
-                            name="document_id"
-                            id="document_id"
-                            type="text"
-                            options={docOptions}
-                            // className="form-control"
-                            placeholder="Müqavilə"
-                            label={operation && "Müqavilə"}
-                          />
-                        </div>
-                        <div className="col-md-6">
-                          <MySearchableSelect
-                            defaultValue={docOptions.filter(
-                              (docOption) =>
-                                docOption.value ===
-                                (operation.document_id &&
-                                  operation.document_id.id)
-                            )}
-                            // }
-                            name="faktura_id"
-                            id="faktura_id"
-                            type="text"
-                            options={docOptions}
-                            // className="form-control"
-                            placeholder="Hesab faktura"
-                            label={operation && "Hesab faktura"}
-                          />
-                        </div>
-                      </div>
+
                       <div className={`row ${operation && "mb-4"}`}>
                         <div className="col-md-6">
                           <MyTextInput
@@ -716,25 +741,7 @@ export default function OperationPageModal({ operation }) {
                         </div>
                       </div>
                       <div className={`row ${operation && "mb-4"}`}>
-                        <div className="col-md-4">
-                          <MySearchableSelect
-                            defaultValue={
-                              operation &&
-                              labOptions.filter(
-                                (labOption) =>
-                                  labOption.value ===
-                                  (operation.lab_id && operation.lab_id.id)
-                              )
-                            }
-                            name="lab_id"
-                            id="lab_id"
-                            type="text"
-                            options={labOptions}
-                            // className="form-control"
-                            placeholder="Laboratoriya"
-                            label={operation && "Laboratoriya"}
-                          />
-                        </div>
+
                         <div className="col-md-4">
                           <MySearchableSelect
                             defaultValue={
@@ -779,6 +786,7 @@ export default function OperationPageModal({ operation }) {
                     </div>
                   </div>
                 </div>
+              
               </div>
 
               {values.serviceType === "0" && (

@@ -13,6 +13,7 @@ import { createExpense, updateExpense } from "./expenseActions";
 import { closeModal } from "../../../app/modal/modalReducer";
 import MySearchableSelect from "../../../app/common/form/MySearchableSelect";
 import moment from "moment";
+import MyTextArea from "../../../app/common/form/MyTextArea";
 
 export default function ExpensePageModal({ expense }) {
   const dispatch = useDispatch();
@@ -82,21 +83,26 @@ export default function ExpensePageModal({ expense }) {
       $("#closeModal").click();
     }
   });
-  
 
   const initialValues = expense
     ? {
-      income_expense_group_id: expense.income_expense_group_id && expense.income_expense_group_id.id,
-      expense_type_id: expense.expense_type_id && expense.expense_type_id.id,
-      date: expense.date && moment(expense.date).format("YYYY-MM-DD"),
-      contractor_id: expense.contractor_id && expense.contractor_id.id,
-      document_id: expense.document_id && expense.document_id.id,
-      // expenseInvoice: "",
-      operation_id: expense.operation_id && expense.operation_id,
-      payment_id: expense.payment_id && expense.payment_id,
-      payment_type_id: expense.payment_type_id && expense.payment_type_id,
-      faktura: expense.faktura && expense.faktura,
-    }
+        income_expense_group_id:
+          expense.income_expense_group_id && expense.income_expense_group_id.id,
+        expense_type_id: expense.expense_type_id && expense.expense_type_id.id,
+        date: expense.date && moment(expense.date).format("YYYY-MM-DD"),
+        contractor_id: expense.contractor_id && expense.contractor_id.id,
+        document_id: expense.document_id && expense.document_id.id,
+        // expenseInvoice: "",
+        operation_id: expense.operation_id && expense.operation_id,
+        payment_id: expense.payment_id && expense.payment_id,
+        payment_type_id: expense.payment_type_id && expense.payment_type_id,
+        faktura: expense.faktura && expense.faktura,
+
+        // Yeni elave edilen setirler asagidadir
+        // amount: "",
+        // edv: "",
+        // note:"",
+      }
     : {
         income_expense_group_id: "",
         expense_type_id: "",
@@ -108,6 +114,9 @@ export default function ExpensePageModal({ expense }) {
         payment_id: "",
         payment_type_id: "",
         faktura: "",
+        amount: "",
+        edv: "",
+        note:"",
       };
   const validationSchema = Yup.object({
     income_expense_group_id: Yup.string().required("Mütləq doldurulmalıdır."),
@@ -130,7 +139,7 @@ export default function ExpensePageModal({ expense }) {
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
             expense
-              ? await dispatch(updateExpense({...values, id:expense.id}))
+              ? await dispatch(updateExpense({ ...values, id: expense.id }))
               : await dispatch(createExpense({ ...values }));
             setSubmitting(false);
             setModal(true);
@@ -142,164 +151,340 @@ export default function ExpensePageModal({ expense }) {
           }
         }}
       >
-        {({ isSubmitting, isValid, dirty, errors }) => (
+        {({ isSubmitting, isValid, dirty, errors, values }) => (
           <Form id="emp">
-            <div className={`row ${expense && "mb-4"}`}>
-              <div className="col-md-6">
-                <MySearchableSelect
-                  id="income_expense_group_id"
-                  name="income_expense_group_id"
-                  options={expenseGroupsOptions}
-                  label={expense && "Gəlir-Xərc qrupu"}
-                  defaultValue={
-                    expense && {
-                      label: expense.income_expense_group_id.name,
-                      value: expense.income_expense_group_id.id,
-                    }
-                  }
-                  // type="text"
-                  // className="form-control"
-                  placeholder="Gəlir-Xərc qrupu"
-                />
-              </div>
-              <div className="col-md-6">
-                <MySearchableSelect
-                  id="expense_type_id"
-                  name="expense_type_id"
-                  options={expenseTypesOptions}
-                  defaultValue={
-                    expense && {
-                      label: expense.expense_type_id.name,
-                      value: expense.expense_type_id.id,
-                    }
-                  }
-                  type="text"
-                  label={expense && "Gəlir-Xərc Növü"}
-                  // className="form-control"
-                  placeholder="Gəlir-Xərc Növü"
-                />
-              </div>
-            </div>
-            <div className={`row ${expense && "mb-4"}`}>
-              <div className="col-md-4">
-                <MyTextInput
-                  id="date"
-                  name="date"
-                  type="date"
-                  className="form-control"
-                  label={expense && "Tarix"}
+            <div id="iconsAccordion" className="accordion-icons">
+              <div className="card">
+                <div className="card-header" id="headingOne3">
+                  <section className="mb-0 mt-0">
+                    <div
+                      role="menu"
+                      className="collapsed"
+                      data-toggle="collapse"
+                      data-target="#iconAccordionOne"
+                      aria-expanded="false"
+                      aria-controls="iconAccordionOne"
+                    >
+                      <div className="accordion-icon">
+                        <svg
+                          viewBox="0 0 24 24"
+                          width={24}
+                          height={24}
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          fill="none"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="css-i6dzq1"
+                        >
+                          <polyline points="21 8 21 21 3 21 3 8" />
+                          <rect x={1} y={3} width={22} height={5} />
+                          <line x1={10} y1={12} x2={14} y2={12} />
+                        </svg>
+                      </div>
+                      Umumi məlumatlar
+                      <div className="icons">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width={24}
+                          height={24}
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="feather feather-chevron-down"
+                        >
+                          <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+                <div
+                  id="iconAccordionOne"
+                  className="collapse"
+                  aria-labelledby="headingOne3"
+                  data-parent="#iconsAccordion"
+                  style={{}}
+                >
+                  <div className="card-body">
+                    <div className={`row ${expense && "mb-4"}`}>
+                      <div className="col-md-4">
+                        <MyTextInput
+                          id="date"
+                          name="date"
+                          type="date"
+                          className="form-control"
+                          label={expense && "Tarix"}
+                          placeholder="Tarix"
+                        />
+                      </div>
+                      <div className="col-md-4">
+                        <MySearchableSelect
+                          name="contractor_id"
+                          id="contractor_id"
+                          options={counterpartiesOptions}
+                          defaultValue={
+                            expense && {
+                              label: expense.contractor_id.name,
+                              value: expense.contractor_id.id,
+                            }
+                          }
+                          // type="text"
+                          // className="form-control"
+                          label={expense && "Kontragent"}
+                          placeholder="Kontragent"
+                        />
+                      </div>
+                      <div className="col-md-4">
+                        <MySearchableSelect
+                          name="document_id"
+                          id="document_id"
+                          // type="text"
+                          defaultValue={
+                            expense && {
+                              label: expense.document_id.document_number,
+                              value: expense.document_id.id,
+                            }
+                          }
+                          options={docsOptions}
+                          // className="form-control"
+                          label={expense && "Müqavilə"}
+                          placeholder="Müqavilə"
+                        />
+                      </div>
+                    </div>
+                    <div className={`row ${expense && "mb-4"}`}>
+                      <div className="col-md-4">
+                        <MySearchableSelect
+                          name="operation_id"
+                          id="operation_id"
+                          // type="text"
+                          options={operationTypeOptions}
+                          defaultValue={
+                            expense &&
+                            operationTypeOptions.filter(
+                              (operationTypeOption) =>
+                                expense.operation_id ===
+                                operationTypeOption.value
+                            )
+                          }
+                          // className="form-control"
+                          label={expense && "Əməliyyat növü"}
+                          placeholder="Əməliyyat növü"
+                        />
+                      </div>
+                      <div className="col-md-4">
+                        <MySearchableSelect
+                          name="payment_id"
+                          id="payment_id"
+                          // type="text"
+                          options={paymentOptions}
+                          defaultValue={
+                            expense &&
+                            paymentOptions.filter(
+                              (paymentOption) =>
+                                expense.payment_id === paymentOption.value
+                            )
+                          }
+                          // className="form-control"
+                          placeholder="Ödəniş"
+                          label={expense && "Ödəniş"}
+                        />
+                      </div>
+                      <div className="col-md-4">
+                        <MySearchableSelect
+                          name="payment_type_id"
+                          id="payment_type_id"
+                          // type="text"
+                          options={paymentTypeOptions}
+                          defaultValue={
+                            expense &&
+                            paymentTypeOptions.filter(
+                              (paymentTypeOption) =>
+                                expense.payment_type_id ===
+                                paymentTypeOption.value
+                            )
+                          }
+                          // className="form-control"
+                          placeholder="Ödəniş növü"
+                          label={expense && "Ödəniş növü"}
+                        />
+                      </div>
+                    </div>
 
-                  placeholder="Tarix"
-                />
+                    <div className={`row ${expense && "mb-4"}`}>
+                      <div className="col-md-12">
+                        <MySearchableSelect
+                          name="faktura"
+                          id="faktura"
+                          // type="text"
+                          defaultValue={
+                            expense && {
+                              label: expense.document_id.document_number,
+                              value: expense.document_id.id,
+                            }
+                          }
+                          options={docsOptions}
+                          // className="form-control"
+                          label={expense && "Hesab faktura"}
+                          placeholder="Hesab faktura"
+                        />
+                        {/* <MyTextInput
+                          name="faktura"
+                          id="faktura"
+                          // type="text"
+                          className="form-control"
+                          placeholder="Hesab faktura"
+                          label={expense && "Hesab faktura"}
+                        /> */}
+                      </div>
+                    </div>
+
+                    <div className={`row ${expense && "mb-4"}`}>
+                      <div className="col-md-6">
+                        <MyTextInput
+                          name="amount"
+                          id="amount"
+                          type="text"
+                          className="form-control"
+                          placeholder="Məbləğ"
+                          label={expense && "Məbləğ"}
+                        />
+                      </div>
+                      <div className="col-md-6">
+                        <MyTextInput
+                          name="edv"
+                          id="edv"
+                          type="text"
+                          className="form-control"
+                          placeholder="ƏDV"
+                          value={(parseInt(values.amount) * 18) / 100}
+                          label={expense && "ƏDV"}
+                          readOnly
+                        />
+                      </div>
+                    </div>
+                    <div className={`row ${expense && "mb-4"}`}>
+                      <div className="col-md-12">
+                        <MyTextArea  
+                          name="note"
+                          id="note"
+                          type="text"
+                          className="form-control"
+                          placeholder="Qeyd"
+                          label={expense && "Qeyd"}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="col-md-4">
-                <MySearchableSelect
-                  name="contractor_id"
-                  id="contractor_id"
-                  options={counterpartiesOptions}
-                  defaultValue={
-                    expense && {
-                      label: expense.contractor_id.name,
-                      value: expense.contractor_id.id,
-                    }
-                  }
-                  // type="text"
-                  // className="form-control"
-                  label={expense && "Kontragent"}
-
-                  placeholder="Kontragent"
-                />
-              </div>
-              <div className="col-md-4">
-                <MySearchableSelect
-                  name="document_id"
-                  id="document_id"
-                  // type="text"
-                  defaultValue={
-                    expense && {
-                      label: expense.document_id.document_number,
-                      value: expense.document_id.id,
-                    }
-                  }
-                  options={docsOptions}
-                  // className="form-control"
-                  label={expense && "Müqavilə"}
-
-                  placeholder="Müqavilə"
-                />
-              </div>
-            </div>
-            <div className={`row ${expense && "mb-4"}`}>
-              <div className="col-md-4">
-                <MySearchableSelect
-                  name="operation_id"
-                  id="operation_id"
-                  // type="text"
-                  options={operationTypeOptions}
-                  defaultValue={
-                    expense &&
-                    operationTypeOptions.filter(
-                      (operationTypeOption) =>
-                        expense.operation_id === operationTypeOption.value
-                    )
-                  }
-                  // className="form-control"
-                  label={expense && "Əməliyyat növü"}
-
-                  placeholder="Əməliyyat növü"
-                />
-              </div>
-              <div className="col-md-4">
-                <MySearchableSelect
-                  name="payment_id"
-                  id="payment_id"
-                  // type="text"
-                  options={paymentOptions}
-                  defaultValue={
-                    expense &&
-                    paymentOptions.filter(
-                      (paymentOption) =>
-                        expense.payment_id === paymentOption.value
-                    )
-                  }
-                  // className="form-control"
-                  placeholder="Ödəniş"
-                  label={expense && "Ödəniş"}
-
-                />
-              </div>
-              <div className="col-md-4">
-                <MySearchableSelect
-                  name="payment_type_id"
-                  id="payment_type_id"
-                  // type="text"
-                  options={paymentTypeOptions}
-                  defaultValue={
-                    expense &&
-                    paymentTypeOptions.filter(
-                      (paymentTypeOption) =>
-                        expense.payment_type_id === paymentTypeOption.value
-                    )
-                  }
-                  // className="form-control"
-                  placeholder="Ödəniş növü"
-                  label={expense && "Ödəniş növü"}
-
-                />
-              </div>
-            </div>
-
-            <div className={`row ${expense && "mb-4"}`}>
-              <div className="col-md-12">
-                <MyTextInput
-                  name="faktura"
-                  id="faktura"
-                  // type="text"
-                  className="form-control"
-                  placeholder="Hesab faktura"
-                  label={expense && "Hesab faktura"}
-
-                />
+              <div className="card">
+                <div className="card-header" id="headingOne3">
+                  <section className="mb-0 mt-0">
+                    <div
+                      role="menu"
+                      className="collapsed"
+                      data-toggle="collapse"
+                      data-target="#iconAccordionThree"
+                      aria-expanded="false"
+                      aria-controls="iconAccordionThree"
+                    >
+                      <div className="accordion-icon">
+                        <svg
+                          viewBox="0 0 24 24"
+                          width={24}
+                          height={24}
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          fill="none"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="css-i6dzq1"
+                        >
+                          <line x1={12} y1={1} x2={12} y2={23} />
+                          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                        </svg>
+                      </div>
+                      Xərclər haqqında məlumatlar
+                      <div className="icons">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width={24}
+                          height={24}
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="feather feather-chevron-down"
+                        >
+                          <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+                <div
+                  id="iconAccordionThree"
+                  className="collapse"
+                  aria-labelledby="headingOne3"
+                  data-parent="#iconsAccordion"
+                  style={{}}
+                >
+                  <div className="card-body">
+                    <div className={`row ${expense && "mb-4"}`}>
+                      <div className="col-md-4">
+                        <MySearchableSelect
+                          id="income_expense_group_id"
+                          name="income_expense_group_id"
+                          options={expenseGroupsOptions}
+                          label={expense && "Gəlir-Xərc qrupu"}
+                          defaultValue={
+                            expense && {
+                              label: expense.income_expense_group_id.name,
+                              value: expense.income_expense_group_id.id,
+                            }
+                          }
+                          // type="text"
+                          // className="form-control"
+                          placeholder="Gəlir-Xərc qrupu"
+                        />
+                      </div>
+                      <div className="col-md-4">
+                        <MySearchableSelect
+                          id="expense_type_id"
+                          name="expense_type_id"
+                          options={expenseTypesOptions}
+                          defaultValue={
+                            expense && {
+                              label: expense.expense_type_id.name,
+                              value: expense.expense_type_id.id,
+                            }
+                          }
+                          type="text"
+                          label={expense && "Gəlir-Xərc Növü"}
+                          // className="form-control"
+                          placeholder="Gəlir-Xərc Növü"
+                        />
+                      </div>
+                      <div className="col-md-4">
+                      <MyTextInput
+                          name="amount"
+                          id="amount"
+                          type="text"
+                          className="form-control"
+                          placeholder="Xərc"
+                          label={expense && "Xərc"}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 

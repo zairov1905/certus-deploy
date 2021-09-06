@@ -24,6 +24,7 @@ export function loadExpense(data) {
         params: { ...data },
       })
       .then((datas) => {
+        console.log(datas,'expense')
         dispatch({
           type: FETCH_EXPENSE,
           payload: datas.data.data,
