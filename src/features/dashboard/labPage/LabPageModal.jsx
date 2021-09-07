@@ -13,22 +13,25 @@ import { closeModal } from "../../../app/modal/modalReducer";
 import { createLab, updateLab } from "./labActions";
 import MySearchableSelect from "../../../app/common/form/MySearchableSelect";
 import { createCounterparty } from "../settings/counterparty/counterpartyActions";
+import MyTextArea from "../../../app/common/form/MyTextArea";
+import { loadOperation } from "../operationPage/operationActions";
 
 export default function LabPageModal({ lab }) {
-  //   const { employees } = useSelector((state) => state.employees);
-  //   let employeeOptions = [];
+  const [loader, setLoader] = useState(true);
 
-  //   employeeOptions = employees.map((employee) => {
-  //     return {
-  //       value: `${employee.firstname} ${employee.lastname}`,
-  //       label: `${employee.firstname} ${employee.lastname}`,
-  //     };
-  //   });
-  //   let orderSituation = [
-  //     {value:"İcra edilir",label:"İcra edilir"},
-  //     {value:"Gözləmədə",label:"Gözləmədə"},
+  useEffect(async () => {
+    dispatch(loadOperation());
 
-  //   ]
+    setLoader(false);
+  }, []);
+  const { operations } = useSelector((state) => state.operations);
+  let whereIsOperation =
+    lab &&
+    operations.filter(
+      (operation) => operation.lab_id && operation.lab_id.id === lab.id
+    );
+  console.log(whereIsOperation);
+
   const dispatch = useDispatch();
   const { docs } = useSelector((state) => state.docs);
   let docsOptions =
@@ -74,14 +77,18 @@ export default function LabPageModal({ lab }) {
   });
 
   return (
-    <ModalWrapper size="modal-lg" header={lab ? "Redakte Et" : "Əlavə et"}>
+    <ModalWrapper
+      size="modal-lg"
+      header={lab ? "Redakte Et" : "Əlavə et"}
+      data={lab && `Laboratoriya - LB${lab.id}`}
+    >
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
             lab
-              ? await dispatch(updateLab({...values,id:lab.id}))
+              ? await dispatch(updateLab({ ...values, id: lab.id }))
               : await dispatch(
                   createLab({
                     ...values,
@@ -106,8 +113,8 @@ export default function LabPageModal({ lab }) {
                   name="name"
                   type="text"
                   className="form-control"
-                  placeholder="Laboratoriya adı"
-                  label={lab && "Laboratoriya adı"}
+                  placeholder="Laboratoriya adı*"
+                  label={lab && "Laboratoriya adı*"}
                 />
               </div>
               <div className="col-md-4">
@@ -139,7 +146,7 @@ export default function LabPageModal({ lab }) {
               </div>
             </div>
             <div className={`row ${lab && "mb-4"}`}>
-              <div className="col-md-4">
+              <div className="col-md-12">
                 <MyTextInput
                   id="turnover"
                   name="turnover"
@@ -149,18 +156,27 @@ export default function LabPageModal({ lab }) {
                   label={lab && "Dövriyyə"}
                 />
               </div>
-              <div className="col-md-4">
-                <MyTextInput
-                  id="operations"
-                  name="operations"
-                  type="text"
-                  className="form-control"
-                  placeholder="Əməliyyatlar"
-                  label={lab && "Əməliyyatlar"}
-                />
+            </div>
+            {lab && (
+              <div className={`row ${lab && "mb-4"}`}>
+                <div className="col-md-12">
+                  <MyTextArea
+                    id="operations"
+                    name="operations"
+                    type="text"
+                    readOnly
+                    defaultValue={whereIsOperation && whereIsOperation.map(operation=> ` Əməliyyat: ${operation.number}`) }
+                    className="form-control"
+                    placeholder="Əməliyyatlar"
+                    label={lab && "Əməliyyatlar"}
+                  />
+                </div>
               </div>
-              <div className="col-md-4">
-                <MyTextInput
+            )}
+
+            <div className="row">
+              <div className="col-md-12">
+                <MyTextArea
                   id="note"
                   name="note"
                   type="text"

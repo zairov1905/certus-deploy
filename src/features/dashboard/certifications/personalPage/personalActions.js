@@ -22,6 +22,7 @@ export function loadPersonal(data) {
         params: { ...data },
       })
       .then((datas) => {
+        console.log(datas,"personal sertifikatlasma")
         dispatch({
           type: FETCH_PERSONAL,
           payload: datas.data.data,

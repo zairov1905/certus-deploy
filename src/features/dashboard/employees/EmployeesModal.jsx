@@ -164,8 +164,8 @@ export default function EmployeesModal({ employee }) {
                   name="fin"
                   type="text"
                   className="form-control"
-                  placeholder="FİN"
-                  label={employee && "FİN"}
+                  placeholder="FİN*"
+                  label={employee && "FİN*"}
 
                 />
               </div>
@@ -175,8 +175,8 @@ export default function EmployeesModal({ employee }) {
                   name="name"
                   type="text"
                   className="form-control"
-                  placeholder="Ad"
-                  label={employee && "Ad"}
+                  placeholder="Ad*"
+                  label={employee && "Ad*"}
 
                 />
               </div>
@@ -186,8 +186,8 @@ export default function EmployeesModal({ employee }) {
                   name="surname"
                   type="text"
                   className="form-control"
-                  placeholder="Soyad"
-                  label={employee && "Soyad"}
+                  placeholder="Soyad*"
+                  label={employee && "Soyad*"}
 
                   
                 />
@@ -209,7 +209,13 @@ export default function EmployeesModal({ employee }) {
                 <MyTextInput
                   name="birthday"
                   id="birthday"
-                  type="date"
+                  type="text"
+                  onFocus={
+                    (e)=> {
+                      e.currentTarget.type = "date";
+                      e.currentTarget.focus();
+                     }
+                   }
                   className="form-control"
                   placeholder="Doğum tarixi"
                   label={employee && "Doğum tarixi"}
@@ -222,8 +228,8 @@ export default function EmployeesModal({ employee }) {
                   id="address"
                   type="text"
                   className="form-control"
-                  placeholder="Ünvan"
-                  label={employee && "Ünvan"}
+                  placeholder="Ünvan*"
+                  label={employee && "Ünvan*"}
 
                 />
               </div>
@@ -235,8 +241,8 @@ export default function EmployeesModal({ employee }) {
                   id="phone"
                   type="text"
                   className="form-control"
-                  placeholder="Telefon"
-                  label={employee && "Telefon"}
+                  placeholder="Telefon*"
+                  label={employee && "Telefon*"}
 
                 />
               </div>
@@ -331,7 +337,13 @@ export default function EmployeesModal({ employee }) {
                 <MyTextInput
                   name="date"
                   id="date"
-                  type="date"
+                  type="text"
+                  onFocus={
+                    (e)=> {
+                      e.currentTarget.type = "date";
+                      e.currentTarget.focus();
+                     }
+                   }
                   className="form-control"
                   placeholder="İşə qəbul tarixi"
                   label={employee && "İşə qəbul tarixi"}

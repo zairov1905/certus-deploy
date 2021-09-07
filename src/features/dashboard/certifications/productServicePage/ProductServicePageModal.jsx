@@ -16,6 +16,8 @@ import {
 import { loadSignOfLegalAct } from "../../settings/signOfLegalAct/signOfLegalActActions";
 import { loadLab } from "../../labPage/labActions";
 import { loadCrm } from "../../crmPage/crmActions";
+import { loadOperation } from "../../operationPage/operationActions";
+import MyTextArea from "../../../../app/common/form/MyTextArea";
 
 export default function ProductServicePageModal({ productService }) {
   const [loader, setLoader] = useState(true);
@@ -23,6 +25,8 @@ export default function ProductServicePageModal({ productService }) {
   useEffect(async () => {
     dispatch(loadLab());
     dispatch(loadCrm());
+    dispatch(loadOperation());
+
     await dispatch(loadSignOfLegalAct());
     setLoader(false);
   }, []);
@@ -336,7 +340,16 @@ export default function ProductServicePageModal({ productService }) {
       $("#closeModal").click();
     }
   });
-
+    // ++++++++++
+    const { operations } = useSelector((state) => state.operations);
+    const operationOptions =
+      operations &&
+      operations.map((operation) => {
+        return {
+          label: `OR${operation.id}`,
+          value: parseInt(operation.id),
+        };
+      });
   const initialValues = productService
     ? {
         sn_code_id: productService.sn_code_id && productService.sn_code_id,
@@ -394,6 +407,8 @@ export default function ProductServicePageModal({ productService }) {
           moment(productService.product_batch_date).format("YYYY-MM-DD"),
         act_sign_id:
           productService.act_sign_id && JSON.parse(productService.act_sign_id),
+          note: productService.note && productService.note,
+          operation_id: productService.operation_id && productService.operation_id.id,
       }
     : {
         sn_code_id: "",
@@ -427,6 +442,10 @@ export default function ProductServicePageModal({ productService }) {
         test_number: "",
         product_batch_date: "",
         act_sign_id: [],
+        // new
+        operation_id: "",
+        note: "",
+
       };
   const validationSchema = Yup.object({
     sn_code_id: Yup.string().required("Mütləq doldurulmalıdır."),
@@ -436,27 +455,12 @@ export default function ProductServicePageModal({ productService }) {
     issue_date: Yup.string().required("Mütləq doldurulmalıdır."),
     expiration_date: Yup.string().required("Mütləq doldurulmalıdır."),
     customer_id: Yup.string().required("Mütləq doldurulmalıdır."),
-    // only customer_id den gelecek data
-    // legalStatus: "",
-    // VOEN: "",
-    // economicEntityPhoneNumber: "",
-    // legalAddressOfTheBusinessEntity: "",
-    // actualAddressOfTheBusiness: "",
-    //
     product_name: Yup.string().required("Mütləq doldurulmalıdır."),
     quantity: Yup.string().required("Mütləq doldurulmalıdır."),
     product_type_id: Yup.string().required("Mütləq doldurulmalıdır."),
     product_code: Yup.string().required("Mütləq doldurulmalıdır."),
-    country_id: Yup.string().required("Mütləq doldurulmalıdır."),
-    certificate_country_id: Yup.string().required("Mütləq doldurulmalıdır."),
-    // act_sign_id: Yup.string().required("Mütləq doldurulmalıdır."),
-    test_note: Yup.string().required("Mütləq doldurulmalıdır."),
+    operation_id: Yup.number().required("Mütləq doldurulmalıdır."),
     lab_id: Yup.string().required("Mütləq doldurulmalıdır."),
-    // laba aid olan
-    // accreditedLaboratoryNumber: "",
-    //
-    test_number: Yup.string().required("Mütləq doldurulmalıdır."),
-    product_batch_date: Yup.string().required("Mütləq doldurulmalıdır."),
   });
 
   return (
@@ -512,7 +516,7 @@ export default function ProductServicePageModal({ productService }) {
                       }
                     }
                     placeholder="SN kodu daxil edin"
-                    label="SN kodu"
+                    label="SN kodu*"
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -522,7 +526,7 @@ export default function ProductServicePageModal({ productService }) {
                     type="text"
                     className="form-control"
                     placeholder="Reyestr nömrəsi daxil edin"
-                    label="Reyestr nömrəsi"
+                    label="Reyestr nömrəsi*"
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -532,7 +536,7 @@ export default function ProductServicePageModal({ productService }) {
                     type="text"
                     className="form-control"
                     placeholder="Blank nömrəsi daxil edin"
-                    label="Blank nömrəsi"
+                    label="Blank nömrəsi*"
                   />
                   {/* {console.log(values)} */}
                 </div>
@@ -543,7 +547,7 @@ export default function ProductServicePageModal({ productService }) {
                     type="text"
                     className="form-control"
                     placeholder="Akkreditasiya sahəsində sıra nömrəsi daxil edin"
-                    label="Akkreditasiya sahəsində sıra nömrəsi"
+                    label="Akkreditasiya sahəsində sıra nömrəsi*"
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -553,7 +557,7 @@ export default function ProductServicePageModal({ productService }) {
                     type="date"
                     className="form-control"
                     placeholder="Sertifikatın verilmə tarixi daxil edin"
-                    label="Sertifikatın verilmə tarixi"
+                    label="Sertifikatın verilmə tarixi*"
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -563,7 +567,7 @@ export default function ProductServicePageModal({ productService }) {
                     type="date"
                     className="form-control"
                     placeholder="Sertifikatın qüvvədən düşdüyü tarix daxil edin"
-                    label="Sertifikatın qüvvədən düşdüyü tarix"
+                    label="Sertifikatın qüvvədən düşdüyü tarix*"
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -580,7 +584,7 @@ export default function ProductServicePageModal({ productService }) {
                     }
                     // className="form-control"
                     placeholder="Sertifikat təqdim edilən təsərrüfat subyektinin adını daxil edin"
-                    label="Sertifikat təqdim edilən təsərrüfat subyektinin adı"
+                    label="Sertifikat təqdim edilən təsərrüfat subyektinin adı*"
                   />
                 </div>
                 {productService && (
@@ -650,7 +654,22 @@ export default function ProductServicePageModal({ productService }) {
                     type="text"
                     className="form-control"
                     placeholder="Məhsulun(xidmətin) adını daxil edin"
-                    label="Məhsulun(xidmətin) adı"
+                    label="Məhsulun(xidmətin) adı*"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MySearchableSelect
+                    id="operation_id"
+                    name="operation_id"
+                    options={operationOptions}
+                    defaultValue={
+                      productService && {
+                        label: productService.training_id.name,
+                        value: parseInt(productService.training_id.id),
+                      }
+                    }              
+                    placeholder="Aid olduğu əməliyyat"
+                    label="Aid olduğu əməliyyat*"
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -678,7 +697,7 @@ export default function ProductServicePageModal({ productService }) {
                     }
                     type="text"
                     placeholder="Məhsulun ərzaq və ya qeyri ərzaq qrupuna aid olması barədə qeyd daxil edin"
-                    label="Məhsulun ərzaq və ya qeyri ərzaq qrupuna aid olması barədə qeyd"
+                    label="Məhsulun ərzaq və ya qeyri ərzaq qrupuna aid olması barədə qeyd*"
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -688,7 +707,7 @@ export default function ProductServicePageModal({ productService }) {
                     type="text"
                     className="form-control"
                     placeholder="Məhsulun kodunu daxil edin"
-                    label="Məhsulun kodu"
+                    label="Məhsulun kodu*"
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -779,7 +798,7 @@ export default function ProductServicePageModal({ productService }) {
                     }
                     // className="form-control"
                     placeholder="Akkreditasiya olunmuş sınaq laboratoriyasının adını daxil edin"
-                    label="Akkreditasiya olunmuş sınaq laboratoriyasının adı"
+                    label="Akkreditasiya olunmuş sınaq laboratoriyasının adı*"
                   />
                 </div>
                 {productService && (
@@ -813,6 +832,16 @@ export default function ProductServicePageModal({ productService }) {
                     className="form-control"
                     placeholder="Məhsul partiyasının tarixini edin"
                     label="Məhsul partiyasının tarixi"
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MyTextArea
+                    id="note"
+                    name="note"
+                    type="text"
+                    className="form-control"
+                    placeholder="Qeyd"
+                    label="Qeyd"
                   />
                 </div>
               </div>

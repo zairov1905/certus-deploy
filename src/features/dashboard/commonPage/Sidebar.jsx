@@ -338,7 +338,7 @@ export default function Sidebar() {
                   to="/certificates/personal"
                   activeStyle={{ color: "#fe0040" }}
                 >
-                  Perseonal
+                  Perseonal sertifikatları
                 </NavLink>
               </li>
               <li>

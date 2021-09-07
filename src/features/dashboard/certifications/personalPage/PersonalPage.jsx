@@ -74,7 +74,6 @@ export default function PersonalPage() {
             modalProps: null,
           })
         );
-        dispatch(loadTraining());
       }}
       style={{
         ...buttonStyle,

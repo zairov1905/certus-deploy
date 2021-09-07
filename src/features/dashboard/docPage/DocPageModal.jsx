@@ -36,16 +36,18 @@ export default function DocPageModal({ doc }) {
   ];
   const initialValues = doc
     ? {
-      document_type_id: doc.document_type_id && doc.document_type_id.id,
-      document_for: doc.document_for && doc.document_for,
-      date: doc.date && moment(doc.date).format("YYYY-MM-DD"),
-      about: doc.about && doc.about,
-    } 
+        document_type_id: doc.document_type_id && doc.document_type_id.id,
+        document_for: doc.document_for && doc.document_for,
+        date: doc.date && moment(doc.date).format("YYYY-MM-DD"),
+        about: doc.about && doc.about,
+        number: doc.number && doc.number,
+      }
     : {
         document_type_id: "",
         document_for: "",
         date: "",
         about: "",
+        number: "",
       };
   const validationSchema = Yup.object({
     // id:"",
@@ -58,14 +60,18 @@ export default function DocPageModal({ doc }) {
   });
 
   return (
-    <ModalWrapper size="modal-lg" header={doc ? "Redakte Et" : "Əlavə et"}>
+    <ModalWrapper
+      size="modal-lg"
+      header={doc ? "Redakte Et" : "Əlavə et"}
+      data={doc && `Sənəd - DOC${doc.id}`}
+    >
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
             doc
-              ? await dispatch(updateDoc({...values, id:doc.id}))
+              ? await dispatch(updateDoc({ ...values, id: doc.id }))
               : await dispatch(createDoc({ ...values }));
             setSubmitting(false);
             setModal(true);
@@ -80,7 +86,7 @@ export default function DocPageModal({ doc }) {
         {({ isSubmitting, isValid, dirty, errors }) => (
           <Form id="emp">
             <div className="row">
-              <div className="col-md-4">
+              <div className="col-md-6">
                 <MySearchableSelect
                   id="document_type_id"
                   name="document_type_id"
@@ -94,11 +100,10 @@ export default function DocPageModal({ doc }) {
                   // type="text"
                   // className="form-control"
                   label={doc && "Sənəd növü"}
-
                   placeholder="Sənəd növü"
                 />
               </div>
-              <div className="col-md-4">
+              <div className="col-md-6">
                 <MySearchableSelect
                   id="document_for"
                   name="document_for"
@@ -113,22 +118,41 @@ export default function DocPageModal({ doc }) {
                   // type="text"
                   // className="form-control"
                   label={doc && "Sənədin təyinatı"}
-
                   placeholder="Sənədin təyinatı"
                 />
               </div>
-              <div className="col-md-4">
+            </div>
+            <div className="row">
+              <div className="col-md-6">
+                <MyTextInput
+                  id="number"
+                  name="number"
+                  className="form-control"
+                  type="text"
+                  // className="form-control"
+                  placeholder="Sənədin texniki nömrəsi"
+                  label={doc && "Sənədin texniki nömrəsi"}
+                />
+              </div>
+              <div className="col-md-6">
                 <MyTextInput
                   id="date"
                   name="date"
                   className="form-control"
-                  type="date"
+                  type="text"
+                  onFocus={
+                    (e)=> {
+                      e.currentTarget.type = "date";
+                      e.currentTarget.focus();
+                     }
+                   }
                   // className="form-control"
                   placeholder="Sənəd tarixi"
                   label={doc && "Sənəd tarixi"}
-                  
                 />
               </div>
+            </div>
+            <div className="row">
               <div className={`col-md-12 ${doc && "mt-4"}`}>
                 <MyTextArea
                   id="about"
@@ -137,7 +161,6 @@ export default function DocPageModal({ doc }) {
                   className="form-control"
                   placeholder="Sənəd predmeti"
                   label={doc && "Sənəd predmeti"}
-
                 />
               </div>
             </div>

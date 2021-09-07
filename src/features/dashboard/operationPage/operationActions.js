@@ -24,6 +24,7 @@ export function loadOperation(data) {
         params: { ...data },
       })
       .then((datas) => {
+        console.log(datas,'operations')
         dispatch({
           type: FETCH_OPERATION,
           payload: datas.data.data,
