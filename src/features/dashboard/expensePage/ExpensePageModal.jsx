@@ -38,8 +38,10 @@ export default function ExpensePageModal({ expense }) {
       return {
         label: expenseType.name,
         value: expenseType.id,
+        group_id: expenseType.group_id && expenseType.group_id.id,
       };
     });
+  console.log(expenseTypes);
   //Options Kontragent
   const counterpartiesOptions =
     counterparties &&
@@ -84,6 +86,7 @@ export default function ExpensePageModal({ expense }) {
     }
   });
 
+
   const initialValues = expense
     ? {
         income_expense_group_id:
@@ -99,9 +102,9 @@ export default function ExpensePageModal({ expense }) {
         faktura: expense.faktura && expense.faktura,
 
         // Yeni elave edilen setirler asagidadir
-        // amount: "",
-        // edv: "",
-        // note:"",
+        amount: expense.amount && expense.amount,
+        edv: expense.edv && expense.edv,
+        note: expense.note && expense.note,
       }
     : {
         income_expense_group_id: "",
@@ -116,7 +119,7 @@ export default function ExpensePageModal({ expense }) {
         faktura: "",
         amount: "",
         edv: "",
-        note:"",
+        note: "",
       };
   const validationSchema = Yup.object({
     income_expense_group_id: Yup.string().required("Mütləq doldurulmalıdır."),
@@ -369,7 +372,7 @@ export default function ExpensePageModal({ expense }) {
                     </div>
                     <div className={`row ${expense && "mb-4"}`}>
                       <div className="col-md-12">
-                        <MyTextArea  
+                        <MyTextArea
                           name="note"
                           id="note"
                           type="text"
@@ -409,7 +412,7 @@ export default function ExpensePageModal({ expense }) {
                           <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
                         </svg>
                       </div>
-                      Xərclər haqqında məlumatlar
+                      Gəlir-Xərc üzrə təsnifatlar
                       <div className="icons">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -438,7 +441,7 @@ export default function ExpensePageModal({ expense }) {
                 >
                   <div className="card-body">
                     <div className={`row ${expense && "mb-4"}`}>
-                      <div className="col-md-4">
+                      <div className="col-md-6">
                         <MySearchableSelect
                           id="income_expense_group_id"
                           name="income_expense_group_id"
@@ -455,11 +458,19 @@ export default function ExpensePageModal({ expense }) {
                           placeholder="Gəlir-Xərc qrupu"
                         />
                       </div>
-                      <div className="col-md-4">
+                      <div className="col-md-6">
                         <MySearchableSelect
                           id="expense_type_id"
                           name="expense_type_id"
-                          options={expenseTypesOptions}
+                          options={
+                            values.income_expense_group_id
+                              ? expenseTypesOptions.filter(
+                                  (expenseType) =>
+                                    expenseType.group_id ===
+                                    values.income_expense_group_id
+                                )
+                              : expenseTypesOptions
+                          }
                           defaultValue={
                             expense && {
                               label: expense.expense_type_id.name,
@@ -470,16 +481,6 @@ export default function ExpensePageModal({ expense }) {
                           label={expense && "Gəlir-Xərc Növü"}
                           // className="form-control"
                           placeholder="Gəlir-Xərc Növü"
-                        />
-                      </div>
-                      <div className="col-md-4">
-                      <MyTextInput
-                          name="amount"
-                          id="amount"
-                          type="text"
-                          className="form-control"
-                          placeholder="Xərc"
-                          label={expense && "Xərc"}
                         />
                       </div>
                     </div>

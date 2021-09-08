@@ -58,7 +58,7 @@ export default function CrmPageModal({ crm }) {
     crm
       ? JSON.parse(crm.circulationByYears)
       : [{ circulationYear: "", circulation: "" }]
-  );
+  );  
   let mapCirculations = circulationWithYears;
   console.log(mapCirculations);
   const handleAddCirculationByYear = () => {
@@ -845,6 +845,7 @@ export default function CrmPageModal({ crm }) {
                         </div>
                       </div>
                     </div>
+                    
                     <div className="row">
                       {mapCirculations &&
                         mapCirculations.map((mapCirculation, index) => (

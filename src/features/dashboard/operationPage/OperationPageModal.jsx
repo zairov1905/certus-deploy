@@ -152,6 +152,39 @@ export default function OperationPageModal({ operation }) {
       setAddedStudents(values);
     }
   };
+  const [expenses, setExpenses] = useState(
+    operation.expenses
+      ? JSON.parse(operation.expenses)
+      : [
+          {
+            income_expense_group_id: "",
+            expense_type_id: "",
+            expense: "",
+            tax: "",
+          },
+        ]
+  );
+  let mapExpenses = expenses;
+  // console.log(mapCirculations);
+  const handleAddExpense = () => {
+    setExpenses([
+      ...expenses,
+      {
+        income_expense_group_id: "",
+        expense_type_id: "",
+        expense: "",
+        tax: "",
+      },
+    ]);
+  };
+  const handleRemoveExpense = () => {
+    if (expenses.length > 1) {
+      let lastIndex = expenses.length - 1;
+      let values = [...expenses];
+      values.splice(lastIndex, 1);
+      setExpenses(values);
+    }
+  };
   const initialValues = operation
     ? {
         number: operation.id && `OR${operation.id}`,
@@ -181,6 +214,7 @@ export default function OperationPageModal({ operation }) {
         bonus: operation.bonus,
 
         performans: operation.performans && operation.performans,
+        expenses: operation.expenses && JSON.parse(operation.expenses),
       }
     : {
         number: "",
@@ -191,7 +225,7 @@ export default function OperationPageModal({ operation }) {
         date: "",
         endDate: "",
         description: "",
-        note:"",
+        note: "",
         employee_id: "",
         document_id: "",
         faktura_id: "",
@@ -202,6 +236,7 @@ export default function OperationPageModal({ operation }) {
         bonus: "",
         edv: "",
         performans: "",
+        expenses: expenses,
       };
   const validationSchema = Yup.object({
     number: Yup.string().required("Mütləq doldurulmalıdır."),
@@ -351,7 +386,6 @@ export default function OperationPageModal({ operation }) {
                             options={customerOptions}
                             // className="form-control"
                             readOnly
-
                             placeholder="Müştəri"
                             label={operation && "Müştəri"}
                           />
@@ -513,10 +547,32 @@ export default function OperationPageModal({ operation }) {
                             label={operation && "Hesab faktura"}
                           />
                         </div>
-
                       </div>
                       <div className={`row ${operation && "mb-4"}`}>
-                        
+                        <div className="col-md-6">
+                          <MyTextInput
+                            name="amount"
+                            id="amount"
+                            type="text"
+                            className="form-control"
+                            placeholder="Məbləğ"
+                            label={operation && "Məbləğ"}
+                          />
+                        </div>
+                        <div className="col-md-6">
+                          <MyTextInput
+                            name="edv"
+                            id="edv"
+                            type="text"
+                            className="form-control"
+                            placeholder="ƏDV"
+                            value={(parseInt(values.amount) * 18) / 100}
+                            label={operation && "ƏDV"}
+                            readOnly
+                          />
+                        </div>
+                      </div>
+                      <div className={`row ${operation && "mb-4"}`}>
                         <div className="col-md-12">
                           <MySearchableSelect
                             defaultValue={
@@ -552,7 +608,7 @@ export default function OperationPageModal({ operation }) {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="card">
                   <div className="card-header" id="headingOne3">
                     <section className="mb-0 mt-0">
@@ -715,78 +771,128 @@ export default function OperationPageModal({ operation }) {
                     style={{}}
                   >
                     <div className="card-body">
-
-                      <div className={`row ${operation && "mb-4"}`}>
-                        <div className="col-md-6">
-                          <MyTextInput
-                            name="amount"
-                            id="amount"
-                            type="text"
-                            className="form-control"
-                            placeholder="Məbləğ"
-                            label={operation && "Məbləğ"}
-                          />
-                        </div>
-                        <div className="col-md-6">
-                          <MyTextInput
-                            name="edv"
-                            id="edv"
-                            type="text"
-                            className="form-control"
-                            placeholder="ƏDV"
-                            value={(parseInt(values.amount) * 18) / 100}
-                            label={operation && "ƏDV"}
-                            readOnly
-                          />
+                      <div className="row">
+                        <div className="col-md-2 offset-10 text-right">
+                          <div className="icon-container">
+                            <button
+                              type="button"
+                              className="close"
+                              onClick={() => handleAddExpense()}
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width={24}
+                                height={24}
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth={2}
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className="feather feather-plus-circle"
+                              >
+                                <circle cx={12} cy={12} r={10} />
+                                <line x1={12} y1={8} x2={12} y2={16} />
+                                <line x1={8} y1={12} x2={16} y2={12} />
+                              </svg>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveExpense()}
+                              className="close"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width={24}
+                                height={24}
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth={2}
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className="feather feather-minus-circle"
+                              >
+                                <circle cx={12} cy={12} r={10} />
+                                <line x1={8} y1={12} x2={16} y2={12} />
+                              </svg>
+                            </button>
+                          </div>
                         </div>
                       </div>
-                      <div className={`row ${operation && "mb-4"}`}>
 
-                        <div className="col-md-4">
-                          <MySearchableSelect
-                            defaultValue={
-                              operation &&
-                              expenseGroupOptions.filter(
-                                (expenseGroupOption) =>
-                                  expenseGroupOption.value ===
-                                  (operation.income_expense_group_id &&
-                                    operation.income_expense_group_id.id)
-                              )
-                            }
-                            name="income_expense_group_id"
-                            id="income_expense_group_id"
-                            type="text"
-                            options={expenseGroupOptions}
-                            // className="form-control"
-                            placeholder="Xərc qrupu"
-                            label={operation && "Xərc qrupu"}
-                          />
-                        </div>
-                        <div className="col-md-4">
-                          <MySearchableSelect
-                            defaultValue={
-                              operation &&
-                              expenseTypeOptions.filter(
-                                (expenseTypeOption) =>
-                                  expenseTypeOption.value ===
-                                  (operation.expense_type_id &&
-                                    operation.expense_type_id.id)
-                              )
-                            }
-                            name="expense_type_id"
-                            id="expense_type_id"
-                            type="text"
-                            options={expenseTypeOptions}
-                            // className="form-control"
-                            placeholder="Xərc tipi"
-                            label={operation && "Xərc tipi"}
-                          />
-                        </div>
+                      <div className={`row ${operation && "mb-4"}`}>
+                        {mapExpenses &&
+                          mapExpenses.map((mapExpense, index) => (
+                            <React.Fragment key={index}>
+                              <div className="col-md-3">
+                                <MySearchableSelect
+                                  defaultValue={
+                                    operation &&
+                                    expenseGroupOptions.filter(
+                                      (expenseGroupOption) =>
+                                        expenseGroupOption.value ===
+                                        (operation.income_expense_group_id &&
+                                          operation.income_expense_group_id.id)
+                                    )
+                                  }
+                                  name="income_expense_group_id"
+                                  id="income_expense_group_id"
+                                  type="text"
+                                  options={expenseGroupOptions}
+                                  // className="form-control"
+                                  placeholder="Xərc qrupu"
+                                  label={operation && "Xərc qrupu"}
+                                />
+                              </div>
+                              <div className="col-md-3">
+                                <MySearchableSelect
+                                  defaultValue={
+                                    operation &&
+                                    expenseTypeOptions.filter(
+                                      (expenseTypeOption) =>
+                                        expenseTypeOption.value ===
+                                        (operation.expense_type_id &&
+                                          operation.expense_type_id.id)
+                                    )
+                                  }
+                                  name="expense_type_id"
+                                  id="expense_type_id"
+                                  type="text"
+                                  options={expenseTypeOptions}
+                                  // className="form-control"
+                                  placeholder="Xərc tipi"
+                                  label={operation && "Xərc tipi"}
+                                />
+                              </div>
+                              <div className="col-md-3">
+                                <MyTextInput
+                                  name="amount"
+                                  id="amount"
+                                  type="text"
+                                  className="form-control"
+                                  placeholder="Məbləğ"
+                                  label={operation && "Məbləğ"}
+                                />
+                              </div>
+                              <div className="col-md-3">
+                                <MyTextInput
+                                  name="edv"
+                                  id="edv"
+                                  type="text"
+                                  className="form-control"
+                                  placeholder="Vergi"
+                                  value={(parseInt(values.amount) * 18) / 100}
+                                  label={operation && "Vergi"}
+                                  readOnly
+                                />
+                              </div>
+                            </React.Fragment>
+                          ))}
                       </div>
                     </div>
                   </div>
                 </div>
-              
               </div>
 
               {values.serviceType === "0" && (
