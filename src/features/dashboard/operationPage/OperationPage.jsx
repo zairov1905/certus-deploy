@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import DataTable, { defaultThemes } from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import { openModal } from "../../../app/modal/modalReducer";
-
 
 import { deleteOperation, loadOperation } from "./operationActions";
 export default function OperationPage() {
@@ -125,12 +125,16 @@ export default function OperationPage() {
     },
     {
       name: "Xidmət növü",
-      cell: (operation) => <p>{operation.service_type_id && operation.service_type_id.name}</p>,
+      cell: (operation) => (
+        <p>{operation.service_type_id && operation.service_type_id.name}</p>
+      ),
       sortable: true,
     },
     {
       name: "Müştəri",
-      cell: (operation) => <p>{operation.customer_id && operation.customer_id.customer_name}</p>,
+      cell: (operation) => (
+        <p>{operation.customer_id && operation.customer_id.customer_name}</p>
+      ),
       sortable: true,
     },
     {
@@ -140,7 +144,9 @@ export default function OperationPage() {
     },
     {
       name: "Referans",
-      cell: (operation) => <p>{operation.reference_id && operation.reference_id.name}</p>,
+      cell: (operation) => (
+        <p>{operation.reference_id && operation.reference_id.name}</p>
+      ),
       sortable: true,
     },
     {
@@ -181,7 +187,6 @@ export default function OperationPage() {
         <div className="action-btn">
           <svg
             onClick={() => {
-
               dispatch(
                 openModal({
                   modalType: "OperationPageModal",
@@ -232,7 +237,14 @@ export default function OperationPage() {
             data-name="delete"
             id={operation.id}
             onClick={() => {
-              dispatch(deleteOperation(operation.id));
+              if (
+                prompt(`Zəhmət olmasa silmək üçün şifrəni daxil edin`) == 9519
+              ) {
+                dispatch(deleteOperation(operation.id));
+              }
+              else{
+                toast.info('Silmək cəhtiniz uğursuzdur, silmək üçün düzgün şifrə daxil edin.')
+              }
             }}
             onMouseEnter={(e) => {
               sethover(true);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import $ from "jquery";
 
 import ModalWrapper from "../../../app/modal/ModalWrapper";
@@ -26,7 +26,17 @@ import MyTextArea from "../../../app/common/form/MyTextArea";
 
 export default function OperationPageModal({ operation }) {
   const dispatch = useDispatch();
-
+  const taxRef = useRef();
+  const onTaxEvent = (e, index) => {
+    let tax = e.target.value;
+    // let currentTax = taxRef.current;
+    // let targetInput = e.target;
+    // console.log(expenses)
+    // console.log(targetInput,currentTax);
+    // if (currentTax.max === targetInput.max) {
+    //   currentTax.value = targetInput.value;
+    // }
+  };
   useEffect(async () => {
     dispatch(loadServiceType());
     dispatch(loadReference());
@@ -153,19 +163,18 @@ export default function OperationPageModal({ operation }) {
     }
   };
   const [expenses, setExpenses] = useState(
-    operation.expenses
-      ? JSON.parse(operation.expenses)
-      : [
-          {
-            income_expense_group_id: "",
-            expense_type_id: "",
-            expense: "",
-            tax: "",
-          },
-        ]
+    operation && [
+      // : // ? JSON.parse(operation.expenses)
+      {
+        income_expense_group_id: "",
+        expense_type_id: "",
+        expense: "",
+        tax: "",
+      },
+    ]
   );
   let mapExpenses = expenses;
-  // console.log(mapCirculations);
+  console.log(mapExpenses);
   const handleAddExpense = () => {
     setExpenses([
       ...expenses,
@@ -214,7 +223,14 @@ export default function OperationPageModal({ operation }) {
         bonus: operation.bonus,
 
         performans: operation.performans && operation.performans,
-        expenses: operation.expenses && JSON.parse(operation.expenses),
+        expenses: [
+          {
+            income_expense_group_id: 1,
+            expense_type_id: 1,
+            expense: 0,
+            tax: 0,
+          },
+        ],
       }
     : {
         number: "",
@@ -608,114 +624,6 @@ export default function OperationPageModal({ operation }) {
                     </div>
                   </div>
                 </div>
-
-                <div className="card">
-                  <div className="card-header" id="headingOne3">
-                    <section className="mb-0 mt-0">
-                      <div
-                        role="menu"
-                        className="collapsed"
-                        data-toggle="collapse"
-                        data-target="#iconAccordionTwo"
-                        aria-expanded="false"
-                        aria-controls="iconAccordionTwo"
-                      >
-                        <div className="accordion-icon">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width={24}
-                            height={24}
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="feather feather-user"
-                          >
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                            <circle cx={12} cy={7} r={4} />
-                          </svg>
-                        </div>
-                        İcraçı haqqında məlumatlar
-                        <div className="icons">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width={24}
-                            height={24}
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            className="feather feather-chevron-down"
-                          >
-                            <polyline points="6 9 12 15 18 9" />
-                          </svg>
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                  <div
-                    id="iconAccordionTwo"
-                    className="collapse"
-                    aria-labelledby="headingOne3"
-                    data-parent="#iconsAccordion"
-                    style={{}}
-                  >
-                    <div className="card-body">
-                      <div className={`row ${operation && "mb-4"}`}>
-                        <div className="col-md-12">
-                          <MySearchableSelect
-                            // defaultValue={
-                            //   operation &&
-                            //   employeeOptions.filter(
-                            //     (employeeOption) =>
-                            //       employeeOption.value === operation.employee_id.id
-                            //   )
-                            // }
-                            defaultValue={
-                              operation && {
-                                value: parseInt(operation.employee_id.id),
-                                label: `${operation.employee_id.name} ${operation.employee_id.surname}`,
-                              }
-                            }
-                            name="employee_id"
-                            id="employee_id"
-                            type="text"
-                            options={employeeOptions}
-                            // className="form-control"
-                            label={operation && "İcraçı*"}
-                            placeholder="İcraçı*"
-                          />
-                        </div>
-                      </div>
-                      <div className={`row ${operation && "mb-4"}`}>
-                        <div className="col-md-6">
-                          <MyTextInput
-                            name="bonus"
-                            id="bonus"
-                            type="text"
-                            className="form-control"
-                            placeholder="İcracı bonusu"
-                            label={operation && "İcracı bonusu"}
-                          />
-                        </div>
-                        <div className="col-md-6">
-                          <MyTextInput
-                            name="performans"
-                            id="performans"
-                            type="text"
-                            className="form-control"
-                            placeholder="Performans"
-                            label={operation && "Performans"}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
                 <div className="card">
                   <div className="card-header" id="headingOne3">
                     <section className="mb-0 mt-0">
@@ -821,74 +729,189 @@ export default function OperationPageModal({ operation }) {
                         </div>
                       </div>
 
+                      {mapExpenses &&
+                        mapExpenses.map((mapExpense, index) => (
+                          <div
+                            key={index}
+                            className={`row ${operation && "mb-4"}`}
+                          >
+                            <div className="col-md-3">
+                              <MySearchableSelect
+                                defaultValue={
+                                  operation &&
+                                  expenseGroupOptions.filter(
+                                    (expenseGroupOption) =>
+                                      expenseGroupOption.value ===
+                                      (operation.income_expense_group_id &&
+                                        operation.income_expense_group_id.id)
+                                  )
+                                }
+                                name={`expenses[${index}].income_expense_group_id`}
+                                id={`expenses[${index}].income_expense_group_id`}
+                                type="text"
+                                options={expenseGroupOptions}
+                                // className="form-control"
+                                placeholder="Xərc qrupu"
+                                label={operation && "Xərc qrupu"}
+                              />
+                            </div>
+                            <div className="col-md-3">
+                              <MySearchableSelect
+                                defaultValue={
+                                  operation &&
+                                  expenseTypeOptions.filter(
+                                    (expenseTypeOption) =>
+                                      expenseTypeOption.value ===
+                                      (operation.expense_type_id &&
+                                        operation.expense_type_id.id)
+                                  )
+                                }
+                                name={`expenses[${index}].expense_type_id`}
+                                id={`expenses[${index}].expense_type_id`}
+                                type="text"
+                                options={expenseTypeOptions}
+                                // className="form-control"
+                                placeholder="Xərc tipi"
+                                label={operation && "Xərc tipi"}
+                              />
+                            </div>
+                            <div className="col-md-3">
+                              <MyTextInput
+                                key={index}
+                                max={index}
+                                name={`expenses[${index}].expense`}
+                                id={`expenses[${index}].expense`}
+                                // defaultValue={mapExpense && mapExpense.amount}
+                                type="number"
+                                className="form-control"
+                                placeholder="Məbləğ"
+                                label={operation && `Məbləğ`}
+                                // onChange={(e) => onTaxEvent(e, index)}
+                              />
+                            </div>
+                            <div className="col-md-3">
+                              <MyTextInput
+                                // ref={taxRef}
+                                max={index}
+                                name={`expenses[${index}].tax`}
+                                id={`expenses[${index}].tax`}
+                                type="number"
+                                className="form-control"
+                                // defaultValue={mapExpense && mapExpense.edv}
+                                placeholder="Vergi"
+                                label={operation && "Vergi(%)"}
+                                // readOnly
+                              />
+                              {console.log(values)}
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                </div>
+                <div className="card">
+                  <div className="card-header" id="headingOne3">
+                    <section className="mb-0 mt-0">
+                      <div
+                        role="menu"
+                        className="collapsed"
+                        data-toggle="collapse"
+                        data-target="#iconAccordionTwo"
+                        aria-expanded="false"
+                        aria-controls="iconAccordionTwo"
+                      >
+                        <div className="accordion-icon">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width={24}
+                            height={24}
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="feather feather-user"
+                          >
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx={12} cy={7} r={4} />
+                          </svg>
+                        </div>
+                        İcraçı haqqında məlumatlar
+                        <div className="icons">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width={24}
+                            height={24}
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="feather feather-chevron-down"
+                          >
+                            <polyline points="6 9 12 15 18 9" />
+                          </svg>
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                  <div
+                    id="iconAccordionTwo"
+                    className="collapse"
+                    aria-labelledby="headingOne3"
+                    data-parent="#iconsAccordion"
+                    style={{}}
+                  >
+                    <div className="card-body">
                       <div className={`row ${operation && "mb-4"}`}>
-                        {mapExpenses &&
-                          mapExpenses.map((mapExpense, index) => (
-                            <React.Fragment key={index}>
-                              <div className="col-md-3">
-                                <MySearchableSelect
-                                  defaultValue={
-                                    operation &&
-                                    expenseGroupOptions.filter(
-                                      (expenseGroupOption) =>
-                                        expenseGroupOption.value ===
-                                        (operation.income_expense_group_id &&
-                                          operation.income_expense_group_id.id)
-                                    )
-                                  }
-                                  name="income_expense_group_id"
-                                  id="income_expense_group_id"
-                                  type="text"
-                                  options={expenseGroupOptions}
-                                  // className="form-control"
-                                  placeholder="Xərc qrupu"
-                                  label={operation && "Xərc qrupu"}
-                                />
-                              </div>
-                              <div className="col-md-3">
-                                <MySearchableSelect
-                                  defaultValue={
-                                    operation &&
-                                    expenseTypeOptions.filter(
-                                      (expenseTypeOption) =>
-                                        expenseTypeOption.value ===
-                                        (operation.expense_type_id &&
-                                          operation.expense_type_id.id)
-                                    )
-                                  }
-                                  name="expense_type_id"
-                                  id="expense_type_id"
-                                  type="text"
-                                  options={expenseTypeOptions}
-                                  // className="form-control"
-                                  placeholder="Xərc tipi"
-                                  label={operation && "Xərc tipi"}
-                                />
-                              </div>
-                              <div className="col-md-3">
-                                <MyTextInput
-                                  name="amount"
-                                  id="amount"
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Məbləğ"
-                                  label={operation && "Məbləğ"}
-                                />
-                              </div>
-                              <div className="col-md-3">
-                                <MyTextInput
-                                  name="edv"
-                                  id="edv"
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Vergi"
-                                  value={(parseInt(values.amount) * 18) / 100}
-                                  label={operation && "Vergi"}
-                                  readOnly
-                                />
-                              </div>
-                            </React.Fragment>
-                          ))}
+                        <div className="col-md-12">
+                          <MySearchableSelect
+                            // defaultValue={
+                            //   operation &&
+                            //   employeeOptions.filter(
+                            //     (employeeOption) =>
+                            //       employeeOption.value === operation.employee_id.id
+                            //   )
+                            // }
+                            defaultValue={
+                              operation && {
+                                value: parseInt(operation.employee_id.id),
+                                label: `${operation.employee_id.name} ${operation.employee_id.surname}`,
+                              }
+                            }
+                            name="employee_id"
+                            id="employee_id"
+                            type="text"
+                            options={employeeOptions}
+                            // className="form-control"
+                            label={operation && "İcraçı*"}
+                            placeholder="İcraçı*"
+                          />
+                        </div>
+                      </div>
+                      <div className={`row ${operation && "mb-4"}`}>
+                        <div className="col-md-6">
+                          <MyTextInput
+                            name="bonus"
+                            id="bonus"
+                            type="text"
+                            className="form-control"
+                            placeholder="İcracı bonusu"
+                            label={operation && "İcracı bonusu"}
+                          />
+                        </div>
+                        <div className="col-md-6">
+                          <MyTextInput
+                            name="performans"
+                            id="performans"
+                            type="text"
+                            className="form-control"
+                            placeholder="Performans"
+                            label={operation && "Performans"}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
