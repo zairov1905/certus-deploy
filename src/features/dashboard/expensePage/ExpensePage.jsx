@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DataTable, { defaultThemes } from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import { openModal } from "../../../app/modal/modalReducer";
 import { loadDocs } from "../docPage/docActions";
 import { loadCounterparty } from "../settings/counterparty/counterpartyActions";
@@ -19,7 +20,7 @@ export default function ExpensePage() {
   }, []);
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);
-  const { expenses,totalCount } = useSelector((state) => state.expenses);
+  const { expenses, totalCount } = useSelector((state) => state.expenses);
   const [hover, sethover] = useState(false);
   const [target, setTarget] = useState({ id: null, name: null });
 
@@ -119,17 +120,15 @@ export default function ExpensePage() {
     {
       name: "Gəlir-Xərc qrupu",
       sortable: true,
-      cell:expense=>(
-        <p>{expense.income_expense_group_id.name}</p>
-      )
+      cell: (expense) => <p>{expense.income_expense_group_id.name}</p>,
     },
     {
       name: "Gəlir-Xərc növü",
       selector: "expense_type_id",
       sortable: true,
-      cell:expense=>(
+      cell: (expense) => (
         <p>{expense.expense_type_id && expense.expense_type_id.name}</p>
-      )
+      ),
     },
     {
       name: "Tarix",
@@ -139,15 +138,14 @@ export default function ExpensePage() {
     {
       name: "Kontragent",
       sortable: true,
-      cell:expense=>(
+      cell: (expense) => (
         <p>{expense.contractor_id && expense.contractor_id.name}</p>
-      )
-      
+      ),
     },
     {
       name: "Müqavilə",
       selector: "document_id",
-      cell:expense=>(
+      cell: (expense) => (
         <p>{expense.document_id && expense.document_id.document_number}</p>
       ),
       sortable: true,
@@ -156,9 +154,12 @@ export default function ExpensePage() {
       name: "Əməliyyat növü",
       selector: "expenseInvoice",
       sortable: true,
-      cell:expense => (
-        expense.operation_id === 0  ? <span className="badge badge-danger">{expense.faktura}</span> : <span className="badge badge-success">{expense.faktura}</span>
-      )
+      cell: (expense) =>
+        expense.operation_id === 0 ? (
+          <span className="badge badge-danger">{expense.faktura}</span>
+        ) : (
+          <span className="badge badge-success">{expense.faktura}</span>
+        ),
     },
     {
       name: "",
@@ -221,7 +222,15 @@ export default function ExpensePage() {
             data-name="delete"
             id={expense.id}
             onClick={() => {
-              dispatch(deleteExpense(expense.id));
+              if (
+                prompt(`Zəhmət olmasa silmək üçün şifrəni daxil edin`) == 9519
+              ) {
+                dispatch(deleteExpense(expense.id));
+              } else {
+                toast.info(
+                  "Silmək cəhtiniz uğursuzdur, silmək üçün düzgün şifrə daxil edin."
+                );
+              }
             }}
             onMouseEnter={(e) => {
               sethover(true);

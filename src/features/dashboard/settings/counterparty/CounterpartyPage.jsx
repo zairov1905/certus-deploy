@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DataTable, { defaultThemes } from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import { openModal } from "../../../../app/modal/modalReducer";
 import { loadCounterparty } from "./counterpartyActions";
 import { deleteCounterparty } from "./counterpartyActions";
@@ -8,14 +9,16 @@ import { deleteCounterparty } from "./counterpartyActions";
 export default function CounterpartyPage() {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(loadCounterparty())
-  //   // return () => {
-  //   //   // dispatch(loadOrder())
-  //   // }
-  },[])
+    dispatch(loadCounterparty());
+    //   // return () => {
+    //   //   // dispatch(loadOrder())
+    //   // }
+  }, []);
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);
-  const {counterparties,totalCount} = useSelector(state => state.counterparties);
+  const { counterparties, totalCount } = useSelector(
+    (state) => state.counterparties
+  );
   const data = counterparties;
 
   const [hover, sethover] = useState(false);
@@ -133,20 +136,15 @@ export default function CounterpartyPage() {
       cell: (counterparty) => (
         <div className="action-btn">
           <svg
-            onClick={() =>
-              {
-                dispatch(
-                
-                  openModal({
-                    modalType: "CounterpartyPageModal",
-                    modalProps: { counterparty },
-                  })
-                )
-                // dispatch(loadEmployees());
-
-              }
-
-            }
+            onClick={() => {
+              dispatch(
+                openModal({
+                  modalType: "CounterpartyPageModal",
+                  modalProps: { counterparty },
+                })
+              );
+              // dispatch(loadEmployees());
+            }}
             data-name="edit"
             id={counterparty.id}
             onMouseEnter={(e) => {
@@ -190,7 +188,15 @@ export default function CounterpartyPage() {
             data-name="delete"
             id={counterparty.id}
             onClick={() => {
-              dispatch(deleteCounterparty(counterparty.id));
+              if (
+                prompt(`Zəhmət olmasa silmək üçün şifrəni daxil edin`) == 9519
+              ) {
+                dispatch(deleteCounterparty(counterparty.id));
+              } else {
+                toast.info(
+                  "Silmək cəhtiniz uğursuzdur, silmək üçün düzgün şifrə daxil edin."
+                );
+              }
             }}
             onMouseEnter={(e) => {
               sethover(true);
@@ -239,7 +245,6 @@ export default function CounterpartyPage() {
         <div className="row layout-top-spacing">
           <div className="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
             <div className="widget-content widget-content-area br-6">
-
               <DataTable
                 // className="dataTables_wrapper container-fluid dt-bootstrap4 table-responsive"
                 // selectableRows

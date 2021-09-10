@@ -8,6 +8,7 @@ import { loadDuties } from "../settings/duty/dutyActions";
 import { loadDepartments } from "../settings/department/departmentActions";
 
 import { Redirect } from "react-router";
+import { toast } from "react-toastify";
 export default function Employees() {
   const dispatch = useDispatch();
   const { employees } = useSelector((state) => state.employees);
@@ -239,10 +240,7 @@ export default function Employees() {
                         </div>
                         <img src="assets/img/90x90.jpg" alt="avatar" />
                         <div className="user-meta-info">
-                          <p
-                            className="user-name"
-                            data-name={employee.name}
-                          >
+                          <p className="user-name" data-name={employee.name}>
                             {employee.name + " " + employee.surname}
                           </p>
                           <p
@@ -309,7 +307,17 @@ export default function Employees() {
                         </svg>
                         <svg
                           onClick={() => {
-                            dispatch(deleteEmployees(employee.id));
+                            if (
+                              prompt(
+                                `Zəhmət olmasa silmək üçün şifrəni daxil edin`
+                              ) == 9519
+                            ) {
+                              dispatch(deleteEmployees(employee.id));
+                            } else {
+                              toast.info(
+                                "Silmək cəhtiniz uğursuzdur, silmək üçün düzgün şifrə daxil edin."
+                              );
+                            }
                           }}
                           xmlns="http://www.w3.org/2000/svg"
                           width={24}

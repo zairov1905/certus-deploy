@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from "react";
 import DataTable, { defaultThemes } from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import { openModal } from "../../../../app/modal/modalReducer";
 import { deleteDepartment, loadDepartments } from "./departmentActions";
 
 export default function DepartmentPage() {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(loadDepartments())
-  //   // return () => {
-  //   //   // dispatch(loadOrder())
-  //   // }
-  },[])
+    dispatch(loadDepartments());
+    //   // return () => {
+    //   //   // dispatch(loadOrder())
+    //   // }
+  }, []);
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);
-  const {departments,totalCount} = useSelector(state => state.departments);
+  const { departments, totalCount } = useSelector((state) => state.departments);
   const data = departments;
 
   const [hover, sethover] = useState(false);
@@ -122,20 +123,15 @@ export default function DepartmentPage() {
       cell: (department) => (
         <div className="action-btn">
           <svg
-            onClick={() =>
-              {
-                dispatch(
-                
-                  openModal({
-                    modalType: "DepartmentPageModal",
-                    modalProps: { department },
-                  })
-                )
-                // dispatch(loadEmployees());
-
-              }
-
-            }
+            onClick={() => {
+              dispatch(
+                openModal({
+                  modalType: "DepartmentPageModal",
+                  modalProps: { department },
+                })
+              );
+              // dispatch(loadEmployees());
+            }}
             data-name="edit"
             id={department.id}
             onMouseEnter={(e) => {
@@ -179,7 +175,15 @@ export default function DepartmentPage() {
             data-name="delete"
             id={department.id}
             onClick={() => {
-              dispatch(deleteDepartment(department.id));
+              if (
+                prompt(`Zəhmət olmasa silmək üçün şifrəni daxil edin`) == 9519
+              ) {
+                dispatch(deleteDepartment(department.id));
+              } else {
+                toast.info(
+                  "Silmək cəhtiniz uğursuzdur, silmək üçün düzgün şifrə daxil edin."
+                );
+              }
             }}
             onMouseEnter={(e) => {
               sethover(true);
@@ -228,7 +232,6 @@ export default function DepartmentPage() {
         <div className="row layout-top-spacing">
           <div className="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
             <div className="widget-content widget-content-area br-6">
-
               <DataTable
                 // className="dataTables_wrapper container-fluid dt-bootstrap4 table-responsive"
                 // selectableRows

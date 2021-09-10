@@ -86,7 +86,6 @@ export default function ExpensePageModal({ expense }) {
     }
   });
 
-
   const initialValues = expense
     ? {
         income_expense_group_id:
@@ -218,7 +217,11 @@ export default function ExpensePageModal({ expense }) {
                         <MyTextInput
                           id="date"
                           name="date"
-                          type="date"
+                          type={expense ? "date" : "text"}
+                          onFocus={(e) => {
+                            e.currentTarget.type = "date";
+                            e.currentTarget.focus();
+                          }}
                           className="form-control"
                           label={expense && "Tarix"}
                           placeholder="Tarix"

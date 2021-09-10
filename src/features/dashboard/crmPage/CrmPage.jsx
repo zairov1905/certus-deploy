@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DataTable, { defaultThemes } from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import { openModal } from "../../../app/modal/modalReducer";
 import { loadEmployees } from "../employees/employeesActions";
 import { loadReference } from "../settings/reference/referenceActions";
@@ -17,7 +18,7 @@ export default function CrmPage() {
   }, []);
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);
-  const { crms , totalCount} = useSelector((state) => state.crms);
+  const { crms, totalCount } = useSelector((state) => state.crms);
   const [hover, sethover] = useState(false);
   const [target, setTarget] = useState({ id: null, name: null });
 
@@ -116,11 +117,12 @@ export default function CrmPage() {
     {
       name: "Kurator",
       selector: "curator",
-      cell:crm =>(
-        <p>{crm.employee_id.name} {crm.employee_id.surname} </p>
+      cell: (crm) => (
+        <p>
+          {crm.employee_id.name} {crm.employee_id.surname}{" "}
+        </p>
       ),
       sortable: true,
-
     },
     {
       name: "Müştəri adı",
@@ -207,7 +209,15 @@ export default function CrmPage() {
             data-name="delete"
             id={crm.id}
             onClick={() => {
-              dispatch(deleteCrm(crm.id));
+              if (
+                prompt(`Zəhmət olmasa silmək üçün şifrəni daxil edin`) == 9519
+              ) {
+                dispatch(deleteCrm(crm.id));
+              } else {
+                toast.info(
+                  "Silmək cəhtiniz uğursuzdur, silmək üçün düzgün şifrə daxil edin."
+                );
+              }
             }}
             onMouseEnter={(e) => {
               sethover(true);

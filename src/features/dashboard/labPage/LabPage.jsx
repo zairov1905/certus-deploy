@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DataTable, { defaultThemes } from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import { openModal } from "../../../app/modal/modalReducer";
 import { loadDocs } from "../docPage/docActions";
 
@@ -124,7 +125,9 @@ export default function LabsPage() {
       name: "Müqavilə nömrəsi",
       sortable: true,
 
-      cell: (lab) => <p>{lab.document_id && lab.document_id.document_number}</p>,
+      cell: (lab) => (
+        <p>{lab.document_id && lab.document_id.document_number}</p>
+      ),
     },
 
     {
@@ -207,7 +210,15 @@ export default function LabsPage() {
             data-name="delete"
             id={lab.id}
             onClick={() => {
-              dispatch(deleteLab(lab.id));
+              if (
+                prompt(`Zəhmət olmasa silmək üçün şifrəni daxil edin`) == 9519
+              ) {
+                dispatch(deleteLab(lab.id));
+              } else {
+                toast.info(
+                  "Silmək cəhtiniz uğursuzdur, silmək üçün düzgün şifrə daxil edin."
+                );
+              }
             }}
             onMouseEnter={(e) => {
               sethover(true);

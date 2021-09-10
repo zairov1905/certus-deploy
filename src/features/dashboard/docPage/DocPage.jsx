@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DataTable, { defaultThemes } from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import { openModal } from "../../../app/modal/modalReducer";
 import { loadDocumentTypes } from "../settings/documentType/documentTypeActions";
 import { loadDocs, deleteDoc } from "./docActions";
@@ -119,9 +120,7 @@ export default function DocPage() {
       name: "Sənəd Növü",
       // selector: "document_type",
       sortable: true,
-      cell: (doc) => (
-        <p>{doc.document_type_id && doc.document_type_id.name}</p>
-      )
+      cell: (doc) => <p>{doc.document_type_id && doc.document_type_id.name}</p>,
     },
     {
       name: "Sənəd Təyinatı ",
@@ -201,7 +200,15 @@ export default function DocPage() {
             data-name="delete"
             id={doc.id}
             onClick={() => {
-              dispatch(deleteDoc(doc.id));
+              if (
+                prompt(`Zəhmət olmasa silmək üçün şifrəni daxil edin`) == 9519
+              ) {
+                dispatch(deleteDoc(doc.id));
+              } else {
+                toast.info(
+                  "Silmək cəhtiniz uğursuzdur, silmək üçün düzgün şifrə daxil edin."
+                );
+              }
             }}
             onMouseEnter={(e) => {
               sethover(true);

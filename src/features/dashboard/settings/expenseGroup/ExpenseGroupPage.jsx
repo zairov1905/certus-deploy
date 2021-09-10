@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from "react";
 import DataTable, { defaultThemes } from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import { openModal } from "../../../../app/modal/modalReducer";
 import { deleteExpenseGroup, loadExpenseGroup } from "./expenseGroupActions";
-
 
 export default function ExpenseGroupPage() {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(loadExpenseGroup())
-  //   // return () => {
-  //   //   // dispatch(loadOrder())
-  //   // }
-  },[])
+    dispatch(loadExpenseGroup());
+    //   // return () => {
+    //   //   // dispatch(loadOrder())
+    //   // }
+  }, []);
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);
-  const {expenseGroups, totalCount} = useSelector(state => state.expenseGroups);
+  const { expenseGroups, totalCount } = useSelector(
+    (state) => state.expenseGroups
+  );
   const data = expenseGroups;
 
   const [hover, sethover] = useState(false);
@@ -125,20 +127,15 @@ export default function ExpenseGroupPage() {
       cell: (expenseGroup) => (
         <div className="action-btn">
           <svg
-            onClick={() =>
-              {
-                dispatch(
-                
-                  openModal({
-                    modalType: "ExpenseGroupPageModal",
-                    modalProps: { expenseGroup },
-                  })
-                )
-                // dispatch(loadEmployees());
-
-              }
-
-            }
+            onClick={() => {
+              dispatch(
+                openModal({
+                  modalType: "ExpenseGroupPageModal",
+                  modalProps: { expenseGroup },
+                })
+              );
+              // dispatch(loadEmployees());
+            }}
             data-name="edit"
             id={expenseGroup.id}
             onMouseEnter={(e) => {
@@ -182,7 +179,15 @@ export default function ExpenseGroupPage() {
             data-name="delete"
             id={expenseGroup.id}
             onClick={() => {
-              dispatch(deleteExpenseGroup(expenseGroup.id));
+              if (
+                prompt(`Zəhmət olmasa silmək üçün şifrəni daxil edin`) == 9519
+              ) {
+                dispatch(deleteExpenseGroup(expenseGroup.id));
+              } else {
+                toast.info(
+                  "Silmək cəhtiniz uğursuzdur, silmək üçün düzgün şifrə daxil edin."
+                );
+              }
             }}
             onMouseEnter={(e) => {
               sethover(true);
@@ -231,7 +236,6 @@ export default function ExpenseGroupPage() {
         <div className="row layout-top-spacing">
           <div className="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
             <div className="widget-content widget-content-area br-6">
-
               <DataTable
                 // className="dataTables_wrapper container-fluid dt-bootstrap4 table-responsive"
                 // selectableRows

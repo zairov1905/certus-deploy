@@ -139,13 +139,11 @@ export default function DocPageModal({ doc }) {
                   id="date"
                   name="date"
                   className="form-control"
-                  type="text"
-                  onFocus={
-                    (e)=> {
-                      e.currentTarget.type = "date";
-                      e.currentTarget.focus();
-                     }
-                   }
+                  type={doc ? "date" : "text"}
+                  onFocus={(e) => {
+                    e.currentTarget.type = "date";
+                    e.currentTarget.focus();
+                  }}
                   // className="form-control"
                   placeholder="Sənəd tarixi"
                   label={doc && "Sənəd tarixi"}

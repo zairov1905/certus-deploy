@@ -44,7 +44,7 @@ export default function PersonalPageModal({ personal }) {
         value: parseInt(training.id),
       };
     });
-    // ++++++++++
+  // ++++++++++
   const { operations } = useSelector((state) => state.operations);
   const operationOptions =
     operations &&
@@ -181,7 +181,7 @@ export default function PersonalPageModal({ personal }) {
                         value: parseInt(personal.sn_code_id),
                       }
                     }
-                    label="SN kodu*"
+                    label={personal && "SN kodu*"}
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -191,7 +191,7 @@ export default function PersonalPageModal({ personal }) {
                     type="text"
                     className="form-control"
                     placeholder="Reyestr nömrəsi daxil edin"
-                    label="Reyestr nömrəsi*"
+                    label={personal && "Reyestr nömrəsi*"}
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -201,7 +201,7 @@ export default function PersonalPageModal({ personal }) {
                     type="text"
                     className="form-control"
                     placeholder="Blank nömrəsi daxil edin"
-                    label="Blank nömrəsi*"
+                    label={personal && "Blank nömrəsi*"}
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -211,27 +211,35 @@ export default function PersonalPageModal({ personal }) {
                     type="text"
                     className="form-control"
                     placeholder="Akkreditasiya sahəsində sıra nömrəsi daxil edin"
-                    label="Akkreditasiya sahəsində sıra nömrəsi*"
+                    label={personal && "Akkreditasiya sahəsində sıra nömrəsi*"}
                   />
                 </div>
                 <div className="col-md-12 mb-4">
                   <MyTextInput
                     id="issue_date"
                     name="issue_date"
-                    type="date"
+                    type={personal ? "date" : "text"}
+                    onFocus={(e) => {
+                      e.currentTarget.type = "date";
+                      e.currentTarget.focus();
+                    }}
                     className="form-control"
                     placeholder="Sertifikatın verilmə tarixi daxil edin"
-                    label="Sertifikatın verilmə tarixi*"
+                    label={personal && "Sertifikatın verilmə tarixi*"}
                   />
                 </div>
                 <div className="col-md-12 mb-4">
                   <MyTextInput
                     id="expiration_date"
                     name="expiration_date"
-                    type="date"
+                    type={personal ? "date" : "text"}
+                    onFocus={(e) => {
+                      e.currentTarget.type = "date";
+                      e.currentTarget.focus();
+                    }}
                     className="form-control"
                     placeholder="Sertifikatın qüvvədən düşdüyü tarix daxil edin"
-                    label="Sertifikatın qüvvədən düşdüyü tarix*"
+                    label={personal && "Sertifikatın qüvvədən düşdüyü tarix*"}
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -241,7 +249,7 @@ export default function PersonalPageModal({ personal }) {
                     type="text"
                     className="form-control"
                     placeholder="İştirakçı adını daxil edin"
-                    label="İştirakçı adı*"
+                    label={personal && "İştirakçı adı*"}
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -257,7 +265,7 @@ export default function PersonalPageModal({ personal }) {
                       }
                     }
                     placeholder="Təlimçinin adını daxil edin"
-                    label="Təlimçinin adı*"
+                    label={personal && "Təlimçinin adı*"}
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -274,7 +282,7 @@ export default function PersonalPageModal({ personal }) {
                     type="text"
                     // className="form-control"
                     placeholder="Təlimin adın daxil edin"
-                    label="Təlimin adı"
+                    label={personal && "Təlimin adı"}
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -292,6 +300,7 @@ export default function PersonalPageModal({ personal }) {
                     // className="form-control"
                     placeholder="Aid olduğu əməliyyat"
                     label="Aid olduğu əməliyyat*"
+                    label={personal && "Aid olduğu əməliyyat*"}
                   />
                 </div>
 
@@ -304,7 +313,7 @@ export default function PersonalPageModal({ personal }) {
                       readOnly
                       className="form-control"
                       placeholder="Səriştələr"
-                      label="Səriştələr"
+                      label={personal && "Səriştələr"}
                     />
                   </div>
                 )}
@@ -316,7 +325,7 @@ export default function PersonalPageModal({ personal }) {
                     type="text"
                     className="form-control"
                     placeholder="Xidmətin kodunu daxil edin"
-                    label="Xidmətin kodu*"
+                    label={personal && "Xidmətin kodu*"}
                   />
                 </div>
                 {/* <div className="col-md-12 mb-4">
@@ -326,7 +335,7 @@ export default function PersonalPageModal({ personal }) {
                   type="text"
                   className="form-control"
                   placeholder="Normativ sənədin işarəsini daxil edin"
-                  label="Normativ sənədin işarəsi"
+                    label={personal && "Normativ sənədin işarəsi"}
                 />
               </div> */}
                 <div className="col-md-12 mb-4">
@@ -336,6 +345,7 @@ export default function PersonalPageModal({ personal }) {
                     type="text"
                     className="form-control"
                     placeholder="Qeyd daxil edin"
+                    label={personal && "Qeyd"}
                     label="Qeyd"
                   />
                 </div>

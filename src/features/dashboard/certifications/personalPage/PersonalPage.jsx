@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import { openModal } from "../../../../app/modal/modalReducer";
 import { loadTraining } from "../../settings/training/trainingActions";
-
 
 import { deletePersonal, loadPersonal } from "./personalActions";
 export default function PersonalPage() {
@@ -134,7 +134,7 @@ export default function PersonalPage() {
     {
       name: "Sertifikatın verilmə tarixi",
       selector: "issue_date",
-      sortable:true
+      sortable: true,
     },
     {
       name: "Sertifikatın qüvvədən düşdüyü tarix",
@@ -154,8 +154,12 @@ export default function PersonalPage() {
     {
       name: "Təlimin adı",
       // selector: "training_id",
-      cell:personal => (
-        <p>{personal.training_id ? personal.training_id.name :'Təlim qeyd olunmayıb'}</p>
+      cell: (personal) => (
+        <p>
+          {personal.training_id
+            ? personal.training_id.name
+            : "Təlim qeyd olunmayıb"}
+        </p>
       ),
       sortable: true,
     },
@@ -233,7 +237,15 @@ export default function PersonalPage() {
             data-name="delete"
             id={personal.id}
             onClick={() => {
-              dispatch(deletePersonal(personal.id));
+              if (
+                prompt(`Zəhmət olmasa silmək üçün şifrəni daxil edin`) == 9519
+              ) {
+                dispatch(deletePersonal(personal.id));
+              } else {
+                toast.info(
+                  "Silmək cəhtiniz uğursuzdur, silmək üçün düzgün şifrə daxil edin."
+                );
+              }
             }}
             onMouseEnter={(e) => {
               sethover(true);

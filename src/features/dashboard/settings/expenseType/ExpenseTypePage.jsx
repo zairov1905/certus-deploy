@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DataTable, { defaultThemes } from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import { openModal } from "../../../../app/modal/modalReducer";
 import { loadExpenseGroup } from "../expenseGroup/expenseGroupActions";
 import { deleteExpenseType, loadExpenseType } from "./expenseTypeActions";
@@ -182,7 +183,15 @@ export default function ExpenseTypePage() {
             data-name="delete"
             id={expenseType.id}
             onClick={() => {
-              dispatch(deleteExpenseType(expenseType.id));
+              if (
+                prompt(`Zəhmət olmasa silmək üçün şifrəni daxil edin`) == 9519
+              ) {
+                dispatch(deleteExpenseType(expenseType.id));
+              } else {
+                toast.info(
+                  "Silmək cəhtiniz uğursuzdur, silmək üçün düzgün şifrə daxil edin."
+                );
+              }
             }}
             onMouseEnter={(e) => {
               sethover(true);

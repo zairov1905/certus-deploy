@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DataTable, { defaultThemes } from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import { openModal } from "../../../app/modal/modalReducer";
 import { loadCrm } from "../crmPage/crmActions";
 import { loadDocs } from "../docPage/docActions";
@@ -123,9 +124,7 @@ export default function OrderPage() {
     {
       name: "Sifariş nömrəsi",
       selector: "id",
-      cell: (order) => (
-        <p>{order.id && `OR${order.id}`}</p>
-      ),
+      cell: (order) => <p>{order.id && `OR${order.id}`}</p>,
       sortable: true,
     },
     {
@@ -242,7 +241,15 @@ export default function OrderPage() {
             data-name="delete"
             id={order.id}
             onClick={() => {
-              dispatch(deleteOrder(order.id));
+              if (
+                prompt(`Zəhmət olmasa silmək üçün şifrəni daxil edin`) == 9519
+              ) {
+                dispatch(deleteOrder(order.id));
+              } else {
+                toast.info(
+                  "Silmək cəhtiniz uğursuzdur, silmək üçün düzgün şifrə daxil edin."
+                );
+              }
             }}
             onMouseEnter={(e) => {
               sethover(true);

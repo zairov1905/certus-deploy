@@ -340,16 +340,16 @@ export default function ProductServicePageModal({ productService }) {
       $("#closeModal").click();
     }
   });
-    // ++++++++++
-    const { operations } = useSelector((state) => state.operations);
-    const operationOptions =
-      operations &&
-      operations.map((operation) => {
-        return {
-          label: `OR${operation.id}`,
-          value: parseInt(operation.id),
-        };
-      });
+  // ++++++++++
+  const { operations } = useSelector((state) => state.operations);
+  const operationOptions =
+    operations &&
+    operations.map((operation) => {
+      return {
+        label: `OR${operation.id}`,
+        value: parseInt(operation.id),
+      };
+    });
   const initialValues = productService
     ? {
         sn_code_id: productService.sn_code_id && productService.sn_code_id,
@@ -407,8 +407,9 @@ export default function ProductServicePageModal({ productService }) {
           moment(productService.product_batch_date).format("YYYY-MM-DD"),
         act_sign_id:
           productService.act_sign_id && JSON.parse(productService.act_sign_id),
-          note: productService.note && productService.note,
-          operation_id: productService.operation_id && productService.operation_id.id,
+        note: productService.note && productService.note,
+        operation_id:
+          productService.operation_id && productService.operation_id.id,
       }
     : {
         sn_code_id: "",
@@ -445,7 +446,6 @@ export default function ProductServicePageModal({ productService }) {
         // new
         operation_id: "",
         note: "",
-
       };
   const validationSchema = Yup.object({
     sn_code_id: Yup.string().required("Mütləq doldurulmalıdır."),
@@ -516,7 +516,7 @@ export default function ProductServicePageModal({ productService }) {
                       }
                     }
                     placeholder="SN kodu daxil edin"
-                    label="SN kodu*"
+                    label={productService && "SN kodu*"}
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -526,7 +526,7 @@ export default function ProductServicePageModal({ productService }) {
                     type="text"
                     className="form-control"
                     placeholder="Reyestr nömrəsi daxil edin"
-                    label="Reyestr nömrəsi*"
+                    label={productService && "Reyestr nömrəsi*"}
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -536,7 +536,7 @@ export default function ProductServicePageModal({ productService }) {
                     type="text"
                     className="form-control"
                     placeholder="Blank nömrəsi daxil edin"
-                    label="Blank nömrəsi*"
+                    label={productService && "Blank nömrəsi*"}
                   />
                   {/* {console.log(values)} */}
                 </div>
@@ -547,27 +547,39 @@ export default function ProductServicePageModal({ productService }) {
                     type="text"
                     className="form-control"
                     placeholder="Akkreditasiya sahəsində sıra nömrəsi daxil edin"
-                    label="Akkreditasiya sahəsində sıra nömrəsi*"
+                    label={
+                      productService && "Akkreditasiya sahəsində sıra nömrəsi*"
+                    }
                   />
                 </div>
                 <div className="col-md-12 mb-4">
                   <MyTextInput
                     id="issue_date"
                     name="issue_date"
-                    type="date"
+                    type={productService ? "date" : "text"}
+                    onFocus={(e) => {
+                      e.currentTarget.type = "date";
+                      e.currentTarget.focus();
+                    }}
                     className="form-control"
                     placeholder="Sertifikatın verilmə tarixi daxil edin"
-                    label="Sertifikatın verilmə tarixi*"
+                    label={productService && "Sertifikatın verilmə tarixi*"}
                   />
                 </div>
                 <div className="col-md-12 mb-4">
                   <MyTextInput
                     id="expiration_date"
                     name="expiration_date"
-                    type="date"
+                    type={productService ? "date" : "text"}
+                    onFocus={(e) => {
+                      e.currentTarget.type = "date";
+                      e.currentTarget.focus();
+                    }}
                     className="form-control"
                     placeholder="Sertifikatın qüvvədən düşdüyü tarix daxil edin"
-                    label="Sertifikatın qüvvədən düşdüyü tarix*"
+                    label={
+                      productService && "Sertifikatın qüvvədən düşdüyü tarix*"
+                    }
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -584,7 +596,10 @@ export default function ProductServicePageModal({ productService }) {
                     }
                     // className="form-control"
                     placeholder="Sertifikat təqdim edilən təsərrüfat subyektinin adını daxil edin"
-                    label="Sertifikat təqdim edilən təsərrüfat subyektinin adı*"
+                    label={
+                      productService &&
+                      "Sertifikat təqdim edilən təsərrüfat subyektinin adı*"
+                    }
                   />
                 </div>
                 {productService && (
@@ -597,7 +612,7 @@ export default function ProductServicePageModal({ productService }) {
                         readOnly
                         className="form-control"
                         placeholder="Hüquqi statusunu daxil edin"
-                        label="Hüquqi statusu"
+                        label={productService && "Hüquqi statusu"}
                       />
                     </div>
                     <div className="col-md-12 mb-4">
@@ -608,7 +623,7 @@ export default function ProductServicePageModal({ productService }) {
                         readOnly
                         className="form-control"
                         placeholder="VÖEN daxil edin"
-                        label="VÖEN"
+                        label={productService && "VÖEN"}
                       />
                     </div>
                     <div className="col-md-12 mb-4">
@@ -619,7 +634,10 @@ export default function ProductServicePageModal({ productService }) {
                         readOnly
                         className="form-control"
                         placeholder="Təsərrüfat subyektinin rəhbərinin telefon nömrəsini daxil edin"
-                        label="Təsərrüfat subyektinin rəhbərinin telefon nömrəsi"
+                        label={
+                          productService &&
+                          "Təsərrüfat subyektinin rəhbərinin telefon nömrəsi"
+                        }
                       />
                     </div>
                     <div className="col-md-12 mb-4">
@@ -630,7 +648,10 @@ export default function ProductServicePageModal({ productService }) {
                         readOnly
                         className="form-control"
                         placeholder="Sertifikat təqdim edilən təsərrüfat subyektinin hüquqi ünvanını daxil edin"
-                        label="Sertifikat təqdim edilən təsərrüfat subyektinin hüquqi ünvanı"
+                        label={
+                          productService &&
+                          "TSertifikat təqdim edilən təsərrüfat subyektinin hüquqi ünvanı"
+                        }
                       />
                     </div>
                     <div className="col-md-12 mb-4">
@@ -641,7 +662,10 @@ export default function ProductServicePageModal({ productService }) {
                         readOnly
                         className="form-control"
                         placeholder="Sertifikat təqdim edilən təsərrüfat subyektinin faktiki ünvanını daxil edin"
-                        label="Sertifikat təqdim edilən təsərrüfat subyektinin faktiki ünvanı"
+                        label={
+                          productService &&
+                          "Sertifikat təqdim edilən təsərrüfat subyektinin faktiki ünvanı"
+                        }
                       />
                     </div>
                   </React.Fragment>
@@ -654,7 +678,7 @@ export default function ProductServicePageModal({ productService }) {
                     type="text"
                     className="form-control"
                     placeholder="Məhsulun(xidmətin) adını daxil edin"
-                    label="Məhsulun(xidmətin) adı*"
+                    label={productService && "Məhsulun(xidmətin) adı*"}
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -667,9 +691,9 @@ export default function ProductServicePageModal({ productService }) {
                         label: productService.training_id.name,
                         value: parseInt(productService.training_id.id),
                       }
-                    }              
+                    }
                     placeholder="Aid olduğu əməliyyat"
-                    label="Aid olduğu əməliyyat*"
+                    label={productService && "Aid olduğu əməliyyat*"}
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -679,7 +703,7 @@ export default function ProductServicePageModal({ productService }) {
                     type="text"
                     className="form-control"
                     placeholder="Miqdarı daxil edin"
-                    label="Miqdarı"
+                    label={productService && "Miqdarı"}
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -697,7 +721,10 @@ export default function ProductServicePageModal({ productService }) {
                     }
                     type="text"
                     placeholder="Məhsulun ərzaq və ya qeyri ərzaq qrupuna aid olması barədə qeyd daxil edin"
-                    label="Məhsulun ərzaq və ya qeyri ərzaq qrupuna aid olması barədə qeyd*"
+                    label={
+                      productService &&
+                      "Məhsulun ərzaq və ya qeyri ərzaq qrupuna aid olması barədə qeyd*"
+                    }
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -707,7 +734,7 @@ export default function ProductServicePageModal({ productService }) {
                     type="text"
                     className="form-control"
                     placeholder="Məhsulun kodunu daxil edin"
-                    label="Məhsulun kodu*"
+                    label={productService && "Məhsulun kodu*"}
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -726,7 +753,7 @@ export default function ProductServicePageModal({ productService }) {
                       )
                     }
                     placeholder="Məhsulun istehsal olunduğu ölkəni daxil edin"
-                    label="Məhsulun istehsal olunduğu ölkə"
+                    label={productService && "Məhsulun istehsal olunduğu ölkə"}
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -745,7 +772,7 @@ export default function ProductServicePageModal({ productService }) {
                     }
                     // className="form-control"
                     placeholder="Sertifikatı tanınan ölkənin adını daxil edin"
-                    label="Sertifikatı tanınan ölkənin adı"
+                    label={productService && "Sertifikatı tanınan ölkənin adı"}
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -763,7 +790,9 @@ export default function ProductServicePageModal({ productService }) {
                     }
                     isMulti
                     placeholder="Hüquqi normativ texniki aktın işarəsini daxil edin"
-                    label="Hüquqi normativ texniki aktın işarəsi"
+                    label={
+                      productService && "Hüquqi normativ texniki aktın işarəsi"
+                    }
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -781,7 +810,10 @@ export default function ProductServicePageModal({ productService }) {
                     }
                     // className="form-control"
                     placeholder="Tanınma prosesində məhsulun sınağının aparılması haqqında qeydi daxil edin"
-                    label="Tanınma prosesində məhsulun sınağının aparılması haqqında qeyd"
+                    label={
+                      productService &&
+                      "Tanınma prosesində məhsulun sınağının aparılması haqqında qeyd"
+                    }
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -798,7 +830,10 @@ export default function ProductServicePageModal({ productService }) {
                     }
                     // className="form-control"
                     placeholder="Akkreditasiya olunmuş sınaq laboratoriyasının adını daxil edin"
-                    label="Akkreditasiya olunmuş sınaq laboratoriyasının adı*"
+                    label={
+                      productService &&
+                      "Akkreditasiya olunmuş sınaq laboratoriyasının adı*"
+                    }
                   />
                 </div>
                 {productService && (
@@ -810,7 +845,10 @@ export default function ProductServicePageModal({ productService }) {
                       readOnly
                       className="form-control"
                       placeholder="Akkreditasiya olunmuş laboratoriyanın attestat nömrəsini daxil edin"
-                      label="Akkreditasiya olunmuş laboratoriyanın attestat nömrəsi"
+                      label={
+                        productService &&
+                        "Akkreditasiya olunmuş laboratoriyanın attestat nömrəsi"
+                      }
                     />
                   </div>
                 )}
@@ -821,17 +859,21 @@ export default function ProductServicePageModal({ productService }) {
                     type="text"
                     className="form-control"
                     placeholder="Aparılmış sınaqların miqdarını edin"
-                    label="Aparılmış sınaqların miqdarı"
+                    label={productService && "Aparılmış sınaqların miqdarı"}
                   />
                 </div>
                 <div className="col-md-12">
                   <MyTextInput
                     id="product_batch_date"
                     name="product_batch_date"
-                    type="date"
+                    type={productService ? "date" : "text"}
+                    onFocus={(e) => {
+                      e.currentTarget.type = "date";
+                      e.currentTarget.focus();
+                    }}
                     className="form-control"
                     placeholder="Məhsul partiyasının tarixini edin"
-                    label="Məhsul partiyasının tarixi"
+                    label={productService && "Məhsul partiyasının tarixi"}
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -841,7 +883,7 @@ export default function ProductServicePageModal({ productService }) {
                     type="text"
                     className="form-control"
                     placeholder="Qeyd"
-                    label="Qeyd"
+                    label={productService && "Qeyd"}
                   />
                 </div>
               </div>

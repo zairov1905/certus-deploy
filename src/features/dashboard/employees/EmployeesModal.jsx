@@ -57,31 +57,33 @@ export default function EmployeesModal({ employee }) {
       : { label: "Əmək müqaviləsi", value: 0 };
   const initialValues = employee
     ? {
-      fin: employee.fin && employee.fin,
-      name: employee.name && employee.name,
-      surname: employee.surname && employee.surname,
-      dadname: employee.dadname && employee.dadname,
-      birthday: employee.birthday && employee.birthday,
-      address: employee.address && employee.address,
-      phone: employee.phone && employee.phone,
+        fin: employee.fin && employee.fin,
+        name: employee.name && employee.name,
+        surname: employee.surname && employee.surname,
+        dadname: employee.dadname && employee.dadname,
+        birthday: employee.birthday && employee.birthday,
+        address: employee.address && employee.address,
+        phone: employee.phone && employee.phone,
 
-      whatsapp: employee.whatsapp && employee.whatsapp,
-      telegram: employee.telegram && employee.telegram,
-      facebook: employee.facebook && employee.facebook,
-      linkedin: employee.linkedin && employee.linkedin,
-      twitter: employee.twitter && employee.twitter,
-      instagram: employee.instagram && employee.instagram,
-      mail: employee.mail && employee.mail,
+        whatsapp: employee.whatsapp && employee.whatsapp,
+        telegram: employee.telegram && employee.telegram,
+        facebook: employee.facebook && employee.facebook,
+        linkedin: employee.linkedin && employee.linkedin,
+        twitter: employee.twitter && employee.twitter,
+        instagram: employee.instagram && employee.instagram,
+        mail: employee.mail && employee.mail,
 
-      position_id: employee.position_id && employee.position_id.id,
-      structural_section_id: employee.structural_section_id && employee.structural_section_id.id,
-      date: employee.date && moment(employee.date).format("YYYY-MM-DD"),
-      turnover: employee.turnover && employee.turnover,
-      bonus: employee.bonus && employee.bonus,
-      customer_satisfaction: employee.customer_satisfaction && employee.customer_satisfaction,
-      performans: employee.performans && employee.performans,
-      agreement_type: employee.agreement_type && employee.agreement_type,
-    }
+        position_id: employee.position_id && employee.position_id.id,
+        structural_section_id:
+          employee.structural_section_id && employee.structural_section_id.id,
+        date: employee.date && moment(employee.date).format("YYYY-MM-DD"),
+        turnover: employee.turnover && employee.turnover,
+        bonus: employee.bonus && employee.bonus,
+        customer_satisfaction:
+          employee.customer_satisfaction && employee.customer_satisfaction,
+        performans: employee.performans && employee.performans,
+        agreement_type: employee.agreement_type && employee.agreement_type,
+      }
     : {
         fin: "",
         name: "",
@@ -143,7 +145,7 @@ export default function EmployeesModal({ employee }) {
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
             employee
-              ? await dispatch(updateEmployees({...values,id:employee.id}))
+              ? await dispatch(updateEmployees({ ...values, id: employee.id }))
               : await dispatch(createEmployees({ ...values }));
             setSubmitting(false);
             setModal(true);
@@ -166,7 +168,6 @@ export default function EmployeesModal({ employee }) {
                   className="form-control"
                   placeholder="FİN*"
                   label={employee && "FİN*"}
-
                 />
               </div>
               <div className="col-md-4">
@@ -177,7 +178,6 @@ export default function EmployeesModal({ employee }) {
                   className="form-control"
                   placeholder="Ad*"
                   label={employee && "Ad*"}
-
                 />
               </div>
               <div className="col-md-4">
@@ -188,8 +188,6 @@ export default function EmployeesModal({ employee }) {
                   className="form-control"
                   placeholder="Soyad*"
                   label={employee && "Soyad*"}
-
-                  
                 />
               </div>
             </div>
@@ -202,24 +200,20 @@ export default function EmployeesModal({ employee }) {
                   className="form-control"
                   placeholder="Ata adı"
                   label={employee && "Ata adı"}
-                  
                 />
               </div>
               <div className="col-md-4">
                 <MyTextInput
                   name="birthday"
                   id="birthday"
-                  type="text"
-                  onFocus={
-                    (e)=> {
-                      e.currentTarget.type = "date";
-                      e.currentTarget.focus();
-                     }
-                   }
+                  type={employee ? "date" : "text"}
+                  onFocus={(e) => {
+                    e.currentTarget.type = "date";
+                    e.currentTarget.focus();
+                  }}
                   className="form-control"
                   placeholder="Doğum tarixi"
                   label={employee && "Doğum tarixi"}
-
                 />
               </div>
               <div className="col-md-4">
@@ -230,7 +224,6 @@ export default function EmployeesModal({ employee }) {
                   className="form-control"
                   placeholder="Ünvan*"
                   label={employee && "Ünvan*"}
-
                 />
               </div>
             </div>
@@ -243,7 +236,6 @@ export default function EmployeesModal({ employee }) {
                   className="form-control"
                   placeholder="Telefon*"
                   label={employee && "Telefon*"}
-
                 />
               </div>
               <div className="col-md-4">
@@ -254,7 +246,6 @@ export default function EmployeesModal({ employee }) {
                   className="form-control"
                   placeholder="Whatsapp"
                   label={employee && "Whatsapp"}
-
                 />
               </div>
               <div className="col-md-4">
@@ -265,7 +256,6 @@ export default function EmployeesModal({ employee }) {
                   className="form-control"
                   placeholder="Telegram"
                   label={employee && "Telegram"}
-
                 />
               </div>
             </div>
@@ -278,7 +268,6 @@ export default function EmployeesModal({ employee }) {
                   className="form-control"
                   placeholder="Instagram"
                   label={employee && "Instagram"}
-
                 />
               </div>{" "}
               <div className="col-md-8">
@@ -289,7 +278,6 @@ export default function EmployeesModal({ employee }) {
                   className="form-control"
                   placeholder="Mail"
                   label={employee && "Mail"}
-
                 />
               </div>
             </div>
@@ -303,7 +291,6 @@ export default function EmployeesModal({ employee }) {
                   // className="form-control"
                   placeholder="Vəzifəsi"
                   label={employee && "Vəzifəsi"}
-
                   defaultValue={
                     employee && {
                       label: employee.position_id.name,
@@ -317,7 +304,6 @@ export default function EmployeesModal({ employee }) {
                   name="structural_section_id"
                   id="structural_section_id"
                   options={departmentOptions}
-
                   defaultValue={
                     employee && {
                       label: employee.structural_section_id.name,
@@ -328,7 +314,6 @@ export default function EmployeesModal({ employee }) {
                   // className="form-control"
                   placeholder="Struktur bölməsi"
                   label={employee && "Struktur bölməsi"}
-
                 />
               </div>
             </div>
@@ -337,17 +322,14 @@ export default function EmployeesModal({ employee }) {
                 <MyTextInput
                   name="date"
                   id="date"
-                  type="text"
-                  onFocus={
-                    (e)=> {
-                      e.currentTarget.type = "date";
-                      e.currentTarget.focus();
-                     }
-                   }
+                  type={employee ? "date" : "text"}
+                  onFocus={(e) => {
+                    e.currentTarget.type = "date";
+                    e.currentTarget.focus();
+                  }}
                   className="form-control"
                   placeholder="İşə qəbul tarixi"
                   label={employee && "İşə qəbul tarixi"}
-
                 />
               </div>
               <div className="col-md-4">
@@ -358,7 +340,6 @@ export default function EmployeesModal({ employee }) {
                   className="form-control"
                   placeholder="Dövriyyə"
                   label={employee && "Dövriyyə"}
-
                 />
               </div>
               <div className="col-md-4">
@@ -369,7 +350,6 @@ export default function EmployeesModal({ employee }) {
                   className="form-control"
                   placeholder="Bonus"
                   label={employee && "Bonus"}
-
                 />
               </div>
             </div>
@@ -381,7 +361,6 @@ export default function EmployeesModal({ employee }) {
                   type="text"
                   className="form-control"
                   label={employee && "Müştəri məmnuniyyəti"}
-                  
                   placeholder="Müştəri məmnuniyyəti"
                 />
               </div>{" "}
@@ -393,7 +372,6 @@ export default function EmployeesModal({ employee }) {
                   className="form-control"
                   placeholder="Performans"
                   label={employee && "Performans"}
-
                 />
               </div>{" "}
               <div className="col-md-4">
@@ -406,7 +384,6 @@ export default function EmployeesModal({ employee }) {
                   // className="form-control"
                   placeholder="Müqavilə növü"
                   label={employee && "Müqavilə növü"}
-
                 />
               </div>
             </div>

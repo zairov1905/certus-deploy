@@ -169,20 +169,96 @@ export default function OperationPage() {
     {
       name: "İcra vəziyyəti",
 
-      cell: (row) => (
-        <button
-          onClick={() => {
-            // dispatch(closeModal());
-            alert("yeahhh");
-          }}
-          className="btn btn-sm btn-danger btn-rounded"
-        >
-          <i className="flaticon-cancel-12" /> Ləğv et
-        </button>
-      ),
+      cell: (row) => {
+        if (row.operationStatus === 1) {
+          <button
+            className="btn btn-info mb-2 mr-2 rounded-circle text-center"
+            style={{ marginLeft: "18px" }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width={24}
+              height={24}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="feather feather-sun"
+            >
+              <circle cx={12} cy={12} r={5} />
+              <line x1={12} y1={1} x2={12} y2={3} />
+              <line x1={12} y1={21} x2={12} y2={23} />
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+              <line x1={1} y1={12} x2={3} y2={12} />
+              <line x1={21} y1={12} x2={23} y2={12} />
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+          </button>;
+        } else if (row.operationStatus === 2) {
+          <button
+            className="btn btn-success mb-2 mr-2 rounded-circle text-center"
+            style={{ marginLeft: "18px" }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width={24}
+              height={24}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="feather feather-sun"
+            >
+              <circle cx={12} cy={12} r={5} />
+              <line x1={12} y1={1} x2={12} y2={3} />
+              <line x1={12} y1={21} x2={12} y2={23} />
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+              <line x1={1} y1={12} x2={3} y2={12} />
+              <line x1={21} y1={12} x2={23} y2={12} />
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+          </button>;
+        } else {
+          <button
+            className="btn btn-danger mb-2 mr-2 rounded-circle text-center"
+            style={{ marginLeft: "18px" }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width={24}
+              height={24}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="feather feather-sun"
+            >
+              <circle cx={12} cy={12} r={5} />
+              <line x1={12} y1={1} x2={12} y2={3} />
+              <line x1={12} y1={21} x2={12} y2={23} />
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+              <line x1={1} y1={12} x2={3} y2={12} />
+              <line x1={21} y1={12} x2={23} y2={12} />
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+          </button>;
+        }
+      },
     },
     {
-      name: "",
+      name: " ",
       cell: (operation) => (
         <div className="action-btn">
           <svg
@@ -241,9 +317,10 @@ export default function OperationPage() {
                 prompt(`Zəhmət olmasa silmək üçün şifrəni daxil edin`) == 9519
               ) {
                 dispatch(deleteOperation(operation.id));
-              }
-              else{
-                toast.info('Silmək cəhtiniz uğursuzdur, silmək üçün düzgün şifrə daxil edin.')
+              } else {
+                toast.info(
+                  "Silmək cəhtiniz uğursuzdur, silmək üçün düzgün şifrə daxil edin."
+                );
               }
             }}
             onMouseEnter={(e) => {

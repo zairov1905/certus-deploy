@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DataTable, { defaultThemes } from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import { openModal } from "../../../../app/modal/modalReducer";
 import { loadSkill } from "../skill/skillActions";
 import { loadTraining } from "./trainingActions";
@@ -125,7 +126,8 @@ export default function TrainingPage() {
       name: "Səriştələr",
       // selector: "trainingSkills",
       sortable: true,
-      cell: (training) =>  training.skill_id && training.skill_id.map((skill) => `${skill.name} `),
+      cell: (training) =>
+        training.skill_id && training.skill_id.map((skill) => `${skill.name} `),
     },
     // {
     //   name: "Kateqoriya",
@@ -188,7 +190,15 @@ export default function TrainingPage() {
             data-name="delete"
             id={training.id}
             onClick={() => {
-              dispatch(deleteTraining(training.id));
+              if (
+                prompt(`Zəhmət olmasa silmək üçün şifrəni daxil edin`) == 9519
+              ) {
+                dispatch(deleteTraining(training.id));
+              } else {
+                toast.info(
+                  "Silmək cəhtiniz uğursuzdur, silmək üçün düzgün şifrə daxil edin."
+                );
+              }
             }}
             onMouseEnter={(e) => {
               sethover(true);

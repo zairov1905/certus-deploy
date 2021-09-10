@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DataTable, { defaultThemes } from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import { openModal } from "../../../../app/modal/modalReducer";
 import { deleteSignOfLegalAct } from "./signOfLegalActActions";
 import { loadSignOfLegalAct } from "./signOfLegalActActions";
@@ -8,14 +9,16 @@ import { loadSignOfLegalAct } from "./signOfLegalActActions";
 export default function SignOfLegalActPage() {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(loadSignOfLegalAct())
-  //   // return () => {
-  //   //   // dispatch(loadOrder())
-  //   // }
-  },[])
+    dispatch(loadSignOfLegalAct());
+    //   // return () => {
+    //   //   // dispatch(loadOrder())
+    //   // }
+  }, []);
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);
-  const {signOfLegalActs,totalCount} = useSelector(state => state.signOfLegalActs);
+  const { signOfLegalActs, totalCount } = useSelector(
+    (state) => state.signOfLegalActs
+  );
   const data = signOfLegalActs;
 
   const [hover, sethover] = useState(false);
@@ -124,20 +127,15 @@ export default function SignOfLegalActPage() {
       cell: (signOfLegalAct) => (
         <div className="action-btn">
           <svg
-            onClick={() =>
-              {
-                dispatch(
-                
-                  openModal({
-                    modalType: "SignOfLegalActPageModal",
-                    modalProps: { signOfLegalAct },
-                  })
-                )
-                // dispatch(loadEmployees());
-
-              }
-
-            }
+            onClick={() => {
+              dispatch(
+                openModal({
+                  modalType: "SignOfLegalActPageModal",
+                  modalProps: { signOfLegalAct },
+                })
+              );
+              // dispatch(loadEmployees());
+            }}
             data-name="edit"
             id={signOfLegalAct.id}
             onMouseEnter={(e) => {
@@ -181,7 +179,15 @@ export default function SignOfLegalActPage() {
             data-name="delete"
             id={signOfLegalAct.id}
             onClick={() => {
-              dispatch(deleteSignOfLegalAct(signOfLegalAct.id));
+              if (
+                prompt(`Zəhmət olmasa silmək üçün şifrəni daxil edin`) == 9519
+              ) {
+                dispatch(deleteSignOfLegalAct(signOfLegalAct.id));
+              } else {
+                toast.info(
+                  "Silmək cəhtiniz uğursuzdur, silmək üçün düzgün şifrə daxil edin."
+                );
+              }
             }}
             onMouseEnter={(e) => {
               sethover(true);
@@ -230,7 +236,6 @@ export default function SignOfLegalActPage() {
         <div className="row layout-top-spacing">
           <div className="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
             <div className="widget-content widget-content-area br-6">
-
               <DataTable
                 // className="dataTables_wrapper container-fluid dt-bootstrap4 table-responsive"
                 // selectableRows

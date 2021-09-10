@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
 import DataTable, { defaultThemes } from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import { openModal } from "../../../../app/modal/modalReducer";
 import { deleteDuty, loadDuties } from "./dutyActions";
 
 export default function DutyPage() {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(loadDuties())
-  //   // return () => {
-  //   //   // dispatch(loadOrder())
-  //   // }
-  },[])
-
+    dispatch(loadDuties());
+    //   // return () => {
+    //   //   // dispatch(loadOrder())
+    //   // }
+  }, []);
 
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);
-  const {duties,totalCount} = useSelector(state => state.duties);
+  const { duties, totalCount } = useSelector((state) => state.duties);
   const data = duties;
 
   const [hover, sethover] = useState(false);
@@ -63,7 +63,6 @@ export default function DutyPage() {
     dispatch(loadDuties({ s: page, take: newPerPage }));
     setPerPage(newPerPage);
   };
-
 
   const actions = (
     <svg
@@ -126,20 +125,15 @@ export default function DutyPage() {
       cell: (duty) => (
         <div className="action-btn">
           <svg
-            onClick={() =>
-              {
-                dispatch(
-                
-                  openModal({
-                    modalType: "DutyPageModal",
-                    modalProps: { duty },
-                  })
-                )
-                // dispatch(loadEmployees());
-
-              }
-
-            }
+            onClick={() => {
+              dispatch(
+                openModal({
+                  modalType: "DutyPageModal",
+                  modalProps: { duty },
+                })
+              );
+              // dispatch(loadEmployees());
+            }}
             data-name="edit"
             id={duty.id}
             onMouseEnter={(e) => {
@@ -183,7 +177,15 @@ export default function DutyPage() {
             data-name="delete"
             id={duty.id}
             onClick={() => {
-              dispatch(deleteDuty(duty.id));
+              if (
+                prompt(`Zəhmət olmasa silmək üçün şifrəni daxil edin`) == 9519
+              ) {
+                dispatch(deleteDuty(duty.id));
+              } else {
+                toast.info(
+                  "Silmək cəhtiniz uğursuzdur, silmək üçün düzgün şifrə daxil edin."
+                );
+              }
             }}
             onMouseEnter={(e) => {
               sethover(true);
@@ -232,7 +234,6 @@ export default function DutyPage() {
         <div className="row layout-top-spacing">
           <div className="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
             <div className="widget-content widget-content-area br-6">
-
               <DataTable
                 // className="dataTables_wrapper container-fluid dt-bootstrap4 table-responsive"
                 // selectableRows

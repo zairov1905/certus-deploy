@@ -58,7 +58,7 @@ export default function CrmPageModal({ crm }) {
     crm
       ? JSON.parse(crm.circulationByYears)
       : [{ circulationYear: "", circulation: "" }]
-  );  
+  );
   let mapCirculations = circulationWithYears;
   console.log(mapCirculations);
   const handleAddCirculationByYear = () => {
@@ -199,7 +199,7 @@ export default function CrmPageModal({ crm }) {
         turnover: "",
         circulationByYears: circulationWithYears,
         workersYears: workersYears,
-        measures:measures,
+        measures: measures,
         note: "",
       };
   const validationSchema = Yup.object({
@@ -439,7 +439,7 @@ export default function CrmPageModal({ crm }) {
                   </div>
                 </div>
               </div>
-            
+
               <div className="card">
                 <div className="card-header" id="headingTwo3">
                   <section className="mb-0 mt-0">
@@ -553,7 +553,11 @@ export default function CrmPageModal({ crm }) {
                         <MyTextInput
                           name="date"
                           id="date"
-                          type="date"
+                          type={crm ? "date" : "text"}
+                          onFocus={(e) => {
+                            e.currentTarget.type = "date";
+                            e.currentTarget.focus();
+                          }}
                           className="form-control"
                           placeholder="Tarix"
                           label={crm && "Tarix"}
@@ -845,7 +849,7 @@ export default function CrmPageModal({ crm }) {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="row">
                       {mapCirculations &&
                         mapCirculations.map((mapCirculation, index) => (
@@ -1144,12 +1148,12 @@ export default function CrmPageModal({ crm }) {
                                 defaultValue={
                                   mapMeasures && mapMeasure.measureYear
                                 }
-                                type="text"
                                 className="form-control"
                                 placeholder="İl"
-                                // onFocus="(this.type='date')"
+                                type={crm ? "date" : "text"}
                                 onFocus={(e) => {
                                   e.currentTarget.type = "date";
+                                  e.currentTarget.focus();
                                 }}
                               />
                             </div>

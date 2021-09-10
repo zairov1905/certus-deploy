@@ -79,16 +79,15 @@ export default function OrderPageModal({ order }) {
   });
 
   const initialValues = order
-  
     ? {
-      // number: order.number && order.number,
-      service_type_id: order.service_type_id && order.service_type_id.id,
-      customer_id: order.customer_id && order.customer_id.id,
-      order_source_id: order.order_source_id && order.order_source_id.id,
-      reference_id: order.reference_id && order.reference_id.id,
-      date: order.date && moment(order.date).format("YYYY-MM-DD"),
-      description: order.description && order.description,
-    }
+        // number: order.number && order.number,
+        service_type_id: order.service_type_id && order.service_type_id.id,
+        customer_id: order.customer_id && order.customer_id.id,
+        order_source_id: order.order_source_id && order.order_source_id.id,
+        reference_id: order.reference_id && order.reference_id.id,
+        date: order.date && moment(order.date).format("YYYY-MM-DD"),
+        description: order.description && order.description,
+      }
     : {
         number: "",
         service_type_id: "",
@@ -111,7 +110,11 @@ export default function OrderPageModal({ order }) {
   });
 
   return (
-    <ModalWrapper data={order && `Sifariş - OR${order.id}`} size="modal-lg" header={order ? "Redakte Et" : "Əlavə et"}>
+    <ModalWrapper
+      data={order && `Sifariş - OR${order.id}`}
+      size="modal-lg"
+      header={order ? "Redakte Et" : "Əlavə et"}
+    >
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -121,8 +124,8 @@ export default function OrderPageModal({ order }) {
               ? await dispatch(
                   updateOrder({
                     ...values,
-                    id:order.id
-                  }),
+                    id: order.id,
+                  })
                 )
               : await dispatch(createOrder(values));
             setSubmitting(false);
@@ -161,7 +164,6 @@ export default function OrderPageModal({ order }) {
                   name="service_type_id"
                   type="text"
                   label={order && "Xidmət Növü*"}
-
                   defaultValue={
                     order && {
                       label: order.service_type_id.name,
@@ -187,7 +189,6 @@ export default function OrderPageModal({ order }) {
                   name="customer_id"
                   options={customerOptions}
                   label={order && "Müştəri"}
-
                   // className="form-control"
                   placeholder="Müştəri"
                 />
@@ -206,7 +207,6 @@ export default function OrderPageModal({ order }) {
                   name="order_source_id"
                   type="text"
                   label={order && "Sifariş Mənbəyi"}
-
                   options={orderSourceOptions}
                   // className="form-control"
                   placeholder="Sifariş Mənbəyi"
@@ -227,18 +227,20 @@ export default function OrderPageModal({ order }) {
                   // className="form-control"
                   placeholder="Referans"
                   label={order && "Referans"}
-
                 />
               </div>
               <div className="col-md-4">
                 <MyTextInput
                   name="date"
                   id="date"
-                  type="date"
+                  type={order ? "date" : "text"}
+                  onFocus={(e) => {
+                    e.currentTarget.type = "date";
+                    e.currentTarget.focus();
+                  }}
                   className="form-control"
                   placeholder="Sifariş tarixi"
                   label={order && "Sifariş tarixi"}
-                  
                 />
               </div>
             </div>
@@ -251,7 +253,6 @@ export default function OrderPageModal({ order }) {
                   className="form-control"
                   placeholder="Sifariş Təyinatı"
                   label={order && "Sifariş Təyinatı"}
-
                 />
               </div>
             </div>

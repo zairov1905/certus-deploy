@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import { openModal } from "../../../../app/modal/modalReducer";
 import { deleteDocumentType, loadDocumentTypes } from "./documentTypeActions";
 
 export default function DocumetTypePage() {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(loadDocumentTypes())
-  //   // return () => {
-  //   //   // dispatch(loadOrder())
-  //   // }
-  },[])
+    dispatch(loadDocumentTypes());
+    //   // return () => {
+    //   //   // dispatch(loadOrder())
+    //   // }
+  }, []);
 
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);
-  const {documentTypes, totalCount} = useSelector(state => state.documentTypes);
+  const { documentTypes, totalCount } = useSelector(
+    (state) => state.documentTypes
+  );
   const data = documentTypes;
 
   const [hover, sethover] = useState(false);
@@ -124,20 +127,15 @@ export default function DocumetTypePage() {
       cell: (documentType) => (
         <div className="action-btn">
           <svg
-            onClick={() =>
-              {
-                dispatch(
-                
-                  openModal({
-                    modalType: "DocumentTypePageModal",
-                    modalProps: { documentType },
-                  })
-                )
-                // dispatch(loadEmployees());
-
-              }
-
-            }
+            onClick={() => {
+              dispatch(
+                openModal({
+                  modalType: "DocumentTypePageModal",
+                  modalProps: { documentType },
+                })
+              );
+              // dispatch(loadEmployees());
+            }}
             data-name="edit"
             id={documentType.id}
             onMouseEnter={(e) => {
@@ -181,7 +179,15 @@ export default function DocumetTypePage() {
             data-name="delete"
             id={documentType.id}
             onClick={() => {
-              dispatch(deleteDocumentType(documentType.id));
+              if (
+                prompt(`Zəhmət olmasa silmək üçün şifrəni daxil edin`) == 9519
+              ) {
+                dispatch(deleteDocumentType(documentType.id));
+              } else {
+                toast.info(
+                  "Silmək cəhtiniz uğursuzdur, silmək üçün düzgün şifrə daxil edin."
+                );
+              }
             }}
             onMouseEnter={(e) => {
               sethover(true);
@@ -230,7 +236,6 @@ export default function DocumetTypePage() {
         <div className="row layout-top-spacing">
           <div className="col-xl-12 col-lg-12 col-sm-12  layout-spacing">
             <div className="widget-content widget-content-area br-6">
-
               <DataTable
                 // className="dataTables_wrapper container-fluid dt-bootstrap4 table-responsive"
                 // selectableRows
@@ -246,7 +251,6 @@ export default function DocumetTypePage() {
                 highlightOnHover
                 Clicked
                 actions={actions}
-
               />
             </div>
           </div>

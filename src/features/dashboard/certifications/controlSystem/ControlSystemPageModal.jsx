@@ -215,7 +215,7 @@ export default function ControlSystemPageModal({ controlSystem }) {
                       }
                     }
                     placeholder="SN kodu daxil edin"
-                    label="SN kodu*"
+                    label={controlSystem && "SN kodu*"}
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -225,7 +225,7 @@ export default function ControlSystemPageModal({ controlSystem }) {
                     type="text"
                     className="form-control"
                     placeholder="Reyestr nömrəsi daxil edin"
-                    label="Reyestr nömrəsi*"
+                    label={controlSystem && "Reyestr nömrəsi*"}
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -235,7 +235,7 @@ export default function ControlSystemPageModal({ controlSystem }) {
                     type="text"
                     className="form-control"
                     placeholder="Blank nömrəsi daxil edin"
-                    label="Blank nömrəsi*"
+                    label={controlSystem && "Blank nömrəsi*"}
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -245,27 +245,39 @@ export default function ControlSystemPageModal({ controlSystem }) {
                     type="text"
                     className="form-control"
                     placeholder="Akkreditasiya sahəsində sıra nömrəsi daxil edin"
-                    label="Akkreditasiya sahəsində sıra nömrəsi*"
+                    label={
+                      controlSystem && "Akkreditasiya sahəsində sıra nömrəsi*"
+                    }
                   />
                 </div>
                 <div className="col-md-12 mb-4">
                   <MyTextInput
                     id="issue_date"
                     name="issue_date"
-                    type="date"
+                    type={controlSystem ? "date" : "text"}
+                    onFocus={(e) => {
+                      e.currentTarget.type = "date";
+                      e.currentTarget.focus();
+                    }}
                     className="form-control"
                     placeholder="Sertifikatın verilmə tarixi daxil edin"
-                    label="Sertifikatın verilmə tarixi*"
+                    label={controlSystem && "Sertifikatın verilmə tarixi*"}
                   />
                 </div>
                 <div className="col-md-12 mb-4">
                   <MyTextInput
                     id="expiration_date"
                     name="expiration_date"
-                    type="date"
+                    type={controlSystem ? "date" : "text"}
+                    onFocus={(e) => {
+                      e.currentTarget.type = "date";
+                      e.currentTarget.focus();
+                    }}
                     className="form-control"
                     placeholder="Sertifikatın qüvvədən düşdüyü tarix daxil edin"
-                    label="Sertifikatın qüvvədən düşdüyü tarix*"
+                    label={
+                      controlSystem && "Sertifikatın qüvvədən düşdüyü tarix*"
+                    }
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -289,7 +301,10 @@ export default function ControlSystemPageModal({ controlSystem }) {
                     }
                     // className="form-control"
                     placeholder="Sertifikat təqdim edilən təsərrüfat subyektinin adını daxil edin"
-                    label="Sertifikat təqdim edilən təsərrüfat subyektinin adı*"
+                    label={
+                      controlSystem &&
+                      "Sertifikat təqdim edilən təsərrüfat subyektinin adı*"
+                    }
                   />
                 </div>
                 {controlSystem && (
@@ -302,7 +317,7 @@ export default function ControlSystemPageModal({ controlSystem }) {
                         readOnly
                         className="form-control"
                         placeholder="Hüquqi statusunu daxil edin"
-                        label="Hüquqi statusu"
+                        label={controlSystem && "Hüquqi statusu"}
                       />
                     </div>
                     <div className="col-md-12 mb-4">
@@ -313,7 +328,7 @@ export default function ControlSystemPageModal({ controlSystem }) {
                         readOnly
                         className="form-control"
                         placeholder="VÖEN daxil edin"
-                        label="VÖEN"
+                        label={controlSystem && "VÖEN"}
                       />
                     </div>
                     <div className="col-md-12 mb-4">
@@ -324,7 +339,10 @@ export default function ControlSystemPageModal({ controlSystem }) {
                         readOnly
                         className="form-control"
                         placeholder="Təsərrüfat subyektinin rəhbərinin telefon nömrəsini daxil edin"
-                        label="Təsərrüfat subyektinin rəhbərinin telefon nömrəsi"
+                        label={
+                          controlSystem &&
+                          "Təsərrüfat subyektinin rəhbərinin telefon nömrəsi"
+                        }
                       />
                     </div>
                     <div className="col-md-12 mb-4">
@@ -335,7 +353,10 @@ export default function ControlSystemPageModal({ controlSystem }) {
                         readOnly
                         className="form-control"
                         placeholder="Sertifikat təqdim edilən təsərrüfat subyektinin hüquqi ünvanını daxil edin"
-                        label="Sertifikat təqdim edilən təsərrüfat subyektinin hüquqi ünvanı"
+                        label={
+                          controlSystem &&
+                          "Sertifikat təqdim edilən təsərrüfat subyektinin hüquqi ünvanı"
+                        }
                       />
                     </div>
                     <div className="col-md-12 mb-4">
@@ -346,7 +367,10 @@ export default function ControlSystemPageModal({ controlSystem }) {
                         readOnly
                         className="form-control"
                         placeholder="Sertifikat təqdim edilən təsərrüfat subyektinin faktiki ünvanını daxil edin"
-                        label="Sertifikat təqdim edilən təsərrüfat subyektinin faktiki ünvanı"
+                        label={
+                          controlSystem &&
+                          "Sertifikat təqdim edilən təsərrüfat subyektinin faktiki ünvanı"
+                        }
                       />
                     </div>
                   </React.Fragment>
@@ -359,7 +383,7 @@ export default function ControlSystemPageModal({ controlSystem }) {
                     type="text"
                     className="form-control"
                     placeholder="Xidmətin adını daxil edin"
-                    label="Xidmətin adı*"
+                    label={controlSystem && "Xidmətin adı*"}
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -376,7 +400,7 @@ export default function ControlSystemPageModal({ controlSystem }) {
                     type="text"
                     // className="form-control"
                     placeholder="Aid olduğu əməliyyat"
-                    label="Aid olduğu əməliyyat*"
+                    label={controlSystem && "Aid olduğu əməliyyat*"}
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -386,7 +410,7 @@ export default function ControlSystemPageModal({ controlSystem }) {
                     type="text"
                     className="form-control"
                     placeholder="Xidmətin kodunu daxil edin"
-                    label="Xidmətin kodu*"
+                    label={controlSystem && "Xidmətin kodu*"}
                   />
                 </div>
 
@@ -407,7 +431,9 @@ export default function ControlSystemPageModal({ controlSystem }) {
                     }
                     // className="form-control"
                     placeholder="Hüquqi normativ texniki aktın işarəsini daxil edin"
-                    label="Hüquqi normativ texniki aktın işarəsi*"
+                    label={
+                      controlSystem && "Hüquqi normativ texniki aktın işarəsi*"
+                    }
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -417,6 +443,7 @@ export default function ControlSystemPageModal({ controlSystem }) {
                     type="text"
                     className="form-control"
                     placeholder="Qeyd"
+                    label={controlSystem && "Qeyd"}
                     label="Qeyd"
                   />
                 </div>
@@ -436,7 +463,7 @@ export default function ControlSystemPageModal({ controlSystem }) {
                     }
                     // className="form-control"
                     placeholder="Tanınma prosesində auditin aparılması haqqında qeydi daxil edin"
-                    label="Tanınma prosesində auditin aparılması haqqında qeyd"
+                    label={controlSystem && "Tanınma prosesində auditin aparılması haqqında qeyd"}
                   />
                 </div>
 
@@ -447,7 +474,7 @@ export default function ControlSystemPageModal({ controlSystem }) {
                     type="text"
                     className="form-control"
                     placeholder="Aparılmış sınaqların miqdarını edin"
-                    label="Aparılmış sınaqların miqdarı"
+                    label={controlSystem && "Aparılmış sınaqların miqdarı"}
                   />
                 </div>
                 <div className="col-md-12">
@@ -457,7 +484,7 @@ export default function ControlSystemPageModal({ controlSystem }) {
                     type="date"
                     className="form-control"
                     placeholder="Məhsul partiyasının tarixini edin"
-                    label="Məhsul partiyasının tarixi"
+                    label={controlSystem && "Məhsul partiyasının tarixi"}
                   />
                 </div>
                */}

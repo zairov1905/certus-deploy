@@ -69,6 +69,11 @@ export default function OperationPageModal({ operation }) {
   let docOptions = [];
   let expenseGroupOptions = [];
   let expenseTypeOptions = [];
+  let operationStatusOptions = [
+    { label: "Hazırlıq mərhələsindədir", value: parseInt(0) },
+    { label: "İcra edilir", value: parseInt(1) },
+    { label: "İcra edildi", value: parseInt(2) },
+  ];
 
   serviceTypeOptions =
     serviceTypes &&
@@ -220,7 +225,7 @@ export default function OperationPageModal({ operation }) {
           operation.income_expense_group_id.id,
         expense_type_id:
           operation.expense_type_id && operation.expense_type_id.id,
-        bonus: operation.bonus,
+        bonus: operation.bonus && operation.bonus,
 
         performans: operation.performans && operation.performans,
         expenses: [
@@ -231,6 +236,7 @@ export default function OperationPageModal({ operation }) {
             tax: 0,
           },
         ],
+        operationStatus: operation.operationStatus && operation.operationStatus,
       }
     : {
         number: "",
@@ -253,6 +259,7 @@ export default function OperationPageModal({ operation }) {
         edv: "",
         performans: "",
         expenses: expenses,
+        operationStatus: "",
       };
   const validationSchema = Yup.object({
     number: Yup.string().required("Mütləq doldurulmalıdır."),
@@ -491,9 +498,12 @@ export default function OperationPageModal({ operation }) {
                           <MyTextInput
                             name="date"
                             id="date"
-                            type="date"
+                            type={operation ? "date" : "text"}
+                            onFocus={(e) => {
+                              e.currentTarget.type = "date";
+                              e.currentTarget.focus();
+                            }}
                             readOnly
-                            // onFocus={(e) => (e.target.type = "date")}
                             className="form-control"
                             placeholder="Sifariş tarixi"
                             label={operation && "Sifariş tarixi"}
@@ -503,8 +513,11 @@ export default function OperationPageModal({ operation }) {
                           <MyTextInput
                             name="endDate"
                             id="endDate"
-                            type="date"
-                            // onFocus={(e) => (e.target.type = "date")}
+                            type={operation ? "date" : "text"}
+                            onFocus={(e) => {
+                              e.currentTarget.type = "date";
+                              e.currentTarget.focus();
+                            }}
                             className="form-control"
                             placeholder="Əməliyyat tarixi"
                             label={operation && "Əməliyyat tarixi"}
@@ -589,7 +602,7 @@ export default function OperationPageModal({ operation }) {
                         </div>
                       </div>
                       <div className={`row ${operation && "mb-4"}`}>
-                        <div className="col-md-12">
+                        <div className="col-md-6">
                           <MySearchableSelect
                             defaultValue={
                               operation &&
@@ -606,6 +619,24 @@ export default function OperationPageModal({ operation }) {
                             // className="form-control"
                             placeholder="Laboratoriya"
                             label={operation && "Laboratoriya"}
+                          />
+                        </div>
+                        <div className="col-md-6">
+                          <MySearchableSelect
+                            id="operationStatus"
+                            name="operationStatus"
+                            type="text"
+                            options={operationStatusOptions}
+                            defaultValue={
+                              operation &&
+                              operationStatusOptions.filter(
+                                (operationStatus) =>
+                                  operationStatus.value ===
+                                  (operation.operationStatus &&
+                                    operation.operationStatus)
+                              )
+                            }
+                            label="İcra vəziyyəti"
                           />
                         </div>
                       </div>

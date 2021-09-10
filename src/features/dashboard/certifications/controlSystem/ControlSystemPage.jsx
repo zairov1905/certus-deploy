@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import { openModal } from "../../../../app/modal/modalReducer";
-
 
 import { deleteControlSystem, loadControlSystem } from "./controlSystemActions";
 export default function ControlSystemPage() {
@@ -10,10 +10,12 @@ export default function ControlSystemPage() {
 
   useEffect(() => {
     dispatch(loadControlSystem());
-  },[]);
+  }, []);
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);
-  const { controlSystems, totalCount } = useSelector((state) => state.controlSystems);
+  const { controlSystems, totalCount } = useSelector(
+    (state) => state.controlSystems
+  );
   const [hover, sethover] = useState(false);
   const [target, setTarget] = useState({ id: null, name: null });
 
@@ -132,7 +134,7 @@ export default function ControlSystemPage() {
     {
       name: "Sertifikatın verilmə tarixi",
       selector: "issue_date",
-      sortable:true
+      sortable: true,
     },
     {
       name: "Sertifikatın qüvvədən düşdüyü tarix",
@@ -198,7 +200,15 @@ export default function ControlSystemPage() {
             data-name="delete"
             id={controlSystem.id}
             onClick={() => {
-              dispatch(deleteControlSystem(controlSystem.id));
+              if (
+                prompt(`Zəhmət olmasa silmək üçün şifrəni daxil edin`) == 9519
+              ) {
+                dispatch(deleteControlSystem(controlSystem.id));
+              } else {
+                toast.info(
+                  "Silmək cəhtiniz uğursuzdur, silmək üçün düzgün şifrə daxil edin."
+                );
+              }
             }}
             onMouseEnter={(e) => {
               sethover(true);
