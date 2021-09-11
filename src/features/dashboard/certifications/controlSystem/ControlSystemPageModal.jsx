@@ -214,7 +214,7 @@ export default function ControlSystemPageModal({ controlSystem }) {
                         value: parseInt(controlSystem.sn_code_id),
                       }
                     }
-                    placeholder="SN kodu daxil edin"
+                    placeholder="SN kodu daxil edin*"
                     label={controlSystem && "SN kodu*"}
                   />
                 </div>
@@ -224,7 +224,7 @@ export default function ControlSystemPageModal({ controlSystem }) {
                     name="registration_number"
                     type="text"
                     className="form-control"
-                    placeholder="Reyestr nömrəsi daxil edin"
+                    placeholder="Reyestr nömrəsi daxil edin*"
                     label={controlSystem && "Reyestr nömrəsi*"}
                   />
                 </div>
@@ -234,7 +234,7 @@ export default function ControlSystemPageModal({ controlSystem }) {
                     name="blank_number"
                     type="text"
                     className="form-control"
-                    placeholder="Blank nömrəsi daxil edin"
+                    placeholder="Blank nömrəsi daxil edin*"
                     label={controlSystem && "Blank nömrəsi*"}
                   />
                 </div>
@@ -244,7 +244,7 @@ export default function ControlSystemPageModal({ controlSystem }) {
                     name="serial_number"
                     type="text"
                     className="form-control"
-                    placeholder="Akkreditasiya sahəsində sıra nömrəsi daxil edin"
+                    placeholder="Akkreditasiya sahəsində sıra nömrəsi daxil edin*"
                     label={
                       controlSystem && "Akkreditasiya sahəsində sıra nömrəsi*"
                     }
@@ -260,7 +260,7 @@ export default function ControlSystemPageModal({ controlSystem }) {
                       e.currentTarget.focus();
                     }}
                     className="form-control"
-                    placeholder="Sertifikatın verilmə tarixi daxil edin"
+                    placeholder="Sertifikatın verilmə tarixi daxil edin*"
                     label={controlSystem && "Sertifikatın verilmə tarixi*"}
                   />
                 </div>
@@ -274,7 +274,7 @@ export default function ControlSystemPageModal({ controlSystem }) {
                       e.currentTarget.focus();
                     }}
                     className="form-control"
-                    placeholder="Sertifikatın qüvvədən düşdüyü tarix daxil edin"
+                    placeholder="Sertifikatın qüvvədən düşdüyü tarix daxil edin*"
                     label={
                       controlSystem && "Sertifikatın qüvvədən düşdüyü tarix*"
                     }
@@ -300,7 +300,7 @@ export default function ControlSystemPageModal({ controlSystem }) {
                       }
                     }
                     // className="form-control"
-                    placeholder="Sertifikat təqdim edilən təsərrüfat subyektinin adını daxil edin"
+                    placeholder="Sertifikat təqdim edilən təsərrüfat subyektinin adını daxil edin*"
                     label={
                       controlSystem &&
                       "Sertifikat təqdim edilən təsərrüfat subyektinin adı*"
@@ -382,7 +382,7 @@ export default function ControlSystemPageModal({ controlSystem }) {
                     name="product_name"
                     type="text"
                     className="form-control"
-                    placeholder="Xidmətin adını daxil edin"
+                    placeholder="Xidmətin adını daxil edin*"
                     label={controlSystem && "Xidmətin adı*"}
                   />
                 </div>
@@ -391,15 +391,18 @@ export default function ControlSystemPageModal({ controlSystem }) {
                     id="operation_id"
                     name="operation_id"
                     options={operationOptions}
+
                     defaultValue={
                       controlSystem && {
-                        label: controlSystem.training_id.name,
-                        value: parseInt(controlSystem.training_id.id),
+                        label:
+                        controlSystem.operation_id &&
+                          `OR${controlSystem.operation_id.id}`,
+                        value: controlSystem.operation_id &&  parseInt(controlSystem.operation_id.id),
                       }
                     }
                     type="text"
                     // className="form-control"
-                    placeholder="Aid olduğu əməliyyat"
+                    placeholder="Aid olduğu əməliyyat*"
                     label={controlSystem && "Aid olduğu əməliyyat*"}
                   />
                 </div>
@@ -409,7 +412,7 @@ export default function ControlSystemPageModal({ controlSystem }) {
                     name="product_code"
                     type="text"
                     className="form-control"
-                    placeholder="Xidmətin kodunu daxil edin"
+                    placeholder="Xidmətin kodunu daxil edin*"
                     label={controlSystem && "Xidmətin kodu*"}
                   />
                 </div>
@@ -430,7 +433,7 @@ export default function ControlSystemPageModal({ controlSystem }) {
                       )
                     }
                     // className="form-control"
-                    placeholder="Hüquqi normativ texniki aktın işarəsini daxil edin"
+                    placeholder="Hüquqi normativ texniki aktın işarəsini daxil edin*"
                     label={
                       controlSystem && "Hüquqi normativ texniki aktın işarəsi*"
                     }

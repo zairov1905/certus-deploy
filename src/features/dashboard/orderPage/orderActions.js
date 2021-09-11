@@ -24,6 +24,7 @@ export function loadOrder(data) {
         params: { ...data },
       })
       .then((datas) => {
+        console.log(datas)
         dispatch({
           type: FETCH_ORDER,
           payload: datas.data.data,

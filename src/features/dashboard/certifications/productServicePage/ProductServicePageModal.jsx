@@ -515,7 +515,7 @@ export default function ProductServicePageModal({ productService }) {
                         value: parseInt(productService.sn_code_id),
                       }
                     }
-                    placeholder="SN kodu daxil edin"
+                    placeholder="SN kodu daxil edin*"
                     label={productService && "SN kodu*"}
                   />
                 </div>
@@ -525,7 +525,7 @@ export default function ProductServicePageModal({ productService }) {
                     name="registration_number"
                     type="text"
                     className="form-control"
-                    placeholder="Reyestr nömrəsi daxil edin"
+                    placeholder="Reyestr nömrəsi daxil edin*"
                     label={productService && "Reyestr nömrəsi*"}
                   />
                 </div>
@@ -535,7 +535,7 @@ export default function ProductServicePageModal({ productService }) {
                     name="blank_number"
                     type="text"
                     className="form-control"
-                    placeholder="Blank nömrəsi daxil edin"
+                    placeholder="Blank nömrəsi daxil edin*"
                     label={productService && "Blank nömrəsi*"}
                   />
                   {/* {console.log(values)} */}
@@ -546,7 +546,7 @@ export default function ProductServicePageModal({ productService }) {
                     name="serial_number"
                     type="text"
                     className="form-control"
-                    placeholder="Akkreditasiya sahəsində sıra nömrəsi daxil edin"
+                    placeholder="Akkreditasiya sahəsində sıra nömrəsi daxil edin*"
                     label={
                       productService && "Akkreditasiya sahəsində sıra nömrəsi*"
                     }
@@ -562,7 +562,7 @@ export default function ProductServicePageModal({ productService }) {
                       e.currentTarget.focus();
                     }}
                     className="form-control"
-                    placeholder="Sertifikatın verilmə tarixi daxil edin"
+                    placeholder="Sertifikatın verilmə tarixi daxil edin*"
                     label={productService && "Sertifikatın verilmə tarixi*"}
                   />
                 </div>
@@ -576,7 +576,7 @@ export default function ProductServicePageModal({ productService }) {
                       e.currentTarget.focus();
                     }}
                     className="form-control"
-                    placeholder="Sertifikatın qüvvədən düşdüyü tarix daxil edin"
+                    placeholder="Sertifikatın qüvvədən düşdüyü tarix daxil edin*"
                     label={
                       productService && "Sertifikatın qüvvədən düşdüyü tarix*"
                     }
@@ -595,7 +595,7 @@ export default function ProductServicePageModal({ productService }) {
                       }
                     }
                     // className="form-control"
-                    placeholder="Sertifikat təqdim edilən təsərrüfat subyektinin adını daxil edin"
+                    placeholder="Sertifikat təqdim edilən təsərrüfat subyektinin adını daxil edin*"
                     label={
                       productService &&
                       "Sertifikat təqdim edilən təsərrüfat subyektinin adı*"
@@ -677,7 +677,7 @@ export default function ProductServicePageModal({ productService }) {
                     name="product_name"
                     type="text"
                     className="form-control"
-                    placeholder="Məhsulun(xidmətin) adını daxil edin"
+                    placeholder="Məhsulun(xidmətin) adını daxil edin*"
                     label={productService && "Məhsulun(xidmətin) adı*"}
                   />
                 </div>
@@ -688,11 +688,13 @@ export default function ProductServicePageModal({ productService }) {
                     options={operationOptions}
                     defaultValue={
                       productService && {
-                        label: productService.training_id.name,
-                        value: parseInt(productService.training_id.id),
+                        label:
+                        productService.operation_id &&
+                          `OR${productService.operation_id.id}`,
+                        value: productService.operation_id &&  parseInt(productService.operation_id.id),
                       }
                     }
-                    placeholder="Aid olduğu əməliyyat"
+                    placeholder="Aid olduğu əməliyyatı daxil edin*"
                     label={productService && "Aid olduğu əməliyyat*"}
                   />
                 </div>
@@ -720,7 +722,7 @@ export default function ProductServicePageModal({ productService }) {
                       )
                     }
                     type="text"
-                    placeholder="Məhsulun ərzaq və ya qeyri ərzaq qrupuna aid olması barədə qeyd daxil edin"
+                    placeholder="Məhsulun ərzaq və ya qeyri ərzaq qrupuna aid olması barədə qeyd daxil edin*"
                     label={
                       productService &&
                       "Məhsulun ərzaq və ya qeyri ərzaq qrupuna aid olması barədə qeyd*"
@@ -733,7 +735,7 @@ export default function ProductServicePageModal({ productService }) {
                     name="product_code"
                     type="text"
                     className="form-control"
-                    placeholder="Məhsulun kodunu daxil edin"
+                    placeholder="Məhsulun kodunu daxil edin*"
                     label={productService && "Məhsulun kodu*"}
                   />
                 </div>
@@ -829,7 +831,7 @@ export default function ProductServicePageModal({ productService }) {
                       }
                     }
                     // className="form-control"
-                    placeholder="Akkreditasiya olunmuş sınaq laboratoriyasının adını daxil edin"
+                    placeholder="Akkreditasiya olunmuş sınaq laboratoriyasının adını daxil edin*"
                     label={
                       productService &&
                       "Akkreditasiya olunmuş sınaq laboratoriyasının adı*"

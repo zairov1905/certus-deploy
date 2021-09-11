@@ -148,36 +148,39 @@ export default function PersonalPage() {
     },
     {
       name: "Təlimçinin adı",
-      selector: "trainer_name",
-      sortable: true,
-    },
-    {
-      name: "Təlimin adı",
-      // selector: "training_id",
+      // selector: "trainer_name",
       cell: (personal) => (
-        <p>
-          {personal.training_id
-            ? personal.training_id.name
-            : "Təlim qeyd olunmayıb"}
-        </p>
+        <p>{personal.trainer_name && personal.trainer_name.name} {personal.trainer_name && personal.trainer_name.surname}</p>
       ),
       sortable: true,
     },
-    {
-      name: "Məhsulun kodu",
-      selector: "product_code",
-      sortable: true,
-    },
-    {
-      name: "Normativ sənədin işarəsi",
-      selector: "normative_document_sign_id",
-      sortable: true,
-    },
-    {
-      name: "Qeyd",
-      selector: "note",
-      sortable: true,
-    },
+    // {
+    //   name: "Təlimin adı",
+    //   // selector: "training_id",
+    //   cell: (personal) => (
+    //     <p>
+    //       {personal.training_id
+    //         ? personal.training_id.name
+    //         : "Təlim qeyd olunmayıb"}
+    //     </p>
+    //   ),
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Məhsulun kodu",
+    //   selector: "product_code",
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Normativ sənədin işarəsi",
+    //   selector: "normative_document_sign_id",
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Qeyd",
+    //   selector: "note",
+    //   sortable: true,
+    // },
     {
       name: "",
       cell: (personal) => (

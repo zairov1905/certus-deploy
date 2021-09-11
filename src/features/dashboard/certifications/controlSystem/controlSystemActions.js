@@ -21,6 +21,7 @@ export function loadControlSystem(data) {
         params: { ...data },
       })
       .then((datas) => {
+        console.log(datas)
         dispatch({
           type: FETCH_CONTROL_SYSTEM,
           payload: datas.data.data,

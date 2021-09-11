@@ -39,7 +39,7 @@ export default function personalReducer(
       return {
         ...state,
         personals: payload,
-        totalCount: totalCount,
+        // totalCount: totalCount,
       };
     default:
       return state;

@@ -122,7 +122,7 @@ export default function DocPageModal({ doc }) {
                 />
               </div>
             </div>
-            <div className="row">
+            <div className={`row ${doc && "mt-4"}`}>
               <div className="col-md-6">
                 <MyTextInput
                   id="number"

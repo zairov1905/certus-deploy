@@ -174,7 +174,7 @@ export default function PersonalPageModal({ personal }) {
                     name="sn_code_id"
                     type="text"
                     options={snCodeOptions}
-                    placeholder="SN kodu daxil edin"
+                    placeholder="SN kodu daxil edin*"
                     defaultValue={
                       personal && {
                         label: `${personal.sn_code_id}`,
@@ -190,7 +190,7 @@ export default function PersonalPageModal({ personal }) {
                     name="registration_number"
                     type="text"
                     className="form-control"
-                    placeholder="Reyestr nömrəsi daxil edin"
+                    placeholder="Reyestr nömrəsi daxil edin*"
                     label={personal && "Reyestr nömrəsi*"}
                   />
                 </div>
@@ -200,7 +200,7 @@ export default function PersonalPageModal({ personal }) {
                     name="blank_number"
                     type="text"
                     className="form-control"
-                    placeholder="Blank nömrəsi daxil edin"
+                    placeholder="Blank nömrəsi daxil edin*"
                     label={personal && "Blank nömrəsi*"}
                   />
                 </div>
@@ -210,7 +210,7 @@ export default function PersonalPageModal({ personal }) {
                     name="serial_number"
                     type="text"
                     className="form-control"
-                    placeholder="Akkreditasiya sahəsində sıra nömrəsi daxil edin"
+                    placeholder="Akkreditasiya sahəsində sıra nömrəsi daxil edin*"
                     label={personal && "Akkreditasiya sahəsində sıra nömrəsi*"}
                   />
                 </div>
@@ -224,7 +224,7 @@ export default function PersonalPageModal({ personal }) {
                       e.currentTarget.focus();
                     }}
                     className="form-control"
-                    placeholder="Sertifikatın verilmə tarixi daxil edin"
+                    placeholder="Sertifikatın verilmə tarixi daxil edin*"
                     label={personal && "Sertifikatın verilmə tarixi*"}
                   />
                 </div>
@@ -238,34 +238,8 @@ export default function PersonalPageModal({ personal }) {
                       e.currentTarget.focus();
                     }}
                     className="form-control"
-                    placeholder="Sertifikatın qüvvədən düşdüyü tarix daxil edin"
+                    placeholder="Sertifikatın qüvvədən düşdüyü tarix daxil edin*"
                     label={personal && "Sertifikatın qüvvədən düşdüyü tarix*"}
-                  />
-                </div>
-                <div className="col-md-12 mb-4">
-                  <MyTextInput
-                    id="participant_name"
-                    name="participant_name"
-                    type="text"
-                    className="form-control"
-                    placeholder="İştirakçı adını daxil edin"
-                    label={personal && "İştirakçı adı*"}
-                  />
-                </div>
-                <div className="col-md-12 mb-4">
-                  <MySearchableSelect
-                    id="trainer_name"
-                    name="trainer_name"
-                    type="text"
-                    options={trainerNameOptions}
-                    defaultValue={
-                      personal && {
-                        label: `${personal.trainer_name.name} ${personal.trainer_name.surname}`,
-                        value: parseInt(personal.trainer_name.id),
-                      }
-                    }
-                    placeholder="Təlimçinin adını daxil edin"
-                    label={personal && "Təlimçinin adı*"}
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -281,8 +255,34 @@ export default function PersonalPageModal({ personal }) {
                     }
                     type="text"
                     // className="form-control"
-                    placeholder="Təlimin adın daxil edin"
+                    placeholder="Təlimin adın daxil edin*"
                     label={personal && "Təlimin adı"}
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MySearchableSelect
+                    id="trainer_name"
+                    name="trainer_name"
+                    type="text"
+                    options={trainerNameOptions}
+                    defaultValue={
+                      personal && {
+                        label: `${personal.trainer_name.name} ${personal.trainer_name.surname}`,
+                        value: parseInt(personal.trainer_name.id),
+                      }
+                    }
+                    placeholder="Təlimçinin adını daxil edin*"
+                    label={personal && "Təlimçinin adı*"}
+                  />
+                </div>
+                <div className="col-md-12 mb-4">
+                  <MyTextInput
+                    id="participant_name"
+                    name="participant_name"
+                    type="text"
+                    className="form-control"
+                    placeholder="İştirakçı adını daxil edin*"
+                    label={personal && "İştirakçı adı*"}
                   />
                 </div>
                 <div className="col-md-12 mb-4">
@@ -292,14 +292,17 @@ export default function PersonalPageModal({ personal }) {
                     options={operationOptions}
                     defaultValue={
                       personal && {
-                        label: personal.training_id.name,
-                        value: parseInt(personal.training_id.id),
+                        label:
+                          personal.operation_id &&
+                          `OR${personal.operation_id.id}`,
+                        value:
+                          personal.operation_id &&
+                          parseInt(personal.operation_id.id),
                       }
                     }
                     type="text"
                     // className="form-control"
-                    placeholder="Aid olduğu əməliyyat"
-                    label="Aid olduğu əməliyyat*"
+                    placeholder="Aid olduğu əməliyyat*"
                     label={personal && "Aid olduğu əməliyyat*"}
                   />
                 </div>
@@ -324,7 +327,7 @@ export default function PersonalPageModal({ personal }) {
                     name="product_code"
                     type="text"
                     className="form-control"
-                    placeholder="Xidmətin kodunu daxil edin"
+                    placeholder="Xidmətin kodunu daxil edin*"
                     label={personal && "Xidmətin kodu*"}
                   />
                 </div>

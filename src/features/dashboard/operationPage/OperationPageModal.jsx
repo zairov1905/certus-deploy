@@ -6,8 +6,7 @@ import ModalWrapper from "../../../app/modal/ModalWrapper";
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import MyTextInput from "../../../app/common/form/MyTextInput";
-import { toast } from "react-toastify";
-import cuid from "cuid";
+import moment from "moment";
 import { Form, Formik } from "formik";
 import { createOperation, updateOperation } from "./operationActions";
 import { closeModal } from "../../../app/modal/modalReducer";
@@ -209,8 +208,8 @@ export default function OperationPageModal({ operation }) {
         order_source_id:
           operation.order_source_id && operation.order_source_id.id,
         reference_id: operation.reference_id && operation.reference_id.id,
-        date: operation.date && operation.date,
-        endDate: operation.endDate && operation.endDate,
+        date: operation.date && moment(operation.date).format("YYYY-MM-DD") ,
+        endDate: operation.endDate && moment(operation.endDate).format("YYYY-MM-DD"),  
 
         description: operation.description && operation.description,
         note: operation.note && operation.note,
@@ -236,7 +235,7 @@ export default function OperationPageModal({ operation }) {
             tax: 0,
           },
         ],
-        operationStatus: operation.operationStatus && operation.operationStatus,
+        executivePositionn: operation.executivePositionn && operation.executivePositionn,
       }
     : {
         number: "",
@@ -259,7 +258,7 @@ export default function OperationPageModal({ operation }) {
         edv: "",
         performans: "",
         expenses: expenses,
-        operationStatus: "",
+        executivePositionn: "",
       };
   const validationSchema = Yup.object({
     number: Yup.string().required("Mütləq doldurulmalıdır."),
@@ -623,8 +622,8 @@ export default function OperationPageModal({ operation }) {
                         </div>
                         <div className="col-md-6">
                           <MySearchableSelect
-                            id="operationStatus"
-                            name="operationStatus"
+                            id="executivePositionn"
+                            name="executivePositionn"
                             type="text"
                             options={operationStatusOptions}
                             defaultValue={
@@ -632,8 +631,8 @@ export default function OperationPageModal({ operation }) {
                               operationStatusOptions.filter(
                                 (operationStatus) =>
                                   operationStatus.value ===
-                                  (operation.operationStatus &&
-                                    operation.operationStatus)
+                                  (operation.executivePositionn &&
+                                    operation.executivePositionn)
                               )
                             }
                             label="İcra vəziyyəti"

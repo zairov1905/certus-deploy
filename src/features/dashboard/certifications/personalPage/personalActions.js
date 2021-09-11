@@ -22,7 +22,7 @@ export function loadPersonal(data) {
         params: { ...data },
       })
       .then((datas) => {
-        console.log(datas,"personal sertifikatlasma")
+        console.log(datas.data.data[0]);
         dispatch({
           type: FETCH_PERSONAL,
           payload: datas.data.data,
@@ -60,7 +60,6 @@ export function createPersonal(personal) {
         toast.info("Xəta baş verdi, yenidən cəht edin.");
       });
   };
-
 }
 
 export function updatePersonal(personal) {
