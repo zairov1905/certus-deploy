@@ -103,6 +103,8 @@ export default function ExpensePageModal({ expense }) {
         // Yeni elave edilen setirler asagidadir
         amount: expense.amount && expense.amount,
         edv: expense.edv && expense.edv,
+        edv_azn: expense.edv_azn && expense.edv_azn,
+
         note: expense.note && expense.note,
       }
     : {
@@ -118,6 +120,8 @@ export default function ExpensePageModal({ expense }) {
         faktura: "",
         amount: "",
         edv: "",
+        edv_azn: "",
+
         note: "",
       };
   const validationSchema = Yup.object({
@@ -350,7 +354,7 @@ export default function ExpensePageModal({ expense }) {
                     </div>
 
                     <div className={`row ${expense && "mb-4"}`}>
-                      <div className="col-md-6">
+                      <div className="col-md-4">
                         <MyTextInput
                           name="amount"
                           id="amount"
@@ -360,16 +364,28 @@ export default function ExpensePageModal({ expense }) {
                           label={expense && "Məbləğ"}
                         />
                       </div>
-                      <div className="col-md-6">
+                      <div className="col-md-4">
                         <MyTextInput
                           name="edv"
                           id="edv"
                           type="text"
                           className="form-control"
-                          placeholder="ƏDV"
-                          value={(parseInt(values.amount) * 18) / 100}
-                          label={expense && "ƏDV"}
-                          readOnly
+                          placeholder="ƏDV(%)"
+                          label={expense && "ƏDV(%)"}
+                        />
+                      </div>
+                      <div className="col-md-4">
+                        <MyTextInput
+                          name="edv_azn"
+                          id="edv_azn"
+                          type="text"
+                          className="form-control"
+                          placeholder="ƏDV(AZN)"
+                          value={
+                            (parseInt(values.amount) * parseInt(values.edv)) /
+                            100
+                          }
+                          label={expense && "ƏDV(AZN)"}
                         />
                       </div>
                     </div>

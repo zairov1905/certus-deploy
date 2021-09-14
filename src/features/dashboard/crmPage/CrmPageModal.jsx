@@ -261,186 +261,8 @@ export default function CrmPageModal({ crm }) {
         {({ isSubmitting, isValid, dirty, errors }) => (
           <Form id="emp">
             <div id="iconsAccordion" className="accordion-icons">
-              <div className="card">
-                <div className="card-header" id="headingOne3">
-                  <section className="mb-0 mt-0">
-                    <div
-                      role="menu"
-                      className="collapsed"
-                      data-toggle="collapse"
-                      data-target="#iconAccordionOne"
-                      aria-expanded="false"
-                      aria-controls="iconAccordionOne"
-                    >
-                      <div className="accordion-icon">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width={24}
-                          height={24}
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="feather feather-user"
-                        >
-                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                          <circle cx={12} cy={7} r={4} />
-                        </svg>
-                      </div>
-                      Kontakt şəxs haqqında məlumatlar
-                      <div className="icons">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width={24}
-                          height={24}
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="feather feather-chevron-down"
-                        >
-                          <polyline points="6 9 12 15 18 9" />
-                        </svg>
-                      </div>
-                    </div>
-                  </section>
-                </div>
-                <div
-                  id="iconAccordionOne"
-                  className="collapse"
-                  aria-labelledby="headingOne3"
-                  data-parent="#iconsAccordion"
-                  style={{}}
-                >
-                  <div className="card-body">
-                    <div className={`row ${crm && "mb-4"}`}>
-                      <div className="col-md-4">
-                        <MyTextInput
-                          id="contact_name"
-                          //  label={crm ? 'Ad' : ''}
-                          label={crm && "Ad*"}
-                          name="contact_name"
-                          type="text"
-                          className="form-control"
-                          placeholder="Ad*"
-                        />
-                      </div>
-                      <div className="col-md-4">
-                        <MyTextInput
-                          id="contact_surname"
-                          name="contact_surname"
-                          type="text"
-                          label={crm && "Soyad*"}
-                          className="form-control"
-                          placeholder="Soyad*"
-                        />
-                      </div>
-                      <div className="col-md-4">
-                        <MyTextInput
-                          id="contact_dadname"
-                          name="contact_dadname"
-                          type="text"
-                          className="form-control"
-                          placeholder="Ata adı"
-                          label={crm && "Ata adı"}
-                        />
-                      </div>
-                    </div>
-                    <div className={`row ${crm && "mb-4"}`}>
-                      <div className="col-md-4">
-                        <MyTextInput
-                          name="contact_phone"
-                          id="contact_phone"
-                          type="text"
-                          className="form-control"
-                          placeholder="Telefon"
-                          label={crm && "Telefon"}
-                        />
-                      </div>
-                      <div className="col-md-4">
-                        <MyTextInput
-                          name="contact_whatsapp"
-                          id="contact_whatsapp"
-                          type="text"
-                          className="form-control"
-                          placeholder="Whatsapp"
-                          label={crm && "Whatsapp"}
-                        />
-                      </div>
-                      <div className="col-md-4">
-                        <MyTextInput
-                          name="contact_telegram"
-                          id="contact_telegram"
-                          type="text"
-                          className="form-control"
-                          placeholder="Telegram"
-                          label={crm && "Telegram"}
-                        />
-                      </div>
-                    </div>
-                    <div className={`row ${crm && "mb-4"}`}>
-                      <div className="col-md-4">
-                        <MyTextInput
-                          name="contact_facebook"
-                          id="contact_facebook"
-                          type="text"
-                          className="form-control"
-                          placeholder="Facebook"
-                          label={crm && "Facebook"}
-                        />
-                      </div>
-                      <div className="col-md-4">
-                        <MyTextInput
-                          name="contact_linkedin"
-                          id="contact_linkedin"
-                          type="text"
-                          className="form-control"
-                          placeholder="Linkedin"
-                          label={crm && "Linkedin"}
-                        />
-                      </div>{" "}
-                      <div className="col-md-4">
-                        <MyTextInput
-                          name="contact_twitter"
-                          id="contact_twitter"
-                          type="text"
-                          className="form-control"
-                          placeholder="Twitter"
-                          label={crm && "Twitter"}
-                        />
-                      </div>{" "}
-                    </div>
-                    <div className={`row ${crm && "mb-4"}`}>
-                      <div className="col-md-4">
-                        <MyTextInput
-                          name="contact_instagram"
-                          id="contact_instagram"
-                          type="text"
-                          className="form-control"
-                          placeholder="Instagram"
-                          label={crm && "Instagram"}
-                        />
-                      </div>{" "}
-                      <div className="col-md-8">
-                        <MyTextInput
-                          name="contact_mail"
-                          id="contact_mail"
-                          type="text"
-                          className="form-control"
-                          placeholder="Mail"
-                          label={crm && "Mail"}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
 
-              <div className="card">
+            <div className="card">
                 <div className="card-header" id="headingTwo3">
                   <section className="mb-0 mt-0">
                     <div
@@ -746,6 +568,185 @@ export default function CrmPageModal({ crm }) {
                   </div>
                 </div>
               </div>
+              <div className="card">
+                <div className="card-header" id="headingOne3">
+                  <section className="mb-0 mt-0">
+                    <div
+                      role="menu"
+                      className="collapsed"
+                      data-toggle="collapse"
+                      data-target="#iconAccordionOne"
+                      aria-expanded="false"
+                      aria-controls="iconAccordionOne"
+                    >
+                      <div className="accordion-icon">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width={24}
+                          height={24}
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="feather feather-user"
+                        >
+                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                          <circle cx={12} cy={7} r={4} />
+                        </svg>
+                      </div>
+                      Kontakt şəxs haqqında məlumatlar
+                      <div className="icons">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width={24}
+                          height={24}
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="feather feather-chevron-down"
+                        >
+                          <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+                <div
+                  id="iconAccordionOne"
+                  className="collapse"
+                  aria-labelledby="headingOne3"
+                  data-parent="#iconsAccordion"
+                  style={{}}
+                >
+                  <div className="card-body">
+                    <div className={`row ${crm && "mb-4"}`}>
+                      <div className="col-md-4">
+                        <MyTextInput
+                          id="contact_name"
+                          //  label={crm ? 'Ad' : ''}
+                          label={crm && "Ad*"}
+                          name="contact_name"
+                          type="text"
+                          className="form-control"
+                          placeholder="Ad*"
+                        />
+                      </div>
+                      <div className="col-md-4">
+                        <MyTextInput
+                          id="contact_surname"
+                          name="contact_surname"
+                          type="text"
+                          label={crm && "Soyad*"}
+                          className="form-control"
+                          placeholder="Soyad*"
+                        />
+                      </div>
+                      <div className="col-md-4">
+                        <MyTextInput
+                          id="contact_dadname"
+                          name="contact_dadname"
+                          type="text"
+                          className="form-control"
+                          placeholder="Ata adı"
+                          label={crm && "Ata adı"}
+                        />
+                      </div>
+                    </div>
+                    <div className={`row ${crm && "mb-4"}`}>
+                      <div className="col-md-4">
+                        <MyTextInput
+                          name="contact_phone"
+                          id="contact_phone"
+                          type="text"
+                          className="form-control"
+                          placeholder="Telefon"
+                          label={crm && "Telefon"}
+                        />
+                      </div>
+                      <div className="col-md-4">
+                        <MyTextInput
+                          name="contact_whatsapp"
+                          id="contact_whatsapp"
+                          type="text"
+                          className="form-control"
+                          placeholder="Whatsapp"
+                          label={crm && "Whatsapp"}
+                        />
+                      </div>
+                      <div className="col-md-4">
+                        <MyTextInput
+                          name="contact_telegram"
+                          id="contact_telegram"
+                          type="text"
+                          className="form-control"
+                          placeholder="Telegram"
+                          label={crm && "Telegram"}
+                        />
+                      </div>
+                    </div>
+                    <div className={`row ${crm && "mb-4"}`}>
+                      <div className="col-md-4">
+                        <MyTextInput
+                          name="contact_facebook"
+                          id="contact_facebook"
+                          type="text"
+                          className="form-control"
+                          placeholder="Facebook"
+                          label={crm && "Facebook"}
+                        />
+                      </div>
+                      <div className="col-md-4">
+                        <MyTextInput
+                          name="contact_linkedin"
+                          id="contact_linkedin"
+                          type="text"
+                          className="form-control"
+                          placeholder="Linkedin"
+                          label={crm && "Linkedin"}
+                        />
+                      </div>{" "}
+                      <div className="col-md-4">
+                        <MyTextInput
+                          name="contact_twitter"
+                          id="contact_twitter"
+                          type="text"
+                          className="form-control"
+                          placeholder="Twitter"
+                          label={crm && "Twitter"}
+                        />
+                      </div>{" "}
+                    </div>
+                    <div className={`row ${crm && "mb-4"}`}>
+                      <div className="col-md-4">
+                        <MyTextInput
+                          name="contact_instagram"
+                          id="contact_instagram"
+                          type="text"
+                          className="form-control"
+                          placeholder="Instagram"
+                          label={crm && "Instagram"}
+                        />
+                      </div>{" "}
+                      <div className="col-md-8">
+                        <MyTextInput
+                          name="contact_mail"
+                          id="contact_mail"
+                          type="text"
+                          className="form-control"
+                          placeholder="Mail"
+                          label={crm && "Mail"}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <div className="card">
                 <div className="card-header" id="headingTwo3">
                   <section className="mb-0 mt-0">

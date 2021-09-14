@@ -138,7 +138,14 @@ export default function OperationPage() {
       sortable: true,
     },
     {
-      name: "Əməliyyat tarixi",
+      name: "Müştəri kodu",
+      cell: (operation) => (
+        <p>{operation.customer_id && `CS${operation.customer_id.id}` }</p>
+      ),
+      sortable: true,
+    },
+    {
+      name: "Sifariş tarixi",
       selector: "date",
       sortable: true,
     },
@@ -170,12 +177,13 @@ export default function OperationPage() {
       name: "İcra vəziyyəti",
 
       cell: (row) => {
-        if (row.executivePositionn === 0) {
+        if (row.executivePositionn === 2) {
           return (
             <button
-              className="btn btn-danger mb-2 mr-2 rounded-circle text-center"
-              title="Hazırlıq mərhələsindədir"
+              className="btn btn-success mb-2 mr-2 bs-tooltip  rounded-circle text-center"
               style={{ marginLeft: "18px" }}
+              title="İcra edildi"
+
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -235,10 +243,9 @@ export default function OperationPage() {
         } else {
           return (
             <button
-              className="btn btn-success mb-2 mr-2 bs-tooltip  rounded-circle text-center"
+              className="btn btn-danger mb-2 mr-2 rounded-circle text-center"
+              title="Hazırlıq mərhələsindədir"
               style={{ marginLeft: "18px" }}
-              title="İcra edildi"
-
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -264,6 +271,7 @@ export default function OperationPage() {
               </svg>
             </button>
           );
+
         }
       },
     },

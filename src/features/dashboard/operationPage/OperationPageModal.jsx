@@ -145,6 +145,7 @@ export default function OperationPageModal({ operation }) {
       return {
         value: parseInt(expenseType.id),
         label: expenseType.name,
+        group_id: expenseType.group_id && expenseType.group_id.id,
       };
     });
   const [modal, setModal] = useState(false);
@@ -167,15 +168,16 @@ export default function OperationPageModal({ operation }) {
     }
   };
   const [expenses, setExpenses] = useState(
-    operation && [
-      // : // ? JSON.parse(operation.expenses)
-      {
-        income_expense_group_id: "",
-        expense_type_id: "",
-        expense: "",
-        tax: "",
-      },
-    ]
+    operation.expenses
+      ? JSON.parse(operation.expenses)
+      : [
+          {
+            income_expense_group_id: "",
+            expense_type_id: "",
+            expense: "",
+            tax: "",
+          },
+        ]
   );
   let mapExpenses = expenses;
   console.log(mapExpenses);
@@ -208,13 +210,16 @@ export default function OperationPageModal({ operation }) {
         order_source_id:
           operation.order_source_id && operation.order_source_id.id,
         reference_id: operation.reference_id && operation.reference_id.id,
-        date: operation.date && moment(operation.date).format("YYYY-MM-DD") ,
-        endDate: operation.endDate && moment(operation.endDate).format("YYYY-MM-DD"),  
+        date: operation.date && moment(operation.date).format("YYYY-MM-DD"),
+        endDate:
+          operation.endDate && moment(operation.endDate).format("YYYY-MM-DD"),
 
         description: operation.description && operation.description,
         note: operation.note && operation.note,
 
         employee_id: operation.employee_id && operation.employee_id.id,
+        employee_id2: operation.employee_id2 && operation.employee_id2.id,
+
         document_id: operation.document_id && operation.document_id.id,
         faktura_id: operation.faktura_id && operation.faktura_id.id,
         amount: operation.amount,
@@ -224,18 +229,17 @@ export default function OperationPageModal({ operation }) {
           operation.income_expense_group_id.id,
         expense_type_id:
           operation.expense_type_id && operation.expense_type_id.id,
+
         bonus: operation.bonus && operation.bonus,
+        bonusPercent: operation.bonusPercent && operation.bonusPercent,
 
         performans: operation.performans && operation.performans,
-        expenses: [
-          {
-            income_expense_group_id: 1,
-            expense_type_id: 1,
-            expense: 0,
-            tax: 0,
-          },
-        ],
-        executivePositionn: operation.executivePositionn && operation.executivePositionn,
+        performansPercent:
+          operation.performansPercent && operation.performansPercent,
+
+        expenses: expenses,
+        executivePositionn:
+          operation.executivePositionn && operation.executivePositionn,
       }
     : {
         number: "",
@@ -248,6 +252,7 @@ export default function OperationPageModal({ operation }) {
         description: "",
         note: "",
         employee_id: "",
+        employee_id2: "",
         document_id: "",
         faktura_id: "",
         amount: "",
@@ -255,8 +260,10 @@ export default function OperationPageModal({ operation }) {
         income_expense_group_id: "",
         expense_type_id: "",
         bonus: "",
+        bonusPercent: "",
         edv: "",
         performans: "",
+        performansPercent: "",
         expenses: expenses,
         executivePositionn: "",
       };
@@ -382,8 +389,8 @@ export default function OperationPageModal({ operation }) {
                             type="text"
                             className="form-control"
                             readOnly
-                            placeholder="Sifariş Nömrəsi"
-                            label={operation && "Sifariş Nömrəsi"}
+                            placeholder="Sifariş Nömrəsi*"
+                            label={operation && "Sifariş Nömrəsi*"}
                           />
                         </div>
                         <div className="col-md-4">
@@ -408,8 +415,8 @@ export default function OperationPageModal({ operation }) {
                             options={customerOptions}
                             // className="form-control"
                             readOnly
-                            placeholder="Müştəri"
-                            label={operation && "Müştəri"}
+                            placeholder="Müştəri*"
+                            label={operation && "Müştəri*"}
                           />
                         </div>
                         <div className="col-md-4">
@@ -462,8 +469,8 @@ export default function OperationPageModal({ operation }) {
                             type="text"
                             options={orderSourceOptions}
                             // className="form-control"
-                            placeholder="Sifariş Mənbəyi"
-                            label={operation && "Sifariş Mənbəyi"}
+                            placeholder="Sifariş Mənbəyi*"
+                            label={operation && "Sifariş Mənbəyi*"}
                           />
                         </div>
                         <div className="col-md-6">
@@ -487,8 +494,8 @@ export default function OperationPageModal({ operation }) {
                             type="text"
                             options={referenceOptions}
                             // className="form-control"
-                            placeholder="Referans"
-                            label={operation && "Referans"}
+                            placeholder="Referans*"
+                            label={operation && "Referans*"}
                           />
                         </div>
                       </div>
@@ -504,8 +511,8 @@ export default function OperationPageModal({ operation }) {
                             }}
                             readOnly
                             className="form-control"
-                            placeholder="Sifariş tarixi"
-                            label={operation && "Sifariş tarixi"}
+                            placeholder="Sifariş tarixi*"
+                            label={operation && "Sifariş tarixi*"}
                           />
                         </div>
                         <div className="col-md-6">
@@ -530,9 +537,9 @@ export default function OperationPageModal({ operation }) {
                             id="description"
                             type="text"
                             className="form-control"
-                            placeholder="Sifariş Təyinatı"
+                            placeholder="Sifariş Təyinatı*"
                             readOnly
-                            label={operation && "Sifariş Təyinatı"}
+                            label={operation && "Sifariş Təyinatı*"}
                           />
                         </div>
                       </div>
@@ -772,8 +779,9 @@ export default function OperationPageModal({ operation }) {
                                   expenseGroupOptions.filter(
                                     (expenseGroupOption) =>
                                       expenseGroupOption.value ===
-                                      (operation.income_expense_group_id &&
-                                        operation.income_expense_group_id.id)
+                                      (expenses[index]
+                                        .income_expense_group_id &&
+                                        expenses[index].income_expense_group_id)
                                   )
                                 }
                                 name={`expenses[${index}].income_expense_group_id`}
@@ -792,18 +800,28 @@ export default function OperationPageModal({ operation }) {
                                   expenseTypeOptions.filter(
                                     (expenseTypeOption) =>
                                       expenseTypeOption.value ===
-                                      (operation.expense_type_id &&
-                                        operation.expense_type_id.id)
+                                      (expenses[index].expense_type_id &&
+                                        expenses[index].expense_type_id)
                                   )
                                 }
                                 name={`expenses[${index}].expense_type_id`}
                                 id={`expenses[${index}].expense_type_id`}
                                 type="text"
-                                options={expenseTypeOptions}
+                                options={
+                                  values.expenses[index]
+                                    ? expenseTypeOptions.filter(
+                                        (expenseType) =>
+                                          expenseType.group_id ===
+                                          values.expenses[index]
+                                            .income_expense_group_id
+                                      )
+                                    : expenseTypeOptions
+                                }
                                 // className="form-control"
                                 placeholder="Xərc tipi"
                                 label={operation && "Xərc tipi"}
                               />
+                              {console.log(values.expenses[index])}
                             </div>
                             <div className="col-md-3">
                               <MyTextInput
@@ -812,7 +830,7 @@ export default function OperationPageModal({ operation }) {
                                 name={`expenses[${index}].expense`}
                                 id={`expenses[${index}].expense`}
                                 // defaultValue={mapExpense && mapExpense.amount}
-                                type="number"
+                                type="text"
                                 className="form-control"
                                 placeholder="Məbləğ"
                                 label={operation && `Məbləğ`}
@@ -825,7 +843,7 @@ export default function OperationPageModal({ operation }) {
                                 max={index}
                                 name={`expenses[${index}].tax`}
                                 id={`expenses[${index}].tax`}
-                                type="number"
+                                type="text"
                                 className="form-control"
                                 // defaultValue={mapExpense && mapExpense.edv}
                                 placeholder="Vergi"
@@ -922,24 +940,101 @@ export default function OperationPageModal({ operation }) {
                         </div>
                       </div>
                       <div className={`row ${operation && "mb-4"}`}>
+                        <div className="col-md-12">
+                          <MySearchableSelect
+                            // defaultValue={
+                            //   operation &&
+                            //   employeeOptions.filter(
+                            //     (employeeOption) =>
+                            //       employeeOption.value === operation.employee_id.id
+                            //   )
+                            // }
+                            defaultValue={
+                              operation.employee_id2 ? {
+                                value: parseInt(
+                                  operation.employee_id2 &&
+                                    operation.employee_id2.id
+                                ),
+                                label: `${
+                                  operation.employee_id2 &&
+                                  operation.employee_id2.name
+                                } ${
+                                  operation.employee_id2 &&
+                                  operation.employee_id2.surname
+                                }`,
+                              } : "Müştərək icraçı təyin edilməyib"
+                            }
+                            name="employee_id2"
+                            id="employee_id2"
+                            type="text"
+                            options={employeeOptions}
+                            // className="form-control"
+                            label={operation && "Müştərək icraçı*"}
+                            placeholder="Müştərək icraçı*"
+                          />
+                        </div>
+                      </div>
+                      <div className={`row ${operation && "mb-4"}`}>
+                        <div className="col-md-6">
+                          <MyTextInput
+                            name="bonusPercent"
+                            id="bonusPercent"
+                            type="text"
+                            className="form-control"
+                            placeholder="İcraçının bonus nisbəti(%)"
+                            label={operation && "İcraçının bonus nisbəti(%)"}
+                          />
+                        </div>
                         <div className="col-md-6">
                           <MyTextInput
                             name="bonus"
                             id="bonus"
                             type="text"
+                            readOnly
+                            value={
+                              ((values.amount -
+                                values.expenses
+                                  .map((expense) => parseInt(expense.expense))
+                                  .reduce((prev, curr) => prev + curr, 0)) *
+                                values.bonusPercent) /
+                              100
+                            }
                             className="form-control"
-                            placeholder="İcracı bonusu"
-                            label={operation && "İcracı bonusu"}
+                            placeholder="İcraçı bonusu"
+                            label={operation && "İcraçı bonusu(AZN)"}
+                          />
+                        </div>
+                      </div>
+                      <div className={`row ${operation && "mb-4"}`}>
+                        <div className="col-md-6">
+                          <MyTextInput
+                            name="performansPercent"
+                            id="performansPercent"
+                            type="text"
+                            className="form-control"
+                            placeholder="İcraçının performans nisbəti(%)"
+                            label={
+                              operation && "İcraçının performans nisbəti(%)"
+                            }
                           />
                         </div>
                         <div className="col-md-6">
                           <MyTextInput
                             name="performans"
                             id="performans"
+                            value={
+                              ((values.amount -
+                                values.expenses
+                                  .map((expense) => parseInt(expense.expense))
+                                  .reduce((prev, curr) => prev + curr, 0)) *
+                                values.performansPercent) /
+                              100
+                            }
+                            readOnly
                             type="text"
                             className="form-control"
-                            placeholder="Performans"
-                            label={operation && "Performans"}
+                            placeholder="Performans bonusu(AZN)"
+                            label={operation && "Performans bonusu(AZN)"}
                           />
                         </div>
                       </div>

@@ -141,11 +141,6 @@ export default function LabsPage() {
       sortable: true,
     },
     {
-      name: "Əməliyyatlar",
-      selector: "operations",
-      sortable: true,
-    },
-    {
       name: "Lab not",
       selector: "note",
       sortable: true,
