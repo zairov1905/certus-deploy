@@ -12,7 +12,7 @@ const initialState = {
 
 export default function employeesReducer(
   state = initialState,
-  { type, payload }
+  { type, payload,totalCount }
 ) {
   switch (type) {
     case CREATE_EMPLOYEES:
@@ -41,6 +41,7 @@ export default function employeesReducer(
       return {
         ...state,
         employees: payload,
+        totalCount:totalCount
       };
     default:
       return state;

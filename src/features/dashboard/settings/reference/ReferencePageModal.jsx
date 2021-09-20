@@ -11,6 +11,7 @@ import cuid from "cuid";
 import { Form, Formik } from "formik";
 import { closeModal } from "../../../../app/modal/modalReducer";
 import { createReference, updateReference } from "./referenceActions";
+import MyTextArea from "../../../../app/common/form/MyTextArea";
 
 export default function ReferencePageModal({ reference }) {
   const dispatch = useDispatch();
@@ -24,9 +25,13 @@ export default function ReferencePageModal({ reference }) {
   const initialValues = reference
     ? {
         name: reference.name && reference.name,
+        phone: reference.phone && reference.phone,
+        about: reference.about && reference.about,
       }
     : {
         name: "",
+        phone: "",
+        about: "",
       };
   const validationSchema = Yup.object({
     name: Yup.string().required("Mütləq doldurulmalıdır."),
@@ -43,8 +48,8 @@ export default function ReferencePageModal({ reference }) {
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
             reference
-              ? await dispatch(updateReference({...values, id:reference.id}))
-              : await dispatch(createReference({ ...values}));
+              ? await dispatch(updateReference({ ...values, id: reference.id }))
+              : await dispatch(createReference({ ...values }));
             setSubmitting(false);
             setModal(true);
             dispatch(closeModal());
@@ -57,7 +62,7 @@ export default function ReferencePageModal({ reference }) {
       >
         {({ isSubmitting, isValid, dirty, errors }) => (
           <Form id="emp">
-            <div className="row">
+            <div className={`row ${reference && "mb-4"}`}>
               <div className="col-md-12">
                 <MyTextInput
                   id="name"
@@ -66,11 +71,33 @@ export default function ReferencePageModal({ reference }) {
                   className="form-control"
                   placeholder="Referans"
                   label={reference && "Referans"}
-
                 />
               </div>
             </div>
-
+            <div className={`row ${reference && "mb-4"}`}>
+              <div className="col-md-12">
+                <MyTextInput
+                  id="phone"
+                  name="phone"
+                  type="text"
+                  className="form-control"
+                  placeholder="Əlaqə nömrəsi"
+                  label={reference && "Əlaqə nömrəsi"}
+                />
+              </div>
+            </div>
+            <div className={`row ${reference && "mb-4"}`}>
+              <div className="col-md-12">
+                <MyTextArea
+                  id="about"
+                  name="about"
+                  type="text"
+                  className="form-control"
+                  placeholder="Qeyd"
+                  label={reference && "Qeyd"}
+                />
+              </div>
+            </div>
             <button
               disabled={!isValid || !dirty || isSubmitting}
               type="submit"

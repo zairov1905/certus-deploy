@@ -9,6 +9,7 @@ import {
   asyncActionStart,
 } from "../../../../app/async/asyncReducer";
 import { delay } from "../../../../app/util/util";
+import { createCounterparty } from "../counterparty/counterpartyActions";
 import {
   CREATE_REFERENCE,
   DELETE_REFERENCE,
@@ -29,6 +30,7 @@ export function loadReference(data) {
           payload: datas.data.data,
           totalCount: datas.data.message,
         });
+        
         dispatch(asyncActionFinish());
       })
       .catch((err) => {
@@ -53,6 +55,11 @@ export function createReference(reference) {
       })
       .then((data) => {
         dispatch({ type: CREATE_REFERENCE, payload: data.data.data });
+        createCounterparty({
+          name:reference.name ,
+          about:"Referansdan gələn kontragentdir",
+          contact:'Təyin edilməyib' ,
+        })
         dispatch(asyncActionFinish());
         toast.success("Uğurla əlavə edildi");
       })

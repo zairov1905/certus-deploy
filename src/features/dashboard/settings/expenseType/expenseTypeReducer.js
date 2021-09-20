@@ -5,7 +5,7 @@ const initialState = {
   expenseTypes: []
 };
 
-export default function expenseTypeReducer(state = initialState, { type, payload }) {
+export default function expenseTypeReducer(state = initialState, { type, payload,totalCount }) {
   switch (type) {
     case CREATE_EXPENSE_TYPE:
       return {
@@ -30,6 +30,7 @@ export default function expenseTypeReducer(state = initialState, { type, payload
       return {
         ...state,
         expenseTypes: payload,
+        totalCount:totalCount
       };
     default:
       return state;

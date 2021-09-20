@@ -237,6 +237,13 @@ export default function OperationPageModal({ operation }) {
         performansPercent:
           operation.performansPercent && operation.performansPercent,
 
+        bonus2: operation.bonus2 && operation.bonus2,
+        bonusPercent2: operation.bonusPercent2 && operation.bonusPercent2,
+
+        performans2: operation.performans2 && operation.performans2,
+        performansPercent2:
+          operation.performansPercent2 && operation.performansPercent2,
+
         expenses: expenses,
         executivePositionn:
           operation.executivePositionn && operation.executivePositionn,
@@ -261,6 +268,13 @@ export default function OperationPageModal({ operation }) {
         expense_type_id: "",
         bonus: "",
         bonusPercent: "",
+
+        bonus2: "",
+        bonusPercent2: "",
+
+        performans2: "",
+        performansPercent2: "",
+
         edv: "",
         performans: "",
         performansPercent: "",
@@ -940,41 +954,6 @@ export default function OperationPageModal({ operation }) {
                         </div>
                       </div>
                       <div className={`row ${operation && "mb-4"}`}>
-                        <div className="col-md-12">
-                          <MySearchableSelect
-                            // defaultValue={
-                            //   operation &&
-                            //   employeeOptions.filter(
-                            //     (employeeOption) =>
-                            //       employeeOption.value === operation.employee_id.id
-                            //   )
-                            // }
-                            defaultValue={
-                              operation.employee_id2 ? {
-                                value: parseInt(
-                                  operation.employee_id2 &&
-                                    operation.employee_id2.id
-                                ),
-                                label: `${
-                                  operation.employee_id2 &&
-                                  operation.employee_id2.name
-                                } ${
-                                  operation.employee_id2 &&
-                                  operation.employee_id2.surname
-                                }`,
-                              } : "Müştərək icraçı təyin edilməyib"
-                            }
-                            name="employee_id2"
-                            id="employee_id2"
-                            type="text"
-                            options={employeeOptions}
-                            // className="form-control"
-                            label={operation && "Müştərək icraçı*"}
-                            placeholder="Müştərək icraçı*"
-                          />
-                        </div>
-                      </div>
-                      <div className={`row ${operation && "mb-4"}`}>
                         <div className="col-md-6">
                           <MyTextInput
                             name="bonusPercent"
@@ -1028,6 +1007,112 @@ export default function OperationPageModal({ operation }) {
                                   .map((expense) => parseInt(expense.expense))
                                   .reduce((prev, curr) => prev + curr, 0)) *
                                 values.performansPercent) /
+                              100
+                            }
+                            readOnly
+                            type="text"
+                            className="form-control"
+                            placeholder="Performans bonusu(AZN)"
+                            label={operation && "Performans bonusu(AZN)"}
+                          />
+                        </div>
+                      </div>
+
+                      <div className={`row ${operation && "mb-4"}`}>
+                        <div className="col-md-12">
+                          <MySearchableSelect
+                            // defaultValue={
+                            //   operation &&
+                            //   employeeOptions.filter(
+                            //     (employeeOption) =>
+                            //       employeeOption.value === operation.employee_id.id
+                            //   )
+                            // }
+                            defaultValue={
+                              operation.employee_id2
+                                ? {
+                                    value: parseInt(
+                                      operation.employee_id2 &&
+                                        operation.employee_id2.id
+                                    ),
+                                    label: `${
+                                      operation.employee_id2 &&
+                                      operation.employee_id2.name
+                                    } ${
+                                      operation.employee_id2 &&
+                                      operation.employee_id2.surname
+                                    }`,
+                                  }
+                                : "Müştərək icraçı təyin edilməyib"
+                            }
+                            name="employee_id2"
+                            id="employee_id2"
+                            type="text"
+                            options={employeeOptions}
+                            // className="form-control"
+                            label={operation && "Müştərək icraçı*"}
+                            placeholder="Müştərək icraçı*"
+                          />
+                        </div>
+                      </div>
+
+                      <div className={`row ${operation && "mb-4"}`}>
+                        <div className="col-md-6">
+                          <MyTextInput
+                            name="bonusPercent2"
+                            id="bonusPercent2"
+                            type="text"
+                            className="form-control"
+                            placeholder="Müştərək icraçının bonus nisbəti(%)"
+                            label={
+                              operation && "Müştərək icraçının bonus nisbəti(%)"
+                            }
+                          />
+                        </div>
+                        <div className="col-md-6">
+                          <MyTextInput
+                            name="bonus2"
+                            id="bonus2"
+                            type="text"
+                            readOnly
+                            value={
+                              ((values.amount -
+                                values.expenses
+                                  .map((expense) => parseInt(expense.expense))
+                                  .reduce((prev, curr) => prev + curr, 0)) *
+                                values.bonusPercent2) /
+                              100
+                            }
+                            className="form-control"
+                            placeholder="Müştərək icraçı bonusu"
+                            label={operation && "Müştərək icraçı bonusu(AZN)"}
+                          />
+                        </div>
+                      </div>
+                      <div className={`row ${operation && "mb-4"}`}>
+                        <div className="col-md-6">
+                          <MyTextInput
+                            name="performansPercent2"
+                            id="performansPercent2"
+                            type="text"
+                            className="form-control"
+                            placeholder="Müştərək icraçının performans nisbəti(%)"
+                            label={
+                              operation &&
+                              "Müştərək İcraçının performans nisbəti(%)"
+                            }
+                          />
+                        </div>
+                        <div className="col-md-6">
+                          <MyTextInput
+                            name="performans2"
+                            id="performans2"
+                            value={
+                              ((values.amount -
+                                values.expenses
+                                  .map((expense) => parseInt(expense.expense))
+                                  .reduce((prev, curr) => prev + curr, 0)) *
+                                values.performansPercent2) /
                               100
                             }
                             readOnly

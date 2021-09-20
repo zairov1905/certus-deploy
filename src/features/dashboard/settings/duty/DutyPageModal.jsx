@@ -58,8 +58,8 @@ export default function DutyPageModal({ duty }) {
                   name="name"
                   type="text"
                   className="form-control"
-                  placeholder="Sturuktur bölməsi"
-                  label={duty && "Sturuktur bölməsi"}
+                  placeholder="Vəzifəsi"
+                  label={duty && "Vəzifəsi"}
 
                 />
               </div>

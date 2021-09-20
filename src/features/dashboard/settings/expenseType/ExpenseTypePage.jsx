@@ -119,6 +119,16 @@ export default function ExpenseTypePage() {
       sortable: true,
     },
     {
+      name: "Gəlir-Xərc Qrupu",
+      // selector: "name",
+      cell: (expenseTypes) => (
+        <p>{expenseTypes.group_id &&  expenseTypes.group_id.name}</p>
+      )
+        
+      ,
+      sortable: true,
+    },
+    {
       name: "Gəlir-Xərc növü",
       selector: "name",
       sortable: true,

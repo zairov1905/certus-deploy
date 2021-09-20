@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from "react";
 import $ from "jquery";
-
 import ModalWrapper from "../../../app/modal/ModalWrapper";
-
 import { useDispatch, useSelector } from "react-redux";
 import * as Yup from "yup";
 import MyTextInput from "../../../app/common/form/MyTextInput";
-import { toast } from "react-toastify";
-import cuid from "cuid";
 import { Form, Formik } from "formik";
 import { closeModal } from "../../../app/modal/modalReducer";
 import { createLab, updateLab } from "./labActions";
 import MySearchableSelect from "../../../app/common/form/MySearchableSelect";
-import { createCounterparty } from "../settings/counterparty/counterpartyActions";
 import MyTextArea from "../../../app/common/form/MyTextArea";
 import { loadOperation } from "../operationPage/operationActions";
 
@@ -124,8 +119,8 @@ export default function LabPageModal({ lab }) {
                   // type="text"
                   defaultValue={
                     lab && {
-                      label: lab.document_id.document_number,
-                      value: lab.document_id.id,
+                      label: lab.document_id && lab.document_id.document_number,
+                      value: lab.document_id && lab.document_id.id,
                     }
                   }
                   options={docsOptions}
@@ -165,7 +160,12 @@ export default function LabPageModal({ lab }) {
                     name="operations"
                     type="text"
                     readOnly
-                    defaultValue={whereIsOperation && whereIsOperation.map(operation=> ` Əməliyyat: ${operation.number}`) }
+                    defaultValue={
+                      whereIsOperation &&
+                      whereIsOperation.map(
+                        (operation) => ` Əməliyyat: ${operation.number}`
+                      )
+                    }
                     className="form-control"
                     placeholder="Əməliyyatlar"
                     label={lab && "Əməliyyatlar"}

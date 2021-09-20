@@ -21,6 +21,7 @@ export function loadExpenseType(data) {
         params: { ...data },
       })
       .then((datas) => {
+        console.log(datas.data.message)
         dispatch({
           type: FETCH_EXPENSE_TYPE,
           payload: datas.data.data,

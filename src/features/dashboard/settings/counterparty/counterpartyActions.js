@@ -51,7 +51,7 @@ export function createCounterparty(counterparty) {
       .then((data) => {
         dispatch({ type: CREATE_COUNTERPARTY, payload: data.data.data });
         dispatch(asyncActionFinish());
-        toast.success("Uğurla əlavə edildi");
+        toast.success("Kontragent uğurla əlavə edildi");
       })
       .catch((err) => {
         dispatch(asyncActionError(err.message));

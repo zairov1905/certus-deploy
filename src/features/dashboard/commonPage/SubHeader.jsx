@@ -33,6 +33,9 @@ export default function SubHeader() {
     case "/settings/departments":
       currentLocation = "Tənzimləmələr / Struktur Bölmələr";
       break;
+    case "/settings/duties":
+      currentLocation = "Tənzimləmələr / Vəzifələr";
+      break;
     case "/settings/counterparties":
       currentLocation = "Tənzimləmələr / Kontragenlər";
       break;
@@ -69,7 +72,6 @@ export default function SubHeader() {
     case "/certificates/controlSystem":
       currentLocation = "Sertifikatlar / İdarəetmə Sistemləri Sertifikatı";
       break;
- 
 
     default:
       break;

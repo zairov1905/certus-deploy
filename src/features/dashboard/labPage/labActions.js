@@ -5,6 +5,7 @@ import {
   asyncActionFinish,
   asyncActionStart,
 } from "../../../app/async/asyncReducer";
+import { createCounterparty } from "../settings/counterparty/counterpartyActions";
 import { CREATE_LAB, DELETE_LAB, FETCH_LAB, UPDATE_LAB } from "./labConstants";
 
 const url = "lab";
@@ -45,6 +46,11 @@ export function createLab(lab) {
       })
       .then((data) => {
         dispatch({ type: CREATE_LAB, payload: data.data.data });
+        createCounterparty({
+          name:lab.name ,
+          about:"Laboratoriyadan gələn kontragentdir",
+          contact: lab.certificate_number,
+        })
         dispatch(asyncActionFinish());
         toast.success("Uğurla əlavə edildi");
       })

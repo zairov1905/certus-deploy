@@ -61,7 +61,7 @@ export default function EmployeesModal({ employee }) {
         name: employee.name && employee.name,
         surname: employee.surname && employee.surname,
         dadname: employee.dadname && employee.dadname,
-        birthday: employee.birthday && employee.birthday,
+        birthday: employee.birthday && moment(employee.birthday).format("YYYY-MM-DD"),
         address: employee.address && employee.address,
         phone: employee.phone && employee.phone,
 
@@ -293,8 +293,8 @@ export default function EmployeesModal({ employee }) {
                   label={employee && "Vəzifəsi"}
                   defaultValue={
                     employee && {
-                      label: employee.position_id.name,
-                      value: employee.position_id.id,
+                      label: employee.position_id && employee.position_id.name,
+                      value: employee.position_id && employee.position_id.id,
                     }
                   }
                 />
@@ -306,8 +306,12 @@ export default function EmployeesModal({ employee }) {
                   options={departmentOptions}
                   defaultValue={
                     employee && {
-                      label: employee.structural_section_id.name,
-                      value: employee.structural_section_id.id,
+                      label:
+                        employee.structural_section_id &&
+                        employee.structural_section_id.name,
+                      value:
+                        employee.structural_section_id &&
+                        employee.structural_section_id.id,
                     }
                   }
                   // type="text"

@@ -5,6 +5,7 @@ import {
   asyncActionFinish,
   asyncActionStart,
 } from "../../../app/async/asyncReducer";
+import { createCounterparty } from "../settings/counterparty/counterpartyActions";
 import { CREATE_CRM, DELETE_CRM, FETCH_CRM, UPDATE_CRM } from "./crmConstants";
 const url = "customer";
 export function loadCrm(data) {
@@ -45,6 +46,13 @@ export function createCrm(crm) {
       })
       .then((data) => {
         dispatch({ type: CREATE_CRM, payload: data.data.data });
+        dispatch(
+          createCounterparty({
+            name:crm.customer_name ,
+            about:"Müştəridən gələn kontragentdir",
+            contact: crm.customer_phone,
+          })
+        );
         dispatch(asyncActionFinish());
         toast.success("Uğurla əlavə edildi");
       })

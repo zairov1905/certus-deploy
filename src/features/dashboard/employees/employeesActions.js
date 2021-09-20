@@ -27,6 +27,7 @@ export function loadEmployees(data) {
         params: { ...data },
       })
       .then((datas) => {
+        console.log(datas);
         dispatch({
           type: FETCH_EMPLOYEES,
           payload: datas.data.data,
@@ -57,6 +58,13 @@ export function createEmployees(employee) {
       })
       .then((data) => {
         dispatch({ type: CREATE_EMPLOYEES, payload: data.data.data });
+        dispatch(
+          createCounterparty({
+            name: `${employee.name} ${employee.surname}`,
+            about:"İşçilərdən gələn kontragentdir",
+            contact: employee.phone,
+          })
+        );
         dispatch(asyncActionFinish());
         toast.success("Uğurla əlavə edildi");
       })
