@@ -206,9 +206,9 @@ export default function CrmPageModal({ crm }) {
         note2:""
       };
   const validationSchema = Yup.object({
-    contact_name: Yup.string().required("Mutuel doldurulmalıdır."),
-    contact_surname: Yup.string().required("Mutuel doldurulmalıdır."),
-    employee_id: Yup.string().required("Mutuel doldurulmalıdır."),
+    contact_name: Yup.string().required("Mütləq doldurulmalıdır."),
+    contact_surname: Yup.string().required("Mütləq doldurulmalıdır."),
+    employee_id: Yup.string().required("Mütləq doldurulmalıdır."),
     // customerCode: Yup.string().required("Mütləq doldurulmalıdır."),
     customer_name: Yup.string().required("Mütləq doldurulmalıdır."),
     voen: Yup.string().required("Mütləq doldurulmalıdır."),
@@ -225,7 +225,7 @@ export default function CrmPageModal({ crm }) {
     // twitter: Yup.string().required("Mütləq doldurulmalıdır."),
     // instagram: Yup.string().required("Mütləq doldurulmalıdır."),
     // customer_email: Yup.string().required("Mütləq doldurulmalıdır."),
-    referans_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    // referans_id: Yup.string().required("Mütləq doldurulmalıdır."),
     // circulation: Yup.string().required("Mütləq doldurulmalıdır."),
     // customer_category: Yup.string().required("Mütləq doldurulmalıdır."),
     // customer_satisfaction: Yup.string().required("Mütləq doldurulmalıdır."),
@@ -501,8 +501,8 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           defaultValue={
                             crm && {
-                              label: crm.referans_id.name && crm.referans_id.name,
-                              value: parseInt(crm.referans_id.id && crm.referans_id.id),
+                              label: crm.referans_id ? crm.referans_id.name:'Təyin edilməyib',
+                              value: parseInt(crm.referans_id && crm.referans_id.id),
                             }
                           }
                           options={referenceOptions}

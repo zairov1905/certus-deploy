@@ -238,8 +238,12 @@ export default function ExpensePageModal({ expense }) {
                           options={counterpartiesOptions}
                           defaultValue={
                             expense && {
-                              label: expense.contractor_id.name,
-                              value: expense.contractor_id.id,
+                              label: expense.contractor_id
+                                ? expense.contractor_id.name
+                                : "Təyin edilməyib",
+                              value:
+                                expense.contractor_id &&
+                                expense.contractor_id.id,
                             }
                           }
                           // type="text"
@@ -255,8 +259,11 @@ export default function ExpensePageModal({ expense }) {
                           // type="text"
                           defaultValue={
                             expense && {
-                              label: expense.document_id.document_number,
-                              value: expense.document_id.id,
+                              label: expense.document_id
+                                ? expense.document_id.document_number
+                                : "Təyin edilməyib",
+                              value:
+                                expense.document_id && expense.document_id.id,
                             }
                           }
                           options={docsOptions}
@@ -333,8 +340,11 @@ export default function ExpensePageModal({ expense }) {
                           // type="text"
                           defaultValue={
                             expense && {
-                              label: expense.document_id.document_number,
-                              value: expense.document_id.id,
+                              label:
+                                expense.document_id ?
+                                expense.document_id.document_number:"Təyin edilməyib",
+                              value:
+                                expense.document_id && expense.document_id.id,
                             }
                           }
                           options={docsOptions}
@@ -468,8 +478,12 @@ export default function ExpensePageModal({ expense }) {
                           label={expense && "Gəlir-Xərc qrupu"}
                           defaultValue={
                             expense && {
-                              label: expense.income_expense_group_id.name,
-                              value: expense.income_expense_group_id.id,
+                              label:
+                                expense.income_expense_group_id ?
+                                expense.income_expense_group_id.name: "Təyin edilməyib",
+                              value:
+                                expense.income_expense_group_id &&
+                                expense.income_expense_group_id.id,
                             }
                           }
                           // type="text"
@@ -492,8 +506,12 @@ export default function ExpensePageModal({ expense }) {
                           }
                           defaultValue={
                             expense && {
-                              label: expense.expense_type_id.name,
-                              value: expense.expense_type_id.id,
+                              label:
+                                expense.expense_type_id ?
+                                expense.expense_type_id.name : "Təyin edilməyib",
+                              value:
+                                expense.expense_type_id &&
+                                expense.expense_type_id.id,
                             }
                           }
                           type="text"
