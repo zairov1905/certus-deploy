@@ -340,8 +340,8 @@ export default function CrmPageModal({ crm }) {
                           // className="form-control"
                           defaultValue={
                             crm && {
-                              label: `${crm.employee_id.name} ${crm.employee_id.surname}`,
-                              value: parseInt(crm.employee_id.id),
+                              label: `${crm.employee_id.name && crm.employee_id.name} ${crm.employee_id.surname && crm.employee_id.surname}`,
+                              value: parseInt(crm.employee_id.id && crm.employee_id.id),
                             }
                           }
                           placeholder="Kurator*"
@@ -363,7 +363,7 @@ export default function CrmPageModal({ crm }) {
                       </div>
                     </div>
                     <div className={`row ${crm && "mb-4"}`}>
-                      <div className="col-md-6">
+                      <div className="col-md-12">
                         <MyTextInput
                           id="voen"
                           name="voen"
@@ -373,20 +373,7 @@ export default function CrmPageModal({ crm }) {
                           label={crm && "VÖEN*"}
                         />
                       </div>
-                      <div className="col-md-6">
-                        <MyTextInput
-                          name="date"
-                          id="date"
-                          type={crm ? "date" : "text"}
-                          onFocus={(e) => {
-                            e.currentTarget.type = "date";
-                            e.currentTarget.focus();
-                          }}
-                          className="form-control"
-                          placeholder="Tarix"
-                          label={crm && "Tarix"}
-                        />
-                      </div>
+
                     </div>
                     <div className={`row ${crm && "mb-4"}`}>
                       <div className="col-md-6">
@@ -514,14 +501,14 @@ export default function CrmPageModal({ crm }) {
                           type="text"
                           defaultValue={
                             crm && {
-                              label: crm.referans_id.name,
-                              value: parseInt(crm.referans_id.id),
+                              label: crm.referans_id.name && crm.referans_id.name,
+                              value: parseInt(crm.referans_id.id && crm.referans_id.id),
                             }
                           }
                           options={referenceOptions}
                           // className="form-control"
-                          placeholder="Referans*"
-                          label={crm && "Referans*"}
+                          placeholder="Referans"
+                          label={crm && "Referans"}
                         />
                       </div>
                       <div className="col-md-3">
@@ -722,7 +709,7 @@ export default function CrmPageModal({ crm }) {
                           label={crm && "Instagram"}
                         />
                       </div>{" "}
-                      <div className="col-md-8">
+                      <div className="col-md-4">
                         <MyTextInput
                           name="contact_mail"
                           id="contact_mail"
@@ -730,6 +717,20 @@ export default function CrmPageModal({ crm }) {
                           className="form-control"
                           placeholder="Mail"
                           label={crm && "Mail"}
+                        />
+                      </div>
+                      <div className="col-md-4">
+                        <MyTextInput
+                          name="date"
+                          id="date"
+                          type={crm ? "date" : "text"}
+                          onFocus={(e) => {
+                            e.currentTarget.type = "date";
+                            e.currentTarget.focus();
+                          }}
+                          className="form-control"
+                          placeholder="Tarix"
+                          label={crm && "Tarix"}
                         />
                       </div>
                     </div>
