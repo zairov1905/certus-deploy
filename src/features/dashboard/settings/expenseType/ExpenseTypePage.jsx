@@ -9,11 +9,11 @@ import { deleteExpenseType, loadExpenseType } from "./expenseTypeActions";
 export default function ExpenseTypePage() {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(loadExpenseType());
+    dispatch(loadExpenseType({take:10}));
     //   // return () => {
     //   //   // dispatch(loadOrder())
     //   // }
-  }, []);
+  }, [dispatch]);
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);
   const { expenseTypes, totalCount } = useSelector(

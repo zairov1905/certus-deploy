@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 export default function Employees() {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(loadEmployees());
+    dispatch(loadEmployees({take:10}));
   }, [dispatch]);
   const { employees,totalCount } = useSelector((state) => state.employees);
   const [perPage, setPerPage] = useState(10);

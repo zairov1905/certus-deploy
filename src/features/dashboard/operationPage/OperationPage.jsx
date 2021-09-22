@@ -9,11 +9,11 @@ export default function OperationPage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadOperation());
+    dispatch(loadOperation({take:10}));
     //   // return () => {
     //   //   // dispatch(loadOrder())
     //   // }
-  }, []);
+  }, [dispatch]);
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);
   const { operations, totalCount } = useSelector((state) => state.operations);
@@ -137,25 +137,25 @@ export default function OperationPage() {
       ),
       sortable: true,
     },
-    {
-      name: "Müştəri kodu",
-      cell: (operation) => (
-        <p>{operation.customer_id && `CS${operation.customer_id.id}` }</p>
-      ),
-      sortable: true,
-    },
+    // {
+    //   name: "Müştəri kodu",
+    //   cell: (operation) => (
+    //     <p>{operation.customer_id && `CS${operation.customer_id.id}` }</p>
+    //   ),
+    //   sortable: true,
+    // },
     {
       name: "Sifariş tarixi",
       selector: "date",
       sortable: true,
     },
-    {
-      name: "Referans",
-      cell: (operation) => (
-        <p>{operation.reference_id && operation.reference_id.name}</p>
-      ),
-      sortable: true,
-    },
+    // {
+    //   name: "Referans",
+    //   cell: (operation) => (
+    //     <p>{operation.reference_id && operation.reference_id.name}</p>
+    //   ),
+    //   sortable: true,
+    // },
     {
       name: "Sifariş təyinatı",
       selector: "description",

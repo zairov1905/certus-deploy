@@ -10,11 +10,11 @@ export default function SkillPage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadSkill());
+    dispatch(loadSkill({take:10}));
     //   // return () => {
     //   //   // dispatch(loadOrder())
     //   // }
-  }, []);
+  }, [dispatch]);
 
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);

@@ -13,11 +13,11 @@ export default function ProductServicePage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadProductService());
+    dispatch(loadProductService({take:10}));
     //   // return () => {
     //   //   // dispatch(loadOrder())
     //   // }
-  }, []);
+  }, [dispatch]);
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);
   const { productServices, totalCount } = useSelector(

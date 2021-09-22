@@ -10,11 +10,11 @@ export default function PersonalPage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadPersonal());
+    dispatch(loadPersonal({take:10}));
     //   // return () => {
     //   //   // dispatch(loadOrder())
     //   // }
-  }, []);
+  }, [dispatch]);
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);
   const { personals, totalCount } = useSelector((state) => state.personals);

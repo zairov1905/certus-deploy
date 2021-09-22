@@ -9,11 +9,11 @@ import { deleteLab, loadLab } from "./labActions";
 export default function LabsPage() {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(loadLab());
+    dispatch(loadLab({take:10}));
     //   // return () => {
     //   //   // dispatch(loadOrder())
     //   // }
-  }, []);
+  }, [dispatch]);
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);
   const { labs, totalCount } = useSelector((state) => state.labs);
@@ -112,7 +112,7 @@ export default function LabsPage() {
 
   const columns = [
     {
-      name: "Lab nömrəsi",
+      name: "№",
       selector: "id",
       sortable: true,
     },
@@ -135,19 +135,22 @@ export default function LabsPage() {
       selector: "certificate_number",
       sortable: true,
     },
-    {
-      name: "Dövriyyə",
-      selector: "turnover",
-      sortable: true,
-    },
-    {
-      name: "Lab not",
-      selector: "note",
-      sortable: true,
-    },
+    // {
+    //   name: "Dövriyyə",
+    //   selector: "turnover",
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Lab not",
+    //   selector: "note",
+    //   sortable: true,
+    // },
 
     {
       name: "",
+      // fixed:"left",
+      // width:200,
+      // fixedColumns: true,
       cell: (lab) => (
         <div className="action-btn">
           <svg

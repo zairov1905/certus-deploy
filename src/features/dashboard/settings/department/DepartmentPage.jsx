@@ -8,11 +8,11 @@ import { deleteDepartment, loadDepartments } from "./departmentActions";
 export default function DepartmentPage() {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(loadDepartments());
+    dispatch(loadDepartments({take:10}));
     //   // return () => {
     //   //   // dispatch(loadOrder())
     //   // }
-  }, []);
+  }, [dispatch]);
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);
   const { departments, totalCount } = useSelector((state) => state.departments);

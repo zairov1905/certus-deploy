@@ -286,7 +286,7 @@ export default function OperationPageModal({ operation }) {
     service_type_id: Yup.string().required("Mütləq doldurulmalıdır."),
     customer_id: Yup.string().required("Mütləq doldurulmalıdır."),
     order_source_id: Yup.string().required("Mütləq doldurulmalıdır."),
-    reference_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    // reference_id: Yup.string().required("Mütləq doldurulmalıdır."),
     date: Yup.string().required("Mütləq doldurulmalıdır."),
     description: Yup.string().required("Mütləq doldurulmalıdır."),
     // employee_id: Yup.string().required("Mütləq doldurulmalıdır."),
@@ -418,8 +418,13 @@ export default function OperationPageModal({ operation }) {
                             // }
                             defaultValue={
                               operation && {
-                                value: parseInt(operation.customer_id.id),
-                                label: operation.customer_id.customer_name,
+                                value: parseInt(
+                                  operation.customer_id &&
+                                    operation.customer_id.id
+                                ),
+                                label: operation.customer_id
+                                  ? operation.customer_id.customer_name
+                                  : "Təyin edilməyib",
                               }
                             }
                             isDisabled
@@ -446,8 +451,13 @@ export default function OperationPageModal({ operation }) {
                             isDisabled
                             defaultValue={
                               operation && {
-                                value: parseInt(operation.service_type_id.id),
-                                label: operation.service_type_id.name,
+                                value: parseInt(
+                                  operation.service_type_id &&
+                                    operation.service_type_id.id
+                                ),
+                                label: operation.service_type_id
+                                  ? operation.service_type_id.name
+                                  : "Təyin edilməyib",
                               }
                             }
                             id="service_type_id"
@@ -474,8 +484,13 @@ export default function OperationPageModal({ operation }) {
                             isDisabled
                             defaultValue={
                               operation && {
-                                value: parseInt(operation.order_source_id.id),
-                                label: operation.order_source_id.name,
+                                value: parseInt(
+                                  operation.order_source_id &&
+                                    operation.order_source_id.id
+                                ),
+                                label: operation.order_source_id
+                                  ? operation.order_source_id.name
+                                  : "Təyin edilməyib",
                               }
                             }
                             id="order_source_id"
@@ -498,18 +513,23 @@ export default function OperationPageModal({ operation }) {
                             // }
                             defaultValue={
                               operation && {
-                                value: parseInt(operation.reference_id.id),
-                                label: operation.reference_id.name,
+                                value: parseInt(
+                                  operation.reference_id &&
+                                    operation.reference_id.id
+                                ),
+                                label: operation.reference_id
+                                  ? operation.reference_id.name
+                                  : "Təyin edilməyib",
                               }
                             }
                             name="reference_id"
-                            isDisabled
+                            // isDisabled
                             id="reference_id"
                             type="text"
                             options={referenceOptions}
                             // className="form-control"
-                            placeholder="Referans*"
-                            label={operation && "Referans*"}
+                            placeholder="Referans"
+                            label={operation && "Referans"}
                           />
                         </div>
                       </div>
@@ -939,8 +959,8 @@ export default function OperationPageModal({ operation }) {
                             // }
                             defaultValue={
                               operation && {
-                                value: parseInt(operation.employee_id.id),
-                                label: `${operation.employee_id.name} ${operation.employee_id.surname}`,
+                                value: parseInt(operation.employee_id && operation.employee_id.id),
+                                label: operation.employee_id ?  `${operation.employee_id.name} ${operation.employee_id.surname}` : "Təyin edilməyib",
                               }
                             }
                             name="employee_id"

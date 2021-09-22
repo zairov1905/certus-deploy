@@ -8,11 +8,11 @@ import { deleteDuty, loadDuties } from "./dutyActions";
 export default function DutyPage() {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(loadDuties());
+    dispatch(loadDuties({take:10}));
     //   // return () => {
     //   //   // dispatch(loadOrder())
     //   // }
-  }, []);
+  }, [dispatch]);
 
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);

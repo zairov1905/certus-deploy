@@ -11,11 +11,11 @@ export default function CrmPage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadCrm());
+    dispatch(loadCrm({take:10}));
     //   // return () => {
     //   //   // dispatch(loadOrder())
     //   // }
-  }, []);
+  }, [dispatch]);
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);
   const { crms, totalCount } = useSelector((state) => state.crms);

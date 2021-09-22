@@ -8,11 +8,11 @@ import { deleteExpenseGroup, loadExpenseGroup } from "./expenseGroupActions";
 export default function ExpenseGroupPage() {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(loadExpenseGroup());
+    dispatch(loadExpenseGroup({take:10}));
     //   // return () => {
     //   //   // dispatch(loadOrder())
     //   // }
-  }, []);
+  }, [dispatch]);
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);
   const { expenseGroups, totalCount } = useSelector(

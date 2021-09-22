@@ -8,11 +8,11 @@ import { deleteOrderSource, loadOrderSource } from "./orderSourceActions";
 export default function OrderSourcePage() {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(loadOrderSource());
+    dispatch(loadOrderSource({take:10}));
     //   // return () => {
     //   //   // dispatch(loadOrder())
     //   // }
-  }, []);
+  }, [dispatch]);
 
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);

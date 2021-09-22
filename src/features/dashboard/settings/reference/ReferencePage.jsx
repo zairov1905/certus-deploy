@@ -9,11 +9,11 @@ export default function ReferencePage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadReference());
+    dispatch(loadReference({take:10}));
     //   // return () => {
     //   //   // dispatch(loadOrder())
     //   // }
-  }, []);
+  }, [dispatch]);
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);
   const { references, totalCount } = useSelector((state) => state.references);

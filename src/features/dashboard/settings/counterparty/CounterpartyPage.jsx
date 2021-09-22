@@ -9,11 +9,11 @@ import { deleteCounterparty } from "./counterpartyActions";
 export default function CounterpartyPage() {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(loadCounterparty());
+    dispatch(loadCounterparty({take:10}));
     //   // return () => {
     //   //   // dispatch(loadOrder())
     //   // }
-  }, []);
+  }, [dispatch]);
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);
   const { counterparties, totalCount } = useSelector(

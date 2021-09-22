@@ -9,11 +9,11 @@ import { loadDocs, deleteDoc } from "./docActions";
 export default function DocPage() {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(loadDocs());
+    dispatch(loadDocs({take:10}));
     //   // return () => {
     //   //   // dispatch(loadOrder())
     //   // }
-  }, []);
+  }, [dispatch]);
 
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);

@@ -15,11 +15,11 @@ export default function OrderPage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadOrder());
+    dispatch(loadOrder({take:10}));
     //   // return () => {
     //   //   // dispatch(loadOrder())
     //   // }
-  }, []);
+  }, [dispatch]);
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);
   const { orders, totalCount } = useSelector((state) => state.orders);
@@ -61,12 +61,12 @@ export default function OrderPage() {
     fill: "#ffcacd",
   };
   const handlePageChange = (page) => {
-    dispatch(loadReference({ s: page, take: perPage }));
+    dispatch(loadOrder({ s: page, take: perPage }));
     setPageNumber(page);
   };
 
   const handlePerRowsChange = async (newPerPage, page) => {
-    dispatch(loadReference({ s: page, take: newPerPage }));
+    dispatch(loadOrder({ s: page, take: newPerPage }));
     setPerPage(newPerPage);
   };
 
@@ -147,11 +147,11 @@ export default function OrderPage() {
       selector: "date",
       sortable: true,
     },
-    {
-      name: "Referans",
-      cell: (order) => <p>{order.reference_id && order.reference_id.name}</p>,
-      sortable: true,
-    },
+    // {
+    //   name: "Referans",
+    //   cell: (order) => <p>{order.reference_id && order.reference_id.name}</p>,
+    //   sortable: true,
+    // },
     {
       name: "Sifariş təyinatı",
       selector: "description",
@@ -160,7 +160,10 @@ export default function OrderPage() {
 
     {
       name: "İcra vəziyyəti",
-
+      // style:{
+      //   position:'absolute',
+      //   top:0
+      // },
       cell: (order) => (
         <button
           data-toggle="modal"
@@ -181,7 +184,7 @@ export default function OrderPage() {
       ),
     },
     {
-      name: "",
+      name:"",
       cell: (order) => (
         <div className="action-btn">
           <svg

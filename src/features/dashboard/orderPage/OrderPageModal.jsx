@@ -166,8 +166,12 @@ export default function OrderPageModal({ order }) {
                   label={order && "Xidmət Növü*"}
                   defaultValue={
                     order && {
-                      label: order.service_type_id.name,
-                      value: parseInt(order.service_type_id.id),
+                      label: order.service_type_id
+                        ? order.service_type_id.name
+                        : "Təyin edilməyib",
+                      value: parseInt(
+                        order.service_type_id && order.service_type_id.id
+                      ),
                     }
                   }
                   options={serviceTypeOptions}
@@ -181,8 +185,12 @@ export default function OrderPageModal({ order }) {
                 <MySearchableSelect
                   defaultValue={
                     order && {
-                      label: order.customer_id.customer_name,
-                      value: parseInt(order.customer_id.id),
+                      label: order.customer_id
+                        ? order.customer_id.customer_name
+                        : "Təyin edilməyib",
+                      value: parseInt(
+                        order.customer_id && order.customer_id.id
+                      ),
                     }
                   }
                   id="customer_id"
@@ -199,8 +207,12 @@ export default function OrderPageModal({ order }) {
                 <MySearchableSelect
                   defaultValue={
                     order && {
-                      label: order.order_source_id.name,
-                      value: parseInt(order.order_source_id.id),
+                      label: order.order_source_id
+                        ? order.order_source_id.name
+                        : "Təyin edilməyib",
+                      value: parseInt(
+                        order.order_source_id && order.order_source_id.id
+                      ),
                     }
                   }
                   id="order_source_id"
@@ -215,9 +227,9 @@ export default function OrderPageModal({ order }) {
               <div className="col-md-4">
                 <MySearchableSelect
                   defaultValue={
-                    order && {
-                      label: order.reference_id.name,
-                      value: parseInt(order.reference_id.id),
+                    order && { 
+                      label: order.reference_id ? order.reference_id.name :'Təyin edilməyib',
+                      value: parseInt(order.reference_id && order.reference_id.id),
                     }
                   }
                   name="reference_id"

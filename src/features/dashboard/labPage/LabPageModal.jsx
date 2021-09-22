@@ -119,7 +119,7 @@ export default function LabPageModal({ lab }) {
                   // type="text"
                   defaultValue={
                     lab && {
-                      label: lab.document_id && lab.document_id.document_number,
+                      label: lab.document_id ? lab.document_id.document_number: 'Təyin edilməyib',
                       value: lab.document_id && lab.document_id.id,
                     }
                   }

@@ -9,11 +9,11 @@ import { loadSignOfLegalAct } from "./signOfLegalActActions";
 export default function SignOfLegalActPage() {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(loadSignOfLegalAct());
+    dispatch(loadSignOfLegalAct({take:10}));
     //   // return () => {
     //   //   // dispatch(loadOrder())
     //   // }
-  }, []);
+  }, [dispatch]);
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);
   const { signOfLegalActs, totalCount } = useSelector(

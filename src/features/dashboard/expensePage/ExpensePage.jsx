@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import DataTable, { defaultThemes } from "react-data-table-component";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import moment from "moment";
 import { openModal } from "../../../app/modal/modalReducer";
 import { loadDocs } from "../docPage/docActions";
 import { loadCounterparty } from "../settings/counterparty/counterpartyActions";
@@ -13,11 +14,11 @@ export default function ExpensePage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadExpense());
+    dispatch(loadExpense({take:10}));
     //   // return () => {
     //   //   // dispatch(loadOrder())
     //   // }
-  }, []);
+  }, [dispatch]);
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);
   const { expenses, totalCount } = useSelector((state) => state.expenses);
@@ -132,7 +133,10 @@ export default function ExpensePage() {
     },
     {
       name: "Tarix",
-      selector: "date",
+      // selector: "date",
+      cell:expense=>(
+        <p>{moment(expense.date).format("DD-MM-YYYY") }</p> 
+      ),
       sortable: true,
     },
     {
@@ -150,6 +154,7 @@ export default function ExpensePage() {
       ),
       sortable: true,
     },
+    
     {
       name: "Əməliyyat növü",
       selector: "expenseInvoice",

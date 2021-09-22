@@ -9,8 +9,8 @@ export default function ControlSystemPage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadControlSystem());
-  }, []);
+    dispatch(loadControlSystem({take:10}));
+  }, [dispatch]);
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);
   const { controlSystems, totalCount } = useSelector(

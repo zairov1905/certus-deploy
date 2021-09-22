@@ -8,11 +8,11 @@ import { deleteServiceType, loadServiceType } from "./serviceTypeActions";
 export default function ServiceTypePage() {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(loadServiceType());
+    dispatch(loadServiceType({take:10}));
     //   // return () => {
     //   //   // dispatch(loadOrder())
     //   // }
-  }, []);
+  }, [dispatch]);
 
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);

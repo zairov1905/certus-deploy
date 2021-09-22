@@ -10,11 +10,11 @@ import { deleteTraining } from "./trainingActions";
 export default function TrainingPage() {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(loadTraining());
+    dispatch(loadTraining({take:10}));
     //   // return () => {
     //   //   // dispatch(loadOrder())
     //   // }
-  }, []);
+  }, [dispatch]);
   const [perPage, setPerPage] = useState(10);
   const [PageNumber, setPageNumber] = useState(1);
   const { trainings, totalCount } = useSelector((state) => state.trainings);
