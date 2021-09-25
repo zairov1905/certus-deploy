@@ -11,6 +11,7 @@ import cuid from "cuid";
 import { Form, Formik } from "formik";
 import { closeModal } from "../../../../app/modal/modalReducer";
 import { createSkill, updateSkill } from "./skillActions";
+import MyTextArea from "../../../../app/common/form/MyTextArea";
 
 export default function SkillPageModal({ skill }) {
   const dispatch = useDispatch();
@@ -24,11 +25,13 @@ export default function SkillPageModal({ skill }) {
   const initialValues = skill
     ? {
         name: skill.name && skill.name,
-        about: skill.about && skill.about
+        about: skill.about && skill.about,
+        note: skill.note && skill.note,
       }
     : {
         name: "",
         about: "",
+        note: "",
         // skillNumber: "",
         // skillCategory: "",
       };
@@ -47,8 +50,8 @@ export default function SkillPageModal({ skill }) {
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
             skill
-              ? await dispatch(updateSkill({ ...values,id:skill.id}))
-              : await dispatch(createSkill({ ...values}));
+              ? await dispatch(updateSkill({ ...values, id: skill.id }))
+              : await dispatch(createSkill({ ...values }));
             setSubmitting(false);
             setModal(true);
             dispatch(closeModal());
@@ -62,22 +65,35 @@ export default function SkillPageModal({ skill }) {
         {({ isSubmitting, isValid, dirty, errors }) => (
           <Form id="emp">
             <div className="row">
-              <div className="col-md-12">
+              <div className={`col-md-12 ${skill && "mb-4"}`}>
                 <MyTextInput
                   id="name"
                   name="name"
                   type="text"
                   className="form-control"
-                  placeholder="Səriştənin adı"
+                  placeholder="Səriştənin adı*"
+                  label={skill && "Səriştənin adı*"}
                 />
               </div>
-              <div className="col-md-12">
+              <div className={`col-md-12 ${skill && "mb-4"}`}>
                 <MyTextInput
                   id="about"
                   name="about"
                   type="text"
                   className="form-control"
-                  placeholder="Səriştə haqqında"
+                  placeholder="Səriştə haqqında*"
+                  label={skill && "Səriştə haqqında*"}
+                />
+              </div>
+
+              <div className="col-md-12">
+                <MyTextArea
+                  id="note"
+                  name="note"
+                  // type="text"
+                  className="form-control"
+                  label={skill && "Qeyd"}
+                  placeholder="Qeyd"
                 />
               </div>
             </div>

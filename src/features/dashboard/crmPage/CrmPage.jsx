@@ -115,6 +115,15 @@ export default function CrmPage() {
 
   const columns = [
     {
+      name: "№",
+      cell: (crm) => (
+        <p>
+          {`CS${crm.id}`} 
+        </p>
+      ),
+      sortable: true,
+    },
+    {
       name: "Kurator",
       selector: "curator",
       cell: (crm) => (
@@ -134,11 +143,11 @@ export default function CrmPage() {
       selector: "voen",
       sortable: true,
     },
-    {
-      name: "Tarix",
-      selector: "date",
-      sortable: true,
-    },
+    // {
+    //   name: "Tarix",
+    //   selector: "date",
+    //   sortable: true,
+    // },
     {
       name: "Əlaqə nömrəsi",
       selector: "customer_phone",

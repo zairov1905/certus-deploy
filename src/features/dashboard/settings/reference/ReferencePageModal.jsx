@@ -26,12 +26,13 @@ export default function ReferencePageModal({ reference }) {
     ? {
         name: reference.name && reference.name,
         phone: reference.phone && reference.phone,
-        about: reference.about && reference.about,
+        note: reference.note && reference.note,
+
       }
     : {
         name: "",
         phone: "",
-        about: "",
+        note: "",
       };
   const validationSchema = Yup.object({
     name: Yup.string().required("Mütləq doldurulmalıdır."),
@@ -89,8 +90,8 @@ export default function ReferencePageModal({ reference }) {
             <div className={`row ${reference && "mb-4"}`}>
               <div className="col-md-12">
                 <MyTextArea
-                  id="about"
-                  name="about"
+                  id="note"
+                  name="note"
                   type="text"
                   className="form-control"
                   placeholder="Qeyd"
@@ -98,6 +99,8 @@ export default function ReferencePageModal({ reference }) {
                 />
               </div>
             </div>
+
+
             <button
               disabled={!isValid || !dirty || isSubmitting}
               type="submit"

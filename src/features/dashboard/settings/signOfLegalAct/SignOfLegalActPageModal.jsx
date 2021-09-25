@@ -14,6 +14,7 @@ import {
   createSignOfLegalAct,
   updateSignOfLegalAct,
 } from "./signOfLegalActActions";
+import MyTextArea from "../../../../app/common/form/MyTextArea";
 
 export default function SignOfLegalActPageModal({ signOfLegalAct }) {
   const dispatch = useDispatch();
@@ -26,10 +27,12 @@ export default function SignOfLegalActPageModal({ signOfLegalAct }) {
 
   const initialValues = signOfLegalAct
     ? {
-        name: signOfLegalAct.name,
+        name: signOfLegalAct.name && signOfLegalAct.name,
+        note: signOfLegalAct.note && signOfLegalAct.note,
       }
     : {
         name: "",
+        note: "",
       };
   const validationSchema = Yup.object({
     name: Yup.string().required("Mütləq doldurulmalıdır."),
@@ -69,10 +72,23 @@ export default function SignOfLegalActPageModal({ signOfLegalAct }) {
                   name="name"
                   type="text"
                   className="form-control"
-                  placeholder="Hüquqi normativ texniki aktın işarəsi"
+                  placeholder="Hüquqi normativ texniki aktın işarəsi*"
                   label={
                     signOfLegalAct && "Hüquqi normativ texniki aktın işarəsi"
                   }
+                />
+              </div>
+
+            </div>
+            <div className={`row ${signOfLegalAct && "mt-4"}`}>
+              <div className="col-md-12">
+                <MyTextArea
+                  id="note"
+                  name="note"
+                  type="text"
+                  className="form-control"
+                  placeholder="Qeyd"
+                  label={signOfLegalAct && "Qeyd"}
                 />
               </div>
             </div>

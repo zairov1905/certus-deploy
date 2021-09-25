@@ -41,6 +41,7 @@ export default function DocPageModal({ doc }) {
         date: doc.date && moment(doc.date).format("YYYY-MM-DD"),
         about: doc.about && doc.about,
         number: doc.number && doc.number,
+        note:doc.note && doc.note
       }
     : {
         document_type_id: "",
@@ -48,11 +49,12 @@ export default function DocPageModal({ doc }) {
         date: "",
         about: "",
         number: "",
+        note:""
       };
   const validationSchema = Yup.object({
     // id:"",
     // id:"",
-    // document_type_id: Yup.string().required("Mütləq doldurulmalıdır."),
+    document_type_id: Yup.string().required("Mütləq doldurulmalıdır."),
     // docNumber: Yup.string().required("Mütləq doldurulmalıdır."),
     // document_for: Yup.string().required("Mütləq doldurulmalıdır."),
     // date: Yup.string().required("Mütləq doldurulmalıdır."),
@@ -159,6 +161,18 @@ export default function DocPageModal({ doc }) {
                   className="form-control"
                   placeholder="Sənəd predmeti"
                   label={doc && "Sənəd predmeti"}
+                />
+              </div>
+            </div>
+            <div className={`row ${doc && "mt-4"}`}>
+              <div className="col-md-12">
+                <MyTextArea
+                  name="note"
+                  id="note"
+                  type="text"
+                  className="form-control"
+                  placeholder="Qeyd"
+                  label={doc && "Qeyd"}
                 />
               </div>
             </div>

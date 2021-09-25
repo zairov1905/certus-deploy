@@ -11,6 +11,7 @@ import cuid from "cuid";
 import { Form, Formik } from "formik";
 import { closeModal } from "../../../../app/modal/modalReducer";
 import { createExpenseGroup, updateExpenseGroup } from "./expenseGroupActions";
+import MyTextArea from "../../../../app/common/form/MyTextArea";
 
 export default function ExpenseGroupPageModal({ expenseGroup }) {
   const dispatch = useDispatch();
@@ -22,9 +23,13 @@ export default function ExpenseGroupPageModal({ expenseGroup }) {
   });
 
   const initialValues = expenseGroup
-    ? { name: expenseGroup.name }
+    ? {
+        name: expenseGroup.name && expenseGroup.name,
+        note: expenseGroup.note && expenseGroup.note,
+      }
     : {
         name: "",
+        note:""
       };
   const validationSchema = Yup.object({
     name: Yup.string().required("Mütləq doldurulmalıdır."),
@@ -41,7 +46,9 @@ export default function ExpenseGroupPageModal({ expenseGroup }) {
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
             expenseGroup
-              ? await dispatch(updateExpenseGroup({ ...values, id:expenseGroup.id }))
+              ? await dispatch(
+                  updateExpenseGroup({ ...values, id: expenseGroup.id })
+                )
               : await dispatch(createExpenseGroup({ ...values }));
             setSubmitting(false);
             setModal(true);
@@ -62,9 +69,18 @@ export default function ExpenseGroupPageModal({ expenseGroup }) {
                   name="name"
                   type="text"
                   className="form-control"
-                  placeholder="Gəlir-Xərc qrupu adı"
-                  label={expenseGroup && "Gəlir-Xərc qrupu adı"}
-
+                  placeholder="Gəlir-Xərc qrupu adı*"
+                  label={expenseGroup && "Gəlir-Xərc qrupu adı*"}
+                />
+              </div>
+              <div className={`col-md-12 ${expenseGroup && "mt-4"}`}>
+                <MyTextArea
+                  id="note"
+                  name="note"
+                  // type="text"
+                  className="form-control"
+                  label={expenseGroup && "Qeyd"}
+                  placeholder="Qeyd"
                 />
               </div>
             </div>

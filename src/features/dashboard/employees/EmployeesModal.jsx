@@ -14,6 +14,7 @@ import { closeModal } from "../../../app/modal/modalReducer";
 import { loadDuties } from "../settings/duty/dutyActions";
 import { loadDepartments } from "../settings/department/departmentActions";
 import moment from "moment";
+import MyTextArea from "../../../app/common/form/MyTextArea";
 
 export default function EmployeesModal({ employee }) {
   const dispatch = useDispatch();
@@ -61,7 +62,8 @@ export default function EmployeesModal({ employee }) {
         name: employee.name && employee.name,
         surname: employee.surname && employee.surname,
         dadname: employee.dadname && employee.dadname,
-        birthday: employee.birthday && moment(employee.birthday).format("YYYY-MM-DD"),
+        birthday:
+          employee.birthday && moment(employee.birthday).format("YYYY-MM-DD"),
         address: employee.address && employee.address,
         phone: employee.phone && employee.phone,
 
@@ -83,6 +85,7 @@ export default function EmployeesModal({ employee }) {
           employee.customer_satisfaction && employee.customer_satisfaction,
         performans: employee.performans && employee.performans,
         agreement_type: employee.agreement_type && employee.agreement_type,
+        note: employee.note && employee.note,
       }
     : {
         fin: "",
@@ -109,6 +112,7 @@ export default function EmployeesModal({ employee }) {
         customer_satisfaction: "",
         performans: "",
         agreement_type: "",
+        note: "",
       };
 
   const validationSchema = Yup.object({
@@ -388,6 +392,18 @@ export default function EmployeesModal({ employee }) {
                   // className="form-control"
                   placeholder="Müqavilə növü"
                   label={employee && "Müqavilə növü"}
+                />
+              </div>
+            </div>
+            <div className={`row ${employee && "mt-4"}`}>
+              <div className="col-md-12">
+                <MyTextArea
+                  name="note"
+                  id="note"
+                  type="text"
+                  className="form-control"
+                  placeholder="Qeyd"
+                  label={employee && "Qeyd"}
                 />
               </div>
             </div>

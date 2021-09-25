@@ -9,6 +9,7 @@ import MyTextInput from "../../../../app/common/form/MyTextInput";
 import { Form, Formik } from "formik";
 import { closeModal } from "../../../../app/modal/modalReducer";
 import { createServiceType, updateServiceType } from "./serviceTypeActions";
+import MyTextArea from "../../../../app/common/form/MyTextArea";
 
 export default function ServiceTypePageModal({ serviceType }) {
   const dispatch = useDispatch();
@@ -21,10 +22,12 @@ export default function ServiceTypePageModal({ serviceType }) {
 
   const initialValues = serviceType
     ? {
-        name: serviceType.name,
+        name: serviceType.name && serviceType.name,
+        note:serviceType.note && serviceType.note
       }
     : {
         name: "",
+        note:""
       };
   const validationSchema = Yup.object({
     name: Yup.string().required("Mütləq doldurulmalıdır."),
@@ -62,9 +65,19 @@ export default function ServiceTypePageModal({ serviceType }) {
                   name="name"
                   type="text"
                   className="form-control"
-                  placeholder="Xidmət növü"
-                  label={serviceType && "Xidmət növü"}
+                  placeholder="Xidmət növü*"
+                  label={serviceType && "Xidmət növü*"}
 
+                />
+              </div>
+              <div className={`col-md-12 ${serviceType && "mt-4"}`}>
+                <MyTextArea
+                  id="note"
+                  name="note"
+                  // type="text"
+                  className="form-control"
+                  label={serviceType && "Qeyd"}
+                  placeholder="Qeyd"
                 />
               </div>
             </div>

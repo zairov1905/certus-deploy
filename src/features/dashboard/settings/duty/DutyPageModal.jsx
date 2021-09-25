@@ -11,6 +11,7 @@ import cuid from "cuid";
 import { Form, Formik } from "formik";
 import { createDuty, updateDuty } from "./dutyActions";
 import { closeModal } from "../../../../app/modal/modalReducer";
+import MyTextArea from "../../../../app/common/form/MyTextArea";
 
 export default function DutyPageModal({ duty }) {
   const dispatch = useDispatch();
@@ -21,12 +22,17 @@ export default function DutyPageModal({ duty }) {
     }
   });
 
-  const initialValues = duty ? {name:duty.name}: {
-    name: "",
-  };
+  const initialValues = duty
+    ? {
+        name: duty.name && duty.name,
+        note: duty.note && duty.note,
+      }
+    : {
+        name: "",
+        note: "",
+      };
   const validationSchema = Yup.object({
     name: Yup.string().required("Mütləq doldurulmalıdır."),
-
   });
 
   return (
@@ -37,7 +43,7 @@ export default function DutyPageModal({ duty }) {
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
             duty
-              ? await dispatch(updateDuty({...values,id:duty.id}))
+              ? await dispatch(updateDuty({ ...values, id: duty.id }))
               : await dispatch(createDuty({ ...values, id: cuid() }));
             setSubmitting(false);
             setModal(true);
@@ -58,9 +64,18 @@ export default function DutyPageModal({ duty }) {
                   name="name"
                   type="text"
                   className="form-control"
-                  placeholder="Vəzifəsi"
-                  label={duty && "Vəzifəsi"}
-
+                  placeholder="Vəzifəsi*"
+                  label={duty && "Vəzifəsi*"}
+                />
+              </div>
+              <div className={`col-md-12 ${duty && "mt-4"}`}>
+                <MyTextArea
+                  id="note"
+                  name="note"
+                  // type="text"
+                  className="form-control"
+                  label={duty && "Qeyd"}
+                  placeholder="Qeyd"
                 />
               </div>
             </div>

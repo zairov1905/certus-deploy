@@ -112,6 +112,27 @@ export default function DocPage() {
 
   const columns = [
     {
+      name: "ID",
+      selector: "id",
+      cell: (doc) => {
+        switch (doc.document_type_id && doc.document_type_id.id ) {
+          case 1:
+            return `Mq${doc.id}`;
+
+          case 2:
+            return `HFQ${doc.id}`;
+          case 3:
+            return `MM${doc.id}`;
+          case 4:
+            return `Dg${doc.id}`;
+
+          default:
+            break;
+        }
+      },
+      sortable: true,
+    },
+    {
       name: "Sənəd nömrəsi",
       selector: "document_number",
       sortable: true,

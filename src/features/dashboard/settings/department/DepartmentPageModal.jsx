@@ -11,6 +11,7 @@ import cuid from "cuid";
 import { Form, Formik } from "formik";
 import { createDepartment, updateDepartment } from "./departmentActions";
 import { closeModal } from "../../../../app/modal/modalReducer";
+import MyTextArea from "../../../../app/common/form/MyTextArea";
 
 export default function DepartmentPageModal({ department }) {
   const dispatch = useDispatch();
@@ -24,9 +25,11 @@ export default function DepartmentPageModal({ department }) {
   const initialValues = department
     ? {
         name: department.name && department.name,
+        note:department.note && department.note
       }
     : {
         name: "",
+        note:""
       };
   const validationSchema = Yup.object({
     name: Yup.string().required("Mütləq doldurulmalıdır."),
@@ -58,15 +61,25 @@ export default function DepartmentPageModal({ department }) {
         {({ isSubmitting, isValid, dirty, errors }) => (
           <Form id="emp">
             <div className="row">
-              <div className="col-md-12">
+              <div className={`col-md-12`}>
                 <MyTextInput
                   id="name"
                   name="name"
                   type="text"
                   className="form-control"
-                  placeholder="Sturuktur bölməsi"
-                  label={department && "Sturuktur bölməsi"}
+                  placeholder="Sturuktur bölməsi*"
+                  label={department && "Sturuktur bölməsi*"}
 
+                />
+              </div>
+              <div className={`col-md-12 ${department && "mt-4"}`}>
+                <MyTextArea
+                  id="note"
+                  name="note"
+                  // type="text"
+                  className="form-control"
+                  label={department && "Qeyd"}
+                  placeholder="Qeyd"
                 />
               </div>
             </div>

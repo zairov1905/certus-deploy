@@ -87,6 +87,7 @@ export default function OrderPageModal({ order }) {
         reference_id: order.reference_id && order.reference_id.id,
         date: order.date && moment(order.date).format("YYYY-MM-DD"),
         description: order.description && order.description,
+        note: order.note && order.note,
       }
     : {
         number: "",
@@ -96,6 +97,7 @@ export default function OrderPageModal({ order }) {
         reference_id: "",
         date: "",
         description: "",
+        note: "",
 
         /////
       };
@@ -227,9 +229,13 @@ export default function OrderPageModal({ order }) {
               <div className="col-md-4">
                 <MySearchableSelect
                   defaultValue={
-                    order && { 
-                      label: order.reference_id ? order.reference_id.name :'Təyin edilməyib',
-                      value: parseInt(order.reference_id && order.reference_id.id),
+                    order && {
+                      label: order.reference_id
+                        ? order.reference_id.name
+                        : "Təyin edilməyib",
+                      value: parseInt(
+                        order.reference_id && order.reference_id.id
+                      ),
                     }
                   }
                   name="reference_id"
@@ -268,7 +274,18 @@ export default function OrderPageModal({ order }) {
                 />
               </div>
             </div>
-
+            <div className={`row ${order && "mt-4"}`}>
+              <div className="col-md-12">
+                <MyTextArea
+                  name="note"
+                  id="note"
+                  type="text"
+                  className="form-control"
+                  placeholder="Qeyd"
+                  label={order && "Qeyd"}
+                />
+              </div>
+            </div>
             <button
               disabled={!isValid || !dirty || isSubmitting}
               type="submit"

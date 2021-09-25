@@ -12,6 +12,7 @@ import { Form, Formik } from "formik";
 import { closeModal } from "../../../../app/modal/modalReducer";
 import { createExpenseType, updateExpenseType } from "./expenseTypeActions";
 import MySearchableSelect from "../../../../app/common/form/MySearchableSelect";
+import MyTextArea from "../../../../app/common/form/MyTextArea";
 
 export default function ExpenseTypePageModal({ expenseType }) {
   const dispatch = useDispatch();
@@ -33,12 +34,14 @@ export default function ExpenseTypePageModal({ expenseType }) {
 
   const initialValues = expenseType
     ? {
-      name: expenseType.name && expenseType.name,
-      group_id: expenseType.group_id && expenseType.group_id.id ,
-    }
+        name: expenseType.name && expenseType.name,
+        group_id: expenseType.group_id && expenseType.group_id.id,
+        note: expenseType.note && expenseType.note,
+      }
     : {
         name: "",
         group_id: "",
+        note: "",
       };
 
   const validationSchema = Yup.object({
@@ -57,8 +60,10 @@ export default function ExpenseTypePageModal({ expenseType }) {
         onSubmit={async (values, { setSubmitting, setErrors }) => {
           try {
             expenseType
-              ? await dispatch(updateExpenseType({ ...values,id:expenseType.id}))
-              : await dispatch(createExpenseType({ ...values}));
+              ? await dispatch(
+                  updateExpenseType({ ...values, id: expenseType.id })
+                )
+              : await dispatch(createExpenseType({ ...values }));
             setSubmitting(false);
             setModal(true);
             dispatch(closeModal());
@@ -85,10 +90,9 @@ export default function ExpenseTypePageModal({ expenseType }) {
                   name="group_id"
                   type="text"
                   options={expenseGroupOptions}
-                  label={expenseType && "Gəlir-Xərc qrupu"}
-
+                  label={expenseType && "Gəlir-Xərc qrupu*"}
                   // className="form-control"
-                  placeholder="Gəlir-Xərc qrupu"
+                  placeholder="Gəlir-Xərc qrupu*"
                 />
               </div>
               <div className="col-md-12">
@@ -97,9 +101,18 @@ export default function ExpenseTypePageModal({ expenseType }) {
                   name="name"
                   type="text"
                   className="form-control"
-                  label={expenseType && "Gəlir-Xərc növü"}
-
-                  placeholder="Gəlir-Xərc növü"
+                  label={expenseType && "Gəlir-Xərc növü*"}
+                  placeholder="Gəlir-Xərc növü*"
+                />
+              </div>
+              <div className={`col-md-12 ${expenseType && "mt-4"}`}>
+                <MyTextArea
+                  id="note"
+                  name="note"
+                  // type="text"
+                  className="form-control"
+                  label={expenseType && "Qeyd"}
+                  placeholder="Qeyd"
                 />
               </div>
             </div>

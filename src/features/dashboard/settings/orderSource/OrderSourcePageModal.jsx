@@ -11,6 +11,7 @@ import cuid from "cuid";
 import { Form, Formik } from "formik";
 import { closeModal } from "../../../../app/modal/modalReducer";
 import { createOrderSource, updateOrderSource } from "./orderSourceActions";
+import MyTextArea from "../../../../app/common/form/MyTextArea";
 
 export default function OrderSourcePageModal({ orderSource }) {
   const dispatch = useDispatch();
@@ -24,9 +25,11 @@ export default function OrderSourcePageModal({ orderSource }) {
   const initialValues = orderSource
     ? {
         name: orderSource.name && orderSource.name,
+        note:orderSource.note && orderSource.note
       }
     : {
         name: "",
+        note:""
       };
   const validationSchema = Yup.object({
     name: Yup.string().required("Mütləq doldurulmalıdır."),
@@ -64,9 +67,19 @@ export default function OrderSourcePageModal({ orderSource }) {
                   name="name"
                   type="text"
                   className="form-control"
-                  placeholder="Sifariş mənbəyi"
-                  label={orderSource && "Sifariş mənbəyi"}
+                  placeholder="Sifariş mənbəyi*"
+                  label={orderSource && "Sifariş mənbəyi*"}
 
+                />
+              </div>
+              <div className={`col-md-12 ${orderSource && "mt-4"}`}>
+                <MyTextArea
+                  id="note"
+                  name="note"
+                  // type="text"
+                  className="form-control"
+                  label={orderSource && "Qeyd"}
+                  placeholder="Qeyd"
                 />
               </div>
             </div>

@@ -13,6 +13,7 @@ import { closeModal } from "../../../../app/modal/modalReducer";
 import { createTraining, updateTraining } from "./trainingActions";
 import MySearchableSelect from "../../../../app/common/form/MySearchableSelect";
 import { loadSkill } from "../skill/skillActions";
+import MyTextArea from "../../../../app/common/form/MyTextArea";
 
 export default function TrainingPageModal({ training }) {
   const dispatch = useDispatch();
@@ -47,6 +48,7 @@ export default function TrainingPageModal({ training }) {
         name: "",
         about: "",
         skill_id: [],
+        note: "",
         // trainingCategory: "",
       };
   const validationSchema = Yup.object({
@@ -93,8 +95,8 @@ export default function TrainingPageModal({ training }) {
                     name="name"
                     type="text"
                     className="form-control"
-                    placeholder="Təlim adı"
-                    label={training && "Təlim adı"}
+                    placeholder="Təlim adı*"
+                    label={training && "Təlim adı*"}
                   />
                 </div>
                 <div className={`col-md-12 ${training && "mb-4"}`}>
@@ -103,8 +105,8 @@ export default function TrainingPageModal({ training }) {
                     name="about"
                     type="text"
                     className="form-control"
-                    placeholder="Təlim haqqında"
-                    label={training && "Təlim haqqında"}
+                    placeholder="Təlim haqqında*"
+                    label={training && "Təlim haqqında*"}
                   />
                 </div>
                 <div className="col-md-12">
@@ -131,6 +133,16 @@ export default function TrainingPageModal({ training }) {
                     label={training && "Təlimin səriştələri"}
                   />
                 </div>
+                <div className={`col-md-12 ${training && "mt-4"}`}>
+                <MyTextArea
+                  id="note"
+                  name="note"
+                  // type="text"
+                  className="form-control"
+                  placeholder="Qeyd"
+                  label={training && "Qeyd"}
+                />
+              </div>
               </div>
 
               <button

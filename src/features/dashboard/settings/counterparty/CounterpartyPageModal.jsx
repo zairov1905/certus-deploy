@@ -11,6 +11,7 @@ import cuid from "cuid";
 import { Form, Formik } from "formik";
 import { closeModal } from "../../../../app/modal/modalReducer";
 import { createCounterparty, updateCounterparty } from "./counterpartyActions";
+import MyTextArea from "../../../../app/common/form/MyTextArea";
 
 export default function CounterpartyPageModal({ counterparty }) {
   const dispatch = useDispatch();
@@ -25,11 +26,13 @@ export default function CounterpartyPageModal({ counterparty }) {
     name: counterparty.name && counterparty.name,
     about: counterparty.name && counterparty.name,
     contact: counterparty.name && counterparty.name,
+    note:counterparty.note && counterparty.note
     // counterpartyCategory: "",lab.name && lab.name,
   }: {
     name: "",
     about: "",
     contact: "",
+    note:""
     // counterpartyCategory: "",lab.name && lab.name,
   };
   const validationSchema = Yup.object({
@@ -67,9 +70,9 @@ export default function CounterpartyPageModal({ counterparty }) {
                   name="name"
                   type="text"
                   className="form-control"
-                  label={counterparty && "Kontragent adı"}
+                  label={counterparty && "Kontragent adı*"}
 
-                  placeholder="Kontragent adı"
+                  placeholder="Kontragent adı*"
                 />
               </div>
               <div className={`col-md-12 ${counterparty && "mb-4"}`}>
@@ -78,8 +81,8 @@ export default function CounterpartyPageModal({ counterparty }) {
                   name="about"
                   type="text"
                   className="form-control"
-                  placeholder="Kontragent haqqında"
-                  label={counterparty && "Kontragent haqqında"}
+                  placeholder="Kontragent haqqında*"
+                  label={counterparty && "Kontragent haqqında*"}
 
                 />
               </div>
@@ -89,9 +92,20 @@ export default function CounterpartyPageModal({ counterparty }) {
                   name="contact"
                   type="text"
                   className="form-control"
-                  placeholder="Kontragent əlaqə nömrəsi"
-                  label={counterparty && "Kontragent əlaqə nömrəsi"}
+                  placeholder="Kontragent əlaqə nömrəsi*"
+                  label={counterparty && "Kontragent əlaqə nömrəsi*"}
 
+                />
+              </div>
+              <div className="col-md-12">
+                <MyTextArea
+                  id="note"
+                  name="note"
+                  // type="text"
+                  label={counterparty && "Qeyd"}
+
+                  className="form-control"
+                  placeholder="Qeyd"
                 />
               </div>
               {/* <div className="col-md-12">
