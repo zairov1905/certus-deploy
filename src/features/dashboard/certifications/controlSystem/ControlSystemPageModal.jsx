@@ -32,6 +32,8 @@ export default function ControlSystemPageModal({ controlSystem }) {
     { value: 1, label: "01" },
     { value: 2, label: "02" },
     { value: 3, label: "03" },
+    { value: 4, label: "04" },
+
   ];
 
   const dispatch = useDispatch();

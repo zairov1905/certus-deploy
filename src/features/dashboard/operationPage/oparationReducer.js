@@ -35,6 +35,7 @@ export default function operationReducer(state = initialState, { type, payload,t
       return {
         ...state,
         operations: payload.filter(operation => operation.employee_id != null),
+        totalCount:totalCount
       };
     default:
       return state;

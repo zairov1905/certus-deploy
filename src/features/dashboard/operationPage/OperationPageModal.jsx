@@ -1070,8 +1070,8 @@ export default function OperationPageModal({ operation }) {
                             type="text"
                             options={employeeOptions}
                             // className="form-control"
-                            label={operation && "Müştərək icraçı*"}
-                            placeholder="Müştərək icraçı*"
+                            label={operation && "Müştərək icraçı"}
+                            placeholder="Müştərək icraçı"
                           />
                         </div>
                       </div>

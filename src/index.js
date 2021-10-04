@@ -5,7 +5,6 @@ import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import App from "./app/layout/App";
 import configureStore from "./app/store/configureStore";
-import { loadEmployees } from "./features/dashboard/employees/employeesActions";
 import reportWebVitals from "./reportWebVitals";
 import axios from "axios";
 axios.defaults.baseURL = "http://api.certusbase.com/api/v1/";
